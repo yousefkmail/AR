@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
+import { ARButton } from "three/examples/jsm/webxr/ARButton";
 
-function App() {
-  const [count, setCount] = useState(0)
+navigator.xr.isSessionSupported("immersive-ar").then((supported) => {
+  if (supported) {
+    console.log("AR is supported");
+  } else {
+    console.log("AR is not supported on this device");
+  }
+});
+
+const ARScene: React.FC = () => {
+  const { gl } = useThree();
+
+  useEffect(() => {
+    // Enable WebXR in the renderer
+    gl.xr.enabled = true;
+
+    // Create the AR button and append to the document
+    const arButton = ARButton.createButton(gl);
+    document.body.appendChild(arButton);
+  }, [gl]);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[5, 5, 5]} intensity={1} />
+      <mesh position={[0, 0.5, 0]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color="orange" />
+      </mesh>
     </>
-  )
-}
+  );
+};
 
-export default App
+const App: React.FC = () => {
+  return (
+    <Canvas
+      style={{
+        height: "100vh",
+        width: "100vw",
+        position: "absolute",
+        top: 0,
+        left: 0,
+      }}
+      camera={{ position: [0, 1.6, 3] }} // Typical camera position for AR
+    >
+      <ARScene />
+    </Canvas>
+  );
+};
+
+export default App;
