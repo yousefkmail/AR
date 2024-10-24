@@ -1,28 +1,27 @@
-import { Canvas } from "@react-three/fiber";
-import { XR, createXRStore } from "@react-three/xr";
-import { useState } from "react";
+import "./App.css";
 
-const store = createXRStore();
+import { createContext, Dispatch, SetStateAction, useState } from "react";
+import { CanvasContent } from "./CanvasContent";
+
+interface DragContextProps {
+  pos?: number;
+  setPos?: Dispatch<SetStateAction<number>>;
+  SetComponent: () => void;
+  setDraggedId: Dispatch<SetStateAction<number>>;
+  draggedId: number;
+}
+export const DragContext = createContext<DragContextProps>(
+  {} as DragContextProps
+);
 
 function App() {
-  const [red, setRed] = useState(false);
+  const [draggedId, setDraggedId] = useState(-1);
+
+  const SetComponent = () => {};
   return (
-    <>
-      <button onClick={() => store.enterAR()}>Enter AR</button>
-      <Canvas>
-        <XR store={store}>
-          <mesh
-            pointerEventsType={{ deny: "grab" }}
-            onClick={() => setRed(!red)}
-            position={[0, 1, -1]}
-          >
-            <boxGeometry />
-            <meshBasicMaterial color={red ? "red" : "blue"} />
-          </mesh>
-        </XR>
-      </Canvas>
-    </>
+    <DragContext.Provider value={{ SetComponent, setDraggedId, draggedId }}>
+      <CanvasContent></CanvasContent>
+    </DragContext.Provider>
   );
 }
-
 export default App;

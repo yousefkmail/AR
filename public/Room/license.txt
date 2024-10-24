@@ -1,0 +1,11 @@
+Model Information:
+* title:	vintage living room
+* source:	https://sketchfab.com/3d-models/vintage-living-room-3ac5d18326e24a1ab47279466e4e00ad
+* author:	QuarizonStudio (https://sketchfab.com/QuarizonStudio)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "vintage living room" (https://sketchfab.com/3d-models/vintage-living-room-3ac5d18326e24a1ab47279466e4e00ad) by QuarizonStudio (https://sketchfab.com/QuarizonStudio) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
