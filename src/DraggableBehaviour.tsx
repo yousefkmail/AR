@@ -3,13 +3,12 @@ import { useContext, useRef } from "react";
 import { DragContext } from "./App";
 import * as THREE from "three";
 
-export default function DraggableBehaviour({ SetIdPosition }: any) {
-  const { draggedId, setDraggedId } = useContext(DragContext);
-
+export default function DraggableBehaviour() {
   const { camera, gl, scene } = useThree(); // Get the camera and renderer from R3F
   const raycaster = useRef(new THREE.Raycaster()); // Create a raycaster
   const mouse = useRef(new THREE.Vector2()); // Store normalized mouse coordinates
 
+  const { DraggedRef } = useContext(DragContext);
   // Function to update mouse coordinates based on mouse movement
   const updateMousePosition = (event: any) => {
     const rect = gl.domElement.getBoundingClientRect();
@@ -18,39 +17,43 @@ export default function DraggableBehaviour({ SetIdPosition }: any) {
   };
 
   const UpdateMouseUp = () => {
-    setDraggedId(-1);
+    DraggedRef.current = null;
   };
 
   // Add an event listener for mouse movement
   document.addEventListener("mousemove", updateMousePosition);
   document.addEventListener("mouseup", UpdateMouseUp);
   useFrame(() => {
-    if (draggedId >= 0) {
-      // Set the ray from the camera and the current mouse position
+    if (DraggedRef.current) {
       raycaster.current.setFromCamera(mouse.current, camera);
 
-      // Find intersections with the objects array
+      if (DraggedRef.current) {
+        // Assign a different layer for this group (and all its children)
+        DraggedRef.current.traverse((object) => {
+          object.layers.set(1); // Layer 1
+        });
+      }
+
       const intersects = raycaster.current.intersectObjects(
         scene.children,
         true
       );
 
       if (intersects.length > 0) {
-        // Get the intersection point
         const intersectionPoint = intersects[0].point;
-        // Update DraggedRef's position to the intersection point
 
-        console.log(SetIdPosition);
-        SetIdPosition(draggedId, [
+        DraggedRef.current.position.set(
           intersectionPoint.x,
           intersectionPoint.y + 0.01,
-          intersectionPoint.z,
-        ]);
-        // DraggedRef.current.position.set(
-        //   intersectionPoint.x,
-        //   intersectionPoint.y + 0.01,
-        //   intersectionPoint.z
-        // );
+          intersectionPoint.z
+        );
+
+        if (DraggedRef.current) {
+          // Assign a different layer for this group (and all its children)
+          DraggedRef.current.traverse((object) => {
+            object.layers.set(0); // Layer 1
+          });
+        }
       }
     }
   });

@@ -4,7 +4,7 @@ import PngPlane from "./Components/PngPlane/PngPlane";
 import { Environment } from "./Environment";
 import DraggableBehaviour from "./DraggableBehaviour";
 
-export function CanvasContainer({ planes, setPlanes, SetIdPosition }: any) {
+export function CanvasContainer({ planes }: any) {
   const [cameraRotation, setCameraRotation] = useState(false);
 
   return (
@@ -12,7 +12,7 @@ export function CanvasContainer({ planes, setPlanes, SetIdPosition }: any) {
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 5, 5]} />
       <PerspectiveCamera makeDefault position={[0, 2, 5]} fov={50} />
-      <DraggableBehaviour SetIdPosition={SetIdPosition} />
+      <DraggableBehaviour />
       <Environment />
 
       <group position={[1.6, -1.5, 0.8]}>
