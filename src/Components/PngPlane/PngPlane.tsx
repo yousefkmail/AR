@@ -1,5 +1,5 @@
 import { Plane, useTexture } from "@react-three/drei";
-import { forwardRef, useContext, useEffect, useRef } from "react";
+import { forwardRef, useContext, useRef } from "react";
 import { DragContext } from "../../App";
 
 interface PngPlaneProps {
@@ -22,10 +22,10 @@ export default forwardRef(function PngPlane({
   const texture = useTexture(path);
 
   const { width, height } = texture.image;
-  const { setDraggedId } = useContext(DragContext);
+  const { DraggedRef } = useContext(DragContext);
   const handlePointerDown = (event: any) => {
     event.stopPropagation(); // Prevents the event from bubbling up
-    setDraggedId(id);
+    DraggedRef.current = planeRef.current;
   };
 
   return (

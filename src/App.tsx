@@ -1,25 +1,27 @@
 import "./App.css";
-
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import * as THREE from "three";
+import {
+  createContext,
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useRef,
+  useState,
+} from "react";
 import { CanvasContent } from "./CanvasContent";
 
 interface DragContextProps {
-  pos?: number;
-  setPos?: Dispatch<SetStateAction<number>>;
-  SetComponent: () => void;
-  setDraggedId: Dispatch<SetStateAction<number>>;
-  draggedId: number;
+  DraggedRef: MutableRefObject<THREE.Mesh | null>;
 }
 export const DragContext = createContext<DragContextProps>(
   {} as DragContextProps
 );
 
 function App() {
-  const [draggedId, setDraggedId] = useState(-1);
+  const DraggedRef = useRef<THREE.Mesh | null>(null);
 
-  const SetComponent = () => {};
   return (
-    <DragContext.Provider value={{ SetComponent, setDraggedId, draggedId }}>
+    <DragContext.Provider value={{ DraggedRef }}>
       <CanvasContent></CanvasContent>
     </DragContext.Provider>
   );
