@@ -1,24 +1,19 @@
 import "./App.css";
-import * as THREE from "three";
-import {
-  createContext,
-  Dispatch,
-  MutableRefObject,
-  SetStateAction,
-  useRef,
-  useState,
-} from "react";
+import { createContext, MutableRefObject, useRef } from "react";
 import { CanvasContent } from "./CanvasContent";
+import { Group } from "three";
+import { BrowserRouter } from "react-router-dom";
 
 interface DragContextProps {
-  DraggedRef: MutableRefObject<THREE.Mesh | null>;
+  DraggedRef: MutableRefObject<Group | null>;
 }
+
 export const DragContext = createContext<DragContextProps>(
   {} as DragContextProps
 );
 
 function App() {
-  const DraggedRef = useRef<THREE.Mesh | null>(null);
+  const DraggedRef = useRef<Group | null>(null);
 
   return (
     <DragContext.Provider value={{ DraggedRef }}>

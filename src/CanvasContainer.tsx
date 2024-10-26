@@ -1,11 +1,14 @@
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import PngPlane from "./Components/PngPlane/PngPlane";
 import { Environment } from "./Environment";
 import DraggableBehaviour from "./DraggableBehaviour";
+import { PiecesContext } from "./Context/PiecesContext";
 
-export function CanvasContainer({ planes }: any) {
+export function CanvasContainer() {
   const [cameraRotation, setCameraRotation] = useState(false);
+
+  const { createdPlanes } = useContext(PiecesContext);
 
   return (
     <>
@@ -15,8 +18,8 @@ export function CanvasContainer({ planes }: any) {
       <DraggableBehaviour />
       <Environment />
 
-      <group position={[1.6, -1.5, 0.8]}>
-        {planes.map((plane: any, index: number) => (
+      <group>
+        {createdPlanes.map((plane: any, index: number) => (
           <PngPlane key={index} {...plane} />
         ))}
       </group>

@@ -1,8 +1,9 @@
 import { Plane, useTexture } from "@react-three/drei";
-import { forwardRef, useContext, useRef } from "react";
+import { forwardRef, useContext, useEffect, useRef, useState } from "react";
 import { DragContext } from "../../App";
+import { Group } from "three";
 
-interface PngPlaneProps {
+export interface PngPlaneProps {
   id: number;
   path: string;
   position?: [number, number, number];
@@ -11,26 +12,30 @@ interface PngPlaneProps {
   pivotOffset?: [number, number, number];
 }
 
-export default forwardRef(function PngPlane({
+export default function PngPlane({
   id,
   path,
   position,
   rotation,
   pivotOffset,
 }: PngPlaneProps) {
-  const planeRef = useRef(null);
   const texture = useTexture(path);
 
+  const ref = useRef<Group>(null);
   const { width, height } = texture.image;
   const { DraggedRef } = useContext(DragContext);
   const handlePointerDown = (event: any) => {
     event.stopPropagation(); // Prevents the event from bubbling up
-    DraggedRef.current = planeRef.current;
+    DraggedRef.current = ref.current;
   };
+
+  useEffect(() => {
+    DraggedRef.current = ref.current;
+  }, []);
 
   return (
     <group
-      ref={planeRef}
+      ref={ref}
       onPointerDown={handlePointerDown}
       position={position}
       rotation={rotation}
@@ -44,4 +49,4 @@ export default forwardRef(function PngPlane({
       </Plane>
     </group>
   );
-});
+}
