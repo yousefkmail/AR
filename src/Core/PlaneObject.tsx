@@ -1,10 +1,14 @@
+import { Entry } from "contentful";
+import { Piece } from "../Contentful/Types/PieceType";
+
 export class PlaneNode {
   parent: PlaneNode | null;
   children: PlaneNode[];
-
-  constructor() {
+  data: Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>;
+  constructor(data: Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>) {
     this.parent = null;
     this.children = [];
+    this.data = data;
   }
 
   // Method to set a parent for the node

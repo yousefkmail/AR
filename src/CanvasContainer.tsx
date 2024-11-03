@@ -10,7 +10,7 @@ import { Piece } from "./Contentful/Types/PieceType";
 export function CanvasContainer() {
   const [cameraRotation, setCameraRotation] = useState(false);
 
-  const { createdPlanes } = useContext(PiecesContext);
+  const { createdPlanes, objects } = useContext(PiecesContext);
 
   return (
     <>
@@ -20,7 +20,7 @@ export function CanvasContainer() {
       <DraggableBehaviour />
       <Environment />
 
-      <group>
+      {/* <group>
         {createdPlanes.map(
           (
             plane: Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>,
@@ -29,6 +29,12 @@ export function CanvasContainer() {
             <PngPlane key={index} planeData={plane} />
           )
         )}
+      </group> */}
+
+      <group>
+        {objects.map((item, index) => (
+          <PngPlane key={index} planeData={item.data} />
+        ))}
       </group>
 
       <OrbitControls enableRotate={cameraRotation} />

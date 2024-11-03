@@ -8,10 +8,11 @@ import { DragEvent } from "react";
 import { useDrop } from "react-dnd";
 import { GetAllPieces } from "./Contentful/ContentfulClient";
 import { useQuery } from "@tanstack/react-query";
+import { PlaneNode } from "./Core/PlaneObject";
 
 export function ObjectBuilder() {
   const { DraggedId } = useContext(DraggedPieceContext);
-  const { setCreatedPlanes } = useContext(PiecesContext);
+  const { setCreatedPlanes, createdObjects } = useContext(PiecesContext);
 
   const { data } = useQuery({
     queryKey: ["repoData"],
@@ -30,6 +31,11 @@ export function ObjectBuilder() {
       {
         ...data.items[DraggedId],
       },
+    ]);
+
+    createdObjects((prevPlanes) => [
+      ...prevPlanes,
+      new PlaneNode(data.items[DraggedId]),
     ]);
   };
 
