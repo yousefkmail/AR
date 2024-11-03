@@ -1,4 +1,40 @@
+:root{
+    --default-border: 1px solid rgba(0, 0, 0, 0.144);
+    /* #8a2be2 */
+}
 body{
     margin: 0;
     box-sizing: border-box;
+    background-color: #f2f0ef
+
+}
+
+.drag-image{
+-webkit-box-shadow:  0px 0px 77px -18px rgba(255,255,255,1);
+-moz-box-shadow:   0px 0px 77px -18px rgba(255,255,255,255,1);
+box-shadow:   0px 0px 77px -18px rgba(255,255,255,1);
+margin: 5px;
+border-radius: 7px;
+overflow: hidden;
+}
+
+.pieces-container {
+    -webkit-box-shadow: inset 0px 0px 12px 10px rgba(255,255,255,1);
+-moz-box-shadow: inset 0px 0px 12px 10px rgba(255,255,255,1);
+box-shadow: inset 0px 0px 12px 10px rgba(255,255,255,1);
+}
+
+ .pieces-inner-container{
+    overflow-y: auto;
+}
+/*
+.pieces-inner-container::-webkit-scrollbar
+{
+    display: none;
+} */
+ 
+.header{
+    border-bottom: var(--default-border);
+    /* height: 70px; */
+    padding:  20px
 }

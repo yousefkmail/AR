@@ -4,6 +4,8 @@ import PngPlane from "./Components/PngPlane/PngPlane";
 import { Environment } from "./Environment";
 import DraggableBehaviour from "./DraggableBehaviour";
 import { PiecesContext } from "./Context/PiecesContext";
+import { Entry } from "contentful";
+import { Piece } from "./Contentful/Types/PieceType";
 
 export function CanvasContainer() {
   const [cameraRotation, setCameraRotation] = useState(false);
@@ -19,9 +21,14 @@ export function CanvasContainer() {
       <Environment />
 
       <group>
-        {createdPlanes.map((plane: any, index: number) => (
-          <PngPlane key={index} {...plane} />
-        ))}
+        {createdPlanes.map(
+          (
+            plane: Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>,
+            index: number
+          ) => (
+            <PngPlane key={index} planeData={plane} />
+          )
+        )}
       </group>
 
       <OrbitControls enableRotate={cameraRotation} />

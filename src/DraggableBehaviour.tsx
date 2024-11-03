@@ -1,6 +1,6 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useContext, useRef } from "react";
-import { DragContext } from "./App";
+import { DragContext } from "./Context/DragContext";
 import * as THREE from "three";
 
 export default function DraggableBehaviour() {
@@ -24,9 +24,10 @@ export default function DraggableBehaviour() {
   document.addEventListener("dragover", updateMousePosition);
   document.addEventListener("pointermove", updateMousePosition);
   document.addEventListener("mouseup", UpdateMouseUp);
+  document.addEventListener("dragend", UpdateMouseUp);
   useFrame(() => {
     if (DraggedRef.current) {
-      get().gl.domElement.style.cursor = "grabbing";
+      // get().gl.domElement.style.cursor = "grabbing";
       raycaster.current.setFromCamera(mouse.current, camera);
 
       if (DraggedRef.current) {
@@ -51,6 +52,8 @@ export default function DraggableBehaviour() {
           intersectionPoint.z
         );
 
+        console.log(intersects[0].object.parent?.name);
+
         if (DraggedRef.current) {
           // Assign a different layer for this group (and all its children)
           DraggedRef.current.traverse((object) => {
@@ -59,7 +62,7 @@ export default function DraggableBehaviour() {
         }
       }
     } else {
-      get().gl.domElement.style.cursor = "default";
+      // get().gl.domElement.style.cursor = "default";
     }
   });
   return <></>;
