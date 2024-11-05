@@ -38,3 +38,8 @@ box-shadow: inset 0px 0px 12px 10px rgba(255,255,255,1);
     /* height: 70px; */
     padding:  20px
 }
+
+.active {
+    background-color: purple;
+    color: white;
+}

@@ -1,11 +1,26 @@
 import { Entry } from "contentful";
 import { Piece } from "../Contentful/Types/PieceType";
+import { Vector3 } from "three";
+
+export class PlaneNodeData {
+  id: number = 0;
+  data: Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>;
+  position: Vector3 = new Vector3(1, 1, 1);
+  rotation: Vector3 = new Vector3(0, 0, 0);
+  constructor(
+    id: number,
+    data: Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>
+  ) {
+    this.id = id;
+    this.data = data;
+  }
+}
 
 export class PlaneNode {
   parent: PlaneNode | null;
   children: PlaneNode[];
-  data: Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>;
-  constructor(data: Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>) {
+  data: PlaneNodeData;
+  constructor(data: PlaneNodeData) {
     this.parent = null;
     this.children = [];
     this.data = data;
