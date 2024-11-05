@@ -53,9 +53,10 @@ export const PiecesContextProvider = ({
     obj1: Object3D<Object3DEventMap>,
     obj2: Object3D<Object3DEventMap>
   ) => {
+    console.log("Plane dropped");
     let plane1 = FindObjectWithId(obj1.userData.id);
     let plane2 = FindObjectWithId(obj2.userData.id);
-
+    if (!plane2?.data.data.fields.isBase) return;
     if (plane1 && plane2) {
       const newObjects = objects.filter((item) => plane1 !== item);
       plane2.addChild(plane1);

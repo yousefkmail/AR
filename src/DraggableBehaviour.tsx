@@ -2,6 +2,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useContext, useRef } from "react";
 import { DragContext } from "./Context/DragContext";
 import * as THREE from "three";
+import { HoveredObjectContext } from "./Context/HoveredObjectContext";
 
 export default function DraggableBehaviour() {
   const { camera, gl, scene, get } = useThree(); // Get the camera and renderer from R3F
@@ -16,15 +17,11 @@ export default function DraggableBehaviour() {
     mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
   };
 
-  const UpdateMouseUp = () => {
-    DraggedRef.current = null;
-  };
-
   // Add an event listener for mouse movement
   document.addEventListener("dragover", updateMousePosition);
   document.addEventListener("pointermove", updateMousePosition);
-  document.addEventListener("mouseup", UpdateMouseUp);
-  document.addEventListener("dragend", UpdateMouseUp);
+
+  const { HoveredObject } = useContext(HoveredObjectContext);
   useFrame(() => {
     if (DraggedRef.current) {
       // get().gl.domElement.style.cursor = "grabbing";
@@ -51,8 +48,7 @@ export default function DraggableBehaviour() {
           intersectionPoint.y + 0.01,
           intersectionPoint.z
         );
-
-        console.log(intersects[0].object.parent?.name);
+        HoveredObject.current = intersects[0].object;
 
         if (DraggedRef.current) {
           // Assign a different layer for this group (and all its children)

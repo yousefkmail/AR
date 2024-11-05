@@ -1,5 +1,5 @@
 import { Plane, useTexture } from "@react-three/drei";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useRef } from "react";
 import { DragContext } from "../../Context/DragContext";
 import { Group } from "three";
 import { ThreeEvent } from "@react-three/fiber";
@@ -15,15 +15,6 @@ export default function PngPlane({ children, data }: Partial<PlaneNode>) {
 
     DraggedRef.current = ref.current;
   };
-
-  useEffect(() => {
-    // DraggedRef.current = ref.current;
-  }, []);
-
-  useEffect(() => {
-    console.log(data?.position);
-    console.log(ref.current?.position);
-  }, []);
 
   return (
     <group
