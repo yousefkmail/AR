@@ -2,9 +2,9 @@ import { useSceneSettings } from "../../Hooks/useSceneSettings";
 import { MovementMode } from "../../Context/SceneSettingsContext";
 import Window from "../DraggableComponent/Window";
 export default function SceneSettings() {
-  const { SetMovementMode, MovementMode: movementMode } = useSceneSettings();
+  const { SetMovementMode, movementMode } = useSceneSettings();
   return (
-    <Window defaultPosition={{ x: 99, y: 0 }}>
+    <Window defaultPosition={{ x: 1000, y: 0 }}>
       <div>
         <div>Piece Movement Mode</div>
         <div>

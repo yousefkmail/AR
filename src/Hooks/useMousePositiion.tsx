@@ -3,8 +3,8 @@ import { useEffect, useRef } from "react";
 import { Vector2 } from "three";
 
 export function useMousePosition() {
-  const mouse = useRef(new Vector2()); // Store normalized mouse coordinates
-  const { gl } = useThree(); // Get the camera and renderer from R3F
+  const mouse = useRef(new Vector2());
+  const { gl } = useThree();
 
   const updateMousePosition = (event: MouseEvent) => {
     const rect = gl.domElement.getBoundingClientRect();
@@ -16,5 +16,5 @@ export function useMousePosition() {
     document.addEventListener("pointermove", updateMousePosition);
   }, []);
 
-  return { mousePos: mouse };
+  return { mousePos: mouse.current };
 }

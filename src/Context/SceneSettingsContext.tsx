@@ -6,11 +6,11 @@ export enum MovementMode {
 }
 
 interface SceneSettings {
-  MovementMode: MovementMode;
+  movementMode: MovementMode;
   SetMovementMode: Dispatch<SetStateAction<MovementMode>>;
 }
 export const SceneSettingsContext = createContext<SceneSettings>({
-  MovementMode: MovementMode.Parent,
+  movementMode: MovementMode.Parent,
 } as SceneSettings);
 
 export const SceneSettingsContextProvider = ({ children }: any) => {
@@ -19,7 +19,7 @@ export const SceneSettingsContextProvider = ({ children }: any) => {
   );
   return (
     <SceneSettingsContext.Provider
-      value={{ MovementMode: movementMode, SetMovementMode: setMovementMode }}
+      value={{ movementMode: movementMode, SetMovementMode: setMovementMode }}
     >
       {children}
     </SceneSettingsContext.Provider>

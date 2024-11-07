@@ -1,39 +1,44 @@
-import { useFrame, useThree } from "@react-three/fiber";
-import { useContext, useRef } from "react";
-import { DragContext } from "./Context/DragContext";
+import { useFrame } from "@react-three/fiber";
+import { useRef } from "react";
 import * as THREE from "three";
-import { HoveredObjectContext } from "./Context/HoveredObjectContext";
+import { useDragPiece } from "./Hooks/useDragPiece";
+import { useMousePosition } from "./Hooks/useMousePositiion";
+import { usePieces } from "./Hooks/usePieces";
+import { NDCToObjectWorld, SetObjectLayerTraverse } from "./Utils/ThreeUtils";
 
 export default function DraggableBehaviour() {
-  const { camera, gl, scene, get } = useThree(); // Get the camera and renderer from R3F
-  const raycaster = useRef(new THREE.Raycaster()); // Create a raycaster
-  const mouse = useRef(new THREE.Vector2()); // Store normalized mouse coordinates
+  const raycaster = useRef(new THREE.Raycaster());
+  const { mousePos } = useMousePosition();
+  const { DraggedRef, HoveredObject } = useDragPiece();
+  const { FindSceneObjectWithId, FindObjectWithId } = usePieces();
 
-  const { DraggedRef } = useContext(DragContext);
-  // Function to update mouse coordinates based on mouse movement
-  const updateMousePosition = (event: any) => {
-    const rect = gl.domElement.getBoundingClientRect();
-    mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-  };
+  useFrame(({ camera, scene }) => {
+    //return early if nothing dragged to be handled.
+    if (!DraggedRef.current) return;
 
-  // Add an event listener for mouse movement
-  document.addEventListener("dragover", updateMousePosition);
-  document.addEventListener("pointermove", updateMousePosition);
+    const draggedObjectData = FindObjectWithId(DraggedRef.current.userData.id);
 
-  const { HoveredObject } = useContext(HoveredObjectContext);
-  useFrame(() => {
-    if (DraggedRef.current) {
-      // get().gl.domElement.style.cursor = "grabbing";
-      raycaster.current.setFromCamera(mouse.current, camera);
+    if (draggedObjectData?.parent) {
+      const child = FindSceneObjectWithId(DraggedRef.current.userData.id);
+      const parent = FindSceneObjectWithId(draggedObjectData.parent.data.id);
 
-      if (DraggedRef.current) {
-        // Assign a different layer for this group (and all its children)
-        if (DraggedRef.current !== null)
-          DraggedRef.current.traverse((object) => {
-            object.layers.set(1); // Layer 1
-          });
+      if (parent && child) {
+        const position = NDCToObjectWorld(mousePos, parent, camera);
+
+        child.position.set(
+          THREE.MathUtils.clamp(
+            parent?.worldToLocal(position).x,
+            -(draggedObjectData?.parent?.data.data.fields.width ?? 100) / 100,
+            (draggedObjectData?.parent?.data.data.fields.width ?? 100) / 100
+          ),
+          0,
+          0
+        );
       }
+    } else {
+      raycaster.current.setFromCamera(mousePos, camera);
+      //set the layer other than 0 so the raycast doesn't detect the object itself
+      SetObjectLayerTraverse(DraggedRef.current, 1);
 
       const intersects = raycaster.current.intersectObjects(
         scene.children,
@@ -42,23 +47,14 @@ export default function DraggableBehaviour() {
 
       if (intersects.length > 0) {
         const intersectionPoint = intersects[0].point;
-        DraggedRef.current;
         DraggedRef.current.position.set(
           intersectionPoint.x,
           intersectionPoint.y + 0.01,
           intersectionPoint.z
         );
         HoveredObject.current = intersects[0].object;
-
-        if (DraggedRef.current) {
-          // Assign a different layer for this group (and all its children)
-          DraggedRef.current.traverse((object) => {
-            object.layers.set(0); // Layer 1
-          });
-        }
       }
-    } else {
-      // get().gl.domElement.style.cursor = "default";
+      SetObjectLayerTraverse(DraggedRef.current, 0);
     }
   });
   return <></>;

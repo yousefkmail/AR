@@ -5,14 +5,17 @@ import { Group } from "three";
 import { ThreeEvent } from "@react-three/fiber";
 import { MathUtils } from "three";
 import { PlaneNode } from "../../Core/PlaneObject";
+import { useSceneSettings } from "../../Hooks/useSceneSettings";
+import { MovementMode } from "../../Context/SceneSettingsContext";
 
 export default function PngPlane({ children, data }: Partial<PlaneNode>) {
   const texture = useTexture(data?.data.fields.texture?.fields.file?.url ?? "");
   const ref = useRef<Group>(null);
   const { DraggedRef } = useContext(DragContext);
+  const { movementMode } = useSceneSettings();
   const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
     if (event.button !== 0) return;
-
+    if (movementMode === MovementMode.Child) event.stopPropagation();
     DraggedRef.current = ref.current;
   };
 

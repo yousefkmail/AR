@@ -9,13 +9,13 @@ import { useDrop } from "react-dnd";
 import { GetAllPieces } from "./Contentful/ContentfulClient";
 import { useQuery } from "@tanstack/react-query";
 import { PlaneNode, PlaneNodeData } from "./Core/PlaneObject";
-import { HoveredObjectContext } from "./Context/HoveredObjectContext";
 import { DragContext } from "./Context/DragContext";
 import { Vector3 } from "three";
 import SceneSettings from "./Components/SceneSettings/SceneSettings";
+import { useDragPiece } from "./Hooks/useDragPiece";
 export function ObjectBuilder() {
   const { DraggedId } = useContext(DraggedPieceContext);
-  const { setCreatedPlanes, createdObjects } = useContext(PiecesContext);
+  const { setCreatedPlanes } = useContext(PiecesContext);
 
   const { data } = useQuery({
     queryKey: ["repoData"],
@@ -29,12 +29,6 @@ export function ObjectBuilder() {
     if (data?.items && DraggedId > data?.items.length) return;
 
     if (!data) return;
-    setCreatedPlanes((prevPlanes) => [
-      ...prevPlanes,
-      {
-        ...data.items[DraggedId],
-      },
-    ]);
 
     const node = new PlaneNodeData(counterRef.current, data?.items[DraggedId]);
     const fields = data?.items[DraggedId].fields;
@@ -44,7 +38,7 @@ export function ObjectBuilder() {
       fields.rotationZ
     );
 
-    createdObjects((prevPlanes) => [...prevPlanes, new PlaneNode(node)]);
+    setCreatedPlanes((prevPlanes) => [...prevPlanes, new PlaneNode(node)]);
 
     counterRef.current++;
   };
@@ -57,9 +51,8 @@ export function ObjectBuilder() {
       canDrop: monitor.canDrop(), // True if this component can accept the dragged item
     }),
   }));
-  const { HoveredObject } = useContext(HoveredObjectContext);
-  const { DraggedRef } = useContext(DragContext);
-  const { HandleDroppedPlane } = useContext(PiecesContext);
+  const { DraggedRef, HoveredObject } = useContext(DragContext);
+  const { HandleDroppedPlane } = useDragPiece();
 
   const HandleMouseUp = () => {
     if (DraggedRef.current && HoveredObject.current) {

@@ -1,39 +1,23 @@
-import { Entry } from "contentful";
 import React, {
   createContext,
   Dispatch,
   SetStateAction,
   useContext,
+  useRef,
   useState,
 } from "react";
-import { Piece } from "../Contentful/Types/PieceType";
 import { PlaneNode } from "../Core/PlaneObject";
-import {
-  Euler,
-  MathUtils,
-  Matrix4,
-  Object3D,
-  Object3DEventMap,
-  Quaternion,
-  Vector3,
-} from "three";
+import { Object3D, Object3DEventMap } from "three";
 import { PlanesContainerContext } from "./PlanesContainerContext";
 export const PiecesContext = createContext<PiecesContextProps>(
   {} as PiecesContextProps
 );
 
 interface PiecesContextProps {
-  createdPlanes: Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>[];
-  setCreatedPlanes: Dispatch<
-    SetStateAction<Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>[]>
-  >;
-
-  objects: PlaneNode[];
-  createdObjects: Dispatch<SetStateAction<PlaneNode[]>>;
-  HandleDroppedPlane: (
-    obj1: Object3D<Object3DEventMap>,
-    obj2: Object3D<Object3DEventMap>
-  ) => void;
+  createdPlanes: PlaneNode[];
+  setCreatedPlanes: Dispatch<SetStateAction<PlaneNode[]>>;
+  FindObjectWithId: (id: number) => PlaneNode | null;
+  FindSceneObjectWithId: (id: number) => Object3D<Object3DEventMap> | null;
 }
 
 interface PiecesContextProviderProps {
@@ -43,98 +27,55 @@ interface PiecesContextProviderProps {
 export const PiecesContextProvider = ({
   children,
 }: PiecesContextProviderProps) => {
-  const [createdPlanes, setCreatedPlanes] = useState<
-    Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>[]
-  >([]);
-
-  const [objects, createdObjects] = useState<PlaneNode[]>([]);
-
-  const HandleDroppedPlane = (
-    obj1: Object3D<Object3DEventMap>,
-    obj2: Object3D<Object3DEventMap>
-  ) => {
-    console.log("Plane dropped");
-    let plane1 = FindObjectWithId(obj1.userData.id);
-    let plane2 = FindObjectWithId(obj2.userData.id);
-    if (!plane2?.data.data.fields.isBase) return;
-    if (plane1 && plane2) {
-      const newObjects = objects.filter((item) => plane1 !== item);
-      plane2.addChild(plane1);
-      plane1.parent = plane2;
-
-      const parent = FindSceneObjectWithId(plane2.data.id);
-
-      const child = FindSceneObjectWithId(plane1.data.id);
-      if (parent && child) {
-        const pos = new Vector3();
-        const rot = new Quaternion();
-        child.getWorldPosition(pos);
-        child.getWorldQuaternion(rot);
-        const position = parent.worldToLocal(pos);
-        plane1.data.position = position;
-
-        parent.updateMatrixWorld(true);
-        child.updateMatrixWorld(true);
-
-        // Step 1: Get the child's current world rotation as a rotation matrix
-        const worldRotationMatrix = new Matrix4().makeRotationFromEuler(
-          child.rotation
-        );
-
-        // Step 2: Convert the world rotation matrix to the local space of the new parent
-        const parentInverseMatrix = new Matrix4()
-          .copy(parent.matrixWorld)
-          .invert();
-        const localRotationMatrix = new Matrix4().multiplyMatrices(
-          parentInverseMatrix,
-          worldRotationMatrix
-        );
-
-        // Step 3: Extract the local rotation as Euler angles
-        const localRotation = new Euler().setFromRotationMatrix(
-          localRotationMatrix
-        );
-        plane1.data.rotation = new Vector3(
-          MathUtils.radToDeg(localRotation.x),
-          MathUtils.radToDeg(localRotation.y),
-          MathUtils.radToDeg(localRotation.z)
-        );
-        // Step 4: Apply the calculated local rotation to the child object
-      }
-      createdObjects(newObjects);
-    }
-  };
+  const [createdPlanes, setCreatedPlanes] = useState<PlaneNode[]>([]);
   const { ContainerRef } = useContext(PlanesContainerContext);
+
   const FindSceneObjectWithId = (
     id: number
   ): Object3D<Object3DEventMap> | null => {
-    let foundObj = null;
-    ContainerRef.current?.children.forEach((item) => {
-      if (item.userData.id === id) {
-        foundObj = item;
+    let foundObject: Object3D<Object3DEventMap> | null = null;
+    ContainerRef.current?.traverse((object) => {
+      if (object.userData.id === id && foundObject === null) {
+        foundObject = object;
       }
     });
-
-    return foundObj;
+    return foundObject;
   };
   const FindObjectWithId = (id: number): PlaneNode | null => {
     let objj: PlaneNode | null = null;
-    objects.forEach((obj) => {
-      if (obj.data.id === id) {
-        objj = obj;
+    for (const node of createdPlanes) {
+      const found = FindObjectInNodeWithId(node, id);
+      if (found) {
+        return found;
       }
-    });
+    }
 
     return objj;
+  };
+
+  const FindObjectInNodeWithId = (
+    node: PlaneNode,
+    id: number
+  ): PlaneNode | null => {
+    if (node.data.id === id) return node;
+
+    if (node.children.length < 1) return null;
+
+    let foundNode: PlaneNode | null = null;
+    for (const nodee of node.children) {
+      foundNode = FindObjectInNodeWithId(nodee, id);
+      if (foundNode) return foundNode;
+    }
+
+    return null;
   };
   return (
     <PiecesContext.Provider
       value={{
         createdPlanes,
         setCreatedPlanes,
-        objects,
-        createdObjects,
-        HandleDroppedPlane,
+        FindObjectWithId,
+        FindSceneObjectWithId,
       }}
     >
       {children}
