@@ -1,8 +1,8 @@
 import { createContext, MutableRefObject, useRef } from "react";
-import { Group } from "three";
+import { ScenePiecesContainerRef } from "../Components/ScenePiecesContainer/ScenePiecesContainer";
 
 interface PlanesContainerProps {
-  ContainerRef: MutableRefObject<Group | null>;
+  ContainerRef: MutableRefObject<ScenePiecesContainerRef | null>;
 }
 
 export const PlanesContainerContext = createContext<PlanesContainerProps>(
@@ -10,7 +10,7 @@ export const PlanesContainerContext = createContext<PlanesContainerProps>(
 );
 
 export const PlanesContainerContextProvider = ({ children }: any) => {
-  const ContainerRef = useRef<Group>(null);
+  const ContainerRef = useRef<ScenePiecesContainerRef>(null);
   return (
     <PlanesContainerContext.Provider value={{ ContainerRef }}>
       {children}

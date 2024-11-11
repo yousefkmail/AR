@@ -1,12 +1,11 @@
 import { useContext, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { DraggedPieceContext } from "../Context/DraggedPieceContext";
-import { Entry } from "contentful";
-import { Piece } from "../Contentful/Types/PieceType";
+import { PlaneModel } from "../Models/PlaneModel";
 
 interface DragableImageProps {
-  item: Entry<Piece, "WITHOUT_UNRESOLVABLE_LINKS", string>;
-  id: number;
+  item: PlaneModel;
+  id: string;
 }
 
 export default function DragableImage({ id, item }: DragableImageProps) {
@@ -43,28 +42,32 @@ export default function DragableImage({ id, item }: DragableImageProps) {
         backgroundColor: "white",
         opacity: isDragging ? 0.5 : 1, // Hide div when dragging
         padding: "10px",
+        cursor: "pointer",
+        overflow: "hidden",
       }}
     >
-      <img
-        draggable={false}
-        style={{
-          width: "100%",
-          height: "80px",
-          aspectRatio: "5/1",
-          objectFit: "contain",
-        }}
-        src={item.fields.texture?.fields.file?.url}
-        alt=""
-      />
-      <div style={{ display: "grid", placeItems: "center" }}>
-        <span>{item.fields.name}</span>
-      </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <span> Size: </span>
-        <span> {item.fields.width} </span>
-        <span> X </span>
-        <span> {item.fields.height} </span>
-        <span> cm </span>
+      <div className="drag-image-inner">
+        <img
+          draggable={false}
+          style={{
+            width: "100%",
+            height: "80px",
+            aspectRatio: "5/1",
+            objectFit: "contain",
+          }}
+          src={item.texture}
+          alt=""
+        />
+        <div style={{ display: "grid", placeItems: "center" }}>
+          <span>{item.name}</span>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <span> Size: </span>
+          <span> {item.width} </span>
+          <span> X </span>
+          <span> {item.height} </span>
+          <span> cm </span>
+        </div>
       </div>
     </div>
   );

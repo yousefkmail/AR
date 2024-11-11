@@ -1,66 +1,88 @@
-import { Plane, useTexture } from "@react-three/drei";
-import { useContext, useRef } from "react";
+import { Edges, Plane, useTexture } from "@react-three/drei";
+import React, {
+  forwardRef,
+  useContext,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { DragContext } from "../../Context/DragContext";
-import { Group } from "three";
+import { Color, Group, MathUtils } from "three";
 import { ThreeEvent } from "@react-three/fiber";
-import { MathUtils } from "three";
-import { PlaneNode } from "../../Core/PlaneObject";
 import { useSceneSettings } from "../../Hooks/useSceneSettings";
 import { MovementMode } from "../../Context/SceneSettingsContext";
+import { PlaneBase } from "../../Core/PlaneBase";
 
-export default function PngPlane({ children, data }: Partial<PlaneNode>) {
-  const texture = useTexture(data?.data.fields.texture?.fields.file?.url ?? "");
-  const ref = useRef<Group>(null);
-  const { DraggedRef } = useContext(DragContext);
-  const { movementMode } = useSceneSettings();
-  const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
-    if (event.button !== 0) return;
-    if (movementMode === MovementMode.Child) event.stopPropagation();
-    DraggedRef.current = ref.current;
-  };
+export type PngPlaneRef = {
+  container: Group;
+  props: Partial<PlaneBase>;
+};
 
-  return (
-    <group
-      name={data?.data.fields.isBase ? "base" : "piece"}
-      ref={ref}
-      position={[
-        data?.position.x ?? 0,
-        data?.position.y ?? 0,
-        data?.position.z ?? 0,
-      ]}
-      onPointerDown={handlePointerDown}
-      rotation={[
-        MathUtils.degToRad(data?.rotation.x ?? 0),
-        MathUtils.degToRad(data?.rotation.y ?? 0),
-        MathUtils.degToRad(data?.rotation.z ?? 0),
-      ]}
-      userData={{ id: data?.id }}
-    >
-      <Plane
-        name={data?.data.fields.isBase ? "base" : "piece"}
-        position={[
-          0,
-          data?.data.fields.isBase ? 0 : (data?.data.fields.height ?? 0) / 100,
-          0,
-        ]}
-        args={[
-          (data?.data.fields.width ?? 0) / 50,
-          (data?.data.fields.height ?? 0) / 50,
-        ]}
-        userData={{ id: data?.id }}
-      >
-        {/* Apply the texture to the plane */}
-        <meshBasicMaterial
-          transparent={true}
-          side={2}
-          map={texture}
-          depthWrite={false}
-          userData={{ id: data?.id }}
-        />
-      </Plane>
-      {children?.map((item) => (
-        <PngPlane key={item.data.id} {...item} />
-      ))}
-    </group>
-  );
+interface PngPlaneProps extends Partial<PlaneBase> {
+  applyOffset?: boolean;
+  children?: React.ReactNode;
 }
+
+export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
+  (props: PngPlaneProps, ref) => {
+    const { id } = props;
+
+    const texture = useTexture(props.texture ?? "");
+    const groupref = useRef<Group>(null);
+    const { DraggedRef } = useContext(DragContext);
+    const { movementMode } = useSceneSettings();
+    const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
+      if (event.button !== 0) return;
+      if (movementMode === MovementMode.Child) event.stopPropagation();
+      DraggedRef.current = groupref.current;
+    };
+
+    useImperativeHandle(ref, () => ({
+      container: groupref.current!,
+      props: props,
+    }));
+
+    const [hover, setHovered] = useState<boolean>(false);
+
+    return (
+      <group
+        ref={groupref}
+        position={[
+          props?.position?.x ?? 0,
+          props?.position?.y ?? 0,
+          props?.position?.z ?? 0,
+        ]}
+        onPointerDown={handlePointerDown}
+        rotation={[
+          MathUtils.degToRad(props?.rotation?.x ?? 0),
+          MathUtils.degToRad(props?.rotation?.y ?? 0),
+          MathUtils.degToRad(props?.rotation?.z ?? 0),
+        ]}
+        userData={{ id: id }}
+        onPointerEnter={() => {
+          setHovered(true);
+        }}
+        onPointerLeave={() => {
+          setHovered(false);
+        }}
+      >
+        <Plane
+          position={[0, props.applyOffset ? (props?.height ?? 0) / 100 : 0, 0]}
+          args={[(props?.width ?? 0) / 50, (props?.height ?? 0) / 50]}
+          userData={{ id: id }}
+        >
+          {/* Apply the texture to the plane */}
+          <meshBasicMaterial
+            transparent={true}
+            side={2}
+            map={texture}
+            depthWrite={false}
+            userData={{ id: id }}
+          />
+          {hover && <Edges color={Color.NAMES.yellow} />}
+        </Plane>
+        {props.children}
+      </group>
+    );
+  }
+);

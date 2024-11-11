@@ -1,8 +1,8 @@
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 
 interface DraggedPieceContextProps {
-  DraggedId: number;
-  setDraggedId: Dispatch<SetStateAction<number>>;
+  DraggedId: string;
+  setDraggedId: Dispatch<SetStateAction<string>>;
 }
 
 export const DraggedPieceContext = createContext<DraggedPieceContextProps>(
@@ -10,7 +10,7 @@ export const DraggedPieceContext = createContext<DraggedPieceContextProps>(
 );
 
 export const DraggedPieceContextProvider = ({ children }: any) => {
-  const [DraggedId, setDraggedId] = useState<number>(-1);
+  const [DraggedId, setDraggedId] = useState<string>("");
 
   return (
     <DraggedPieceContext.Provider value={{ DraggedId, setDraggedId }}>

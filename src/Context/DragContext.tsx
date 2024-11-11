@@ -10,6 +10,8 @@ import {
   Vector3,
 } from "three";
 import { usePieces } from "../Hooks/usePieces";
+import { BasisPlane } from "../Core/BasisPlane";
+import { PiecePlane } from "../Core/PiecePlane";
 
 interface DragContextProps {
   DraggedRef: MutableRefObject<Group | null>;
@@ -43,49 +45,50 @@ export const DragContextProvider = ({ children }: any) => {
 
     if (plane1 && plane2) {
       const newObjects = createdPlanes.filter((item) => plane1 !== item);
-      plane2.addChild(plane1);
-      plane1.parent = plane2;
+      if (plane2 instanceof BasisPlane && plane1 instanceof PiecePlane) {
+        plane2.addChild(plane1);
+        plane1.setParent(plane2);
+        const parent = FindSceneObjectWithId(plane2.id);
+        const child = FindSceneObjectWithId(plane1.id);
 
-      const parent = FindSceneObjectWithId(plane2.data.id);
-      const child = FindSceneObjectWithId(plane1.data.id);
+        if (parent && child) {
+          const pos = new Vector3();
+          const rot = new Quaternion();
+          child.getWorldPosition(pos);
+          child.getWorldQuaternion(rot);
+          const position = parent.worldToLocal(pos);
+          plane1.position = position;
 
-      if (parent && child) {
-        const pos = new Vector3();
-        const rot = new Quaternion();
-        child.getWorldPosition(pos);
-        child.getWorldQuaternion(rot);
-        const position = parent.worldToLocal(pos);
-        plane1.data.position = position;
+          parent.updateMatrixWorld(true);
+          child.updateMatrixWorld(true);
 
-        parent.updateMatrixWorld(true);
-        child.updateMatrixWorld(true);
+          // Step 1: Get the child's current world rotation as a rotation matrix
+          const worldRotationMatrix = new Matrix4().makeRotationFromEuler(
+            child.rotation
+          );
 
-        // Step 1: Get the child's current world rotation as a rotation matrix
-        const worldRotationMatrix = new Matrix4().makeRotationFromEuler(
-          child.rotation
-        );
+          // Step 2: Convert the world rotation matrix to the local space of the new parent
+          const parentInverseMatrix = new Matrix4()
+            .copy(parent.matrixWorld)
+            .invert();
+          const localRotationMatrix = new Matrix4().multiplyMatrices(
+            parentInverseMatrix,
+            worldRotationMatrix
+          );
 
-        // Step 2: Convert the world rotation matrix to the local space of the new parent
-        const parentInverseMatrix = new Matrix4()
-          .copy(parent.matrixWorld)
-          .invert();
-        const localRotationMatrix = new Matrix4().multiplyMatrices(
-          parentInverseMatrix,
-          worldRotationMatrix
-        );
-
-        // Step 3: Extract the local rotation as Euler angles
-        const localRotation = new Euler().setFromRotationMatrix(
-          localRotationMatrix
-        );
-        plane1.data.rotation = new Vector3(
-          MathUtils.radToDeg(localRotation.x),
-          MathUtils.radToDeg(localRotation.y),
-          MathUtils.radToDeg(localRotation.z)
-        );
-        // Step 4: Apply the calculated local rotation to the child object
+          // Step 3: Extract the local rotation as Euler angles
+          const localRotation = new Euler().setFromRotationMatrix(
+            localRotationMatrix
+          );
+          plane1.rotation = new Vector3(
+            MathUtils.radToDeg(localRotation.x),
+            MathUtils.radToDeg(localRotation.y),
+            MathUtils.radToDeg(localRotation.z)
+          );
+          // Step 4: Apply the calculated local rotation to the child object
+        }
+        setCreatedPlanes(newObjects);
       }
-      setCreatedPlanes(newObjects);
     }
   };
 

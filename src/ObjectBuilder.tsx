@@ -4,46 +4,54 @@ import PiecesContainer from "./Components/PiecesContainer/PiecesContainer";
 import { useContext, useRef } from "react";
 import { DraggedPieceContext } from "./Context/DraggedPieceContext";
 import { PiecesContext } from "./Context/PiecesContext";
-import { DragEvent } from "react";
 import { useDrop } from "react-dnd";
-import { GetAllPieces } from "./Contentful/ContentfulClient";
-import { useQuery } from "@tanstack/react-query";
-import { PlaneNode, PlaneNodeData } from "./Core/PlaneObject";
 import { DragContext } from "./Context/DragContext";
-import { Vector3 } from "three";
 import SceneSettings from "./Components/SceneSettings/SceneSettings";
 import { useDragPiece } from "./Hooks/useDragPiece";
+import { PiecePlane } from "./Core/PiecePlane";
+import { BasisPlane } from "./Core/BasisPlane";
+import { useQueryData } from "./Hooks/useQueryData";
+
 export function ObjectBuilder() {
   const { DraggedId } = useContext(DraggedPieceContext);
   const { setCreatedPlanes } = useContext(PiecesContext);
 
-  const { data } = useQuery({
-    queryKey: ["repoData"],
-    queryFn: async () => {
-      return await GetAllPieces();
-    },
-  });
+  const { basis, pieces } = useQueryData();
+
   const counterRef = useRef(0);
-  const handleDragEnter = (event: DragEvent<HTMLDivElement>) => {
-    if (DraggedId < 0) return;
-    if (data?.items && DraggedId > data?.items.length) return;
+  const handleDragEnter = () => {
+    if (DraggedId.length < 1) return;
 
-    if (!data) return;
+    if (pieces) {
+      const piece = pieces.find((item) => item.assetId === DraggedId);
 
-    const node = new PlaneNodeData(counterRef.current, data?.items[DraggedId]);
-    const fields = data?.items[DraggedId].fields;
-    node.rotation = new Vector3(
-      fields.rotationX,
-      fields.rotationY,
-      fields.rotationZ
-    );
+      if (piece) {
+        setCreatedPlanes((prevPlanes) => [
+          ...prevPlanes,
+          new PiecePlane(piece, counterRef.current),
+        ]);
 
-    setCreatedPlanes((prevPlanes) => [...prevPlanes, new PlaneNode(node)]);
+        counterRef.current++;
+        return;
+      }
+    }
 
-    counterRef.current++;
+    if (basis) {
+      const base = basis.find((item) => item.assetId === DraggedId);
+
+      if (base) {
+        setCreatedPlanes((prevPlanes) => [
+          ...prevPlanes,
+          new BasisPlane(base, counterRef.current),
+        ]);
+
+        counterRef.current++;
+        return;
+      }
+    }
   };
 
-  const [{ isOver }, dropRef] = useDrop(() => ({
+  const [, dropRef] = useDrop(() => ({
     accept: "piece", // Accept draggable items of type "piece"
 
     collect: (monitor) => ({
@@ -61,7 +69,7 @@ export function ObjectBuilder() {
     DraggedRef.current = null;
   };
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <div style={{ height: "100%" }}>
       <PiecesContainer />
       <SceneSettings />
       <Canvas

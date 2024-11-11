@@ -11,8 +11,8 @@ export default function PremadeTemplatesSkeleton(
       {Array(props.count)
         .fill(0)
         .map((item) => (
-          <div style={{ padding: "10px" }}>
-            <Skeleton width={300} height={300}></Skeleton>
+          <div style={{ margin: "10px" }}>
+            <Skeleton width={275} height={300}></Skeleton>
             <Skeleton width={100}></Skeleton>
             <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
               <Skeleton width={50} height={20}></Skeleton>

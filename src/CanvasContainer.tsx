@@ -1,20 +1,21 @@
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { useState, useContext, useEffect, useRef } from "react";
-import PngPlane from "./Components/PngPlane/PngPlane";
 import { Environment } from "./Environment";
-import { PiecesContext } from "./Context/PiecesContext";
 import { PlanesContainerContext } from "./Context/PlanesContainerContext";
-import { Euler, Group } from "three";
+import { Euler } from "three";
 import DraggableBehaviour from "./DraggableBehaviour";
+import {
+  ScenePiecesContainerRef,
+  ScenePiecesContainer,
+} from "./Components/ScenePiecesContainer/ScenePiecesContainer";
 
 export function CanvasContainer() {
-  const [cameraRotation, setCameraRotation] = useState(false);
+  const [cameraRotation] = useState(false);
 
-  const { createdPlanes: objects } = useContext(PiecesContext);
-  const containerRef = useRef<Group>(null);
   const { ContainerRef } = useContext(PlanesContainerContext);
+  const ref = useRef<ScenePiecesContainerRef>(null);
   useEffect(() => {
-    ContainerRef.current = containerRef.current;
+    ContainerRef.current = ref.current;
   }, []);
 
   return (
@@ -30,11 +31,8 @@ export function CanvasContainer() {
       <Environment />
 
       <DraggableBehaviour />
-      <group ref={containerRef}>
-        {objects.map((item) => (
-          <PngPlane key={item.data.id} {...item} />
-        ))}
-      </group>
+
+      <ScenePiecesContainer ref={ref} />
 
       <OrbitControls enableRotate={cameraRotation} />
     </>

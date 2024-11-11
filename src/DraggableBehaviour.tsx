@@ -5,6 +5,7 @@ import { useDragPiece } from "./Hooks/useDragPiece";
 import { useMousePosition } from "./Hooks/useMousePositiion";
 import { usePieces } from "./Hooks/usePieces";
 import { NDCToObjectWorld, SetObjectLayerTraverse } from "./Utils/ThreeUtils";
+import { PiecePlane } from "./Core/PiecePlane";
 
 export default function DraggableBehaviour() {
   const raycaster = useRef(new THREE.Raycaster());
@@ -18,9 +19,9 @@ export default function DraggableBehaviour() {
 
     const draggedObjectData = FindObjectWithId(DraggedRef.current.userData.id);
 
-    if (draggedObjectData?.parent) {
+    if (draggedObjectData instanceof PiecePlane && draggedObjectData?.parent) {
       const child = FindSceneObjectWithId(DraggedRef.current.userData.id);
-      const parent = FindSceneObjectWithId(draggedObjectData.parent.data.id);
+      const parent = FindSceneObjectWithId(draggedObjectData.parent.id);
 
       if (parent && child) {
         const position = NDCToObjectWorld(mousePos, parent, camera);
@@ -28,8 +29,8 @@ export default function DraggableBehaviour() {
         child.position.set(
           THREE.MathUtils.clamp(
             parent?.worldToLocal(position).x,
-            -(draggedObjectData?.parent?.data.data.fields.width ?? 100) / 100,
-            (draggedObjectData?.parent?.data.data.fields.width ?? 100) / 100
+            -draggedObjectData.parent.width / 100,
+            draggedObjectData.parent.width / 100
           ),
           0,
           0
@@ -52,6 +53,7 @@ export default function DraggableBehaviour() {
           intersectionPoint.y + 0.01,
           intersectionPoint.z
         );
+
         HoveredObject.current = intersects[0].object;
       }
       SetObjectLayerTraverse(DraggedRef.current, 0);
