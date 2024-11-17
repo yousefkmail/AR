@@ -7,7 +7,7 @@ import { GetPageCount } from "../../Utils/PageUtils";
 import CenterLayout from "../../Layout/CenterLayout";
 import Template from "./Template";
 import PageWidthLayout from "../../Layout/PageWidthLayout";
-import { PaginationCustomStyle } from "../../mui/PaginationCustomStyle";
+import { PaginationCustomStyle } from "../../CustomStyles/mui/PaginationCustomStyle";
 export default function PremadeTemplates() {
   const { templates, isLoading, setPage, count, pageSize, page } =
     useTemplatesQuery();

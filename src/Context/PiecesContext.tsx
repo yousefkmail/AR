@@ -3,6 +3,8 @@ import React, {
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
+  useRef,
   useState,
 } from "react";
 import { Object3D, Object3DEventMap } from "three";
@@ -61,8 +63,10 @@ export const PiecesContextProvider = ({
     if (node.id === id) return node;
 
     if (node instanceof BasisPlane) {
-      for (const nodee of node.children) {
-        if (nodee.id === id) return nodee;
+      for (const layer of node.layers) {
+        for (const nodee of layer.children) {
+          if (nodee.id === id) return nodee;
+        }
       }
     }
 

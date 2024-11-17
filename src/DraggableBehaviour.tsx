@@ -1,5 +1,5 @@
-import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { useDragPiece } from "./Hooks/useDragPiece";
 import { useMousePosition } from "./Hooks/useMousePositiion";
@@ -10,9 +10,28 @@ import { PiecePlane } from "./Core/PiecePlane";
 export default function DraggableBehaviour() {
   const raycaster = useRef(new THREE.Raycaster());
   const { mousePos } = useMousePosition();
-  const { DraggedRef, HoveredObject } = useDragPiece();
+  const { DraggedRef, HoveredObject, HandleDroppedPlane } = useDragPiece();
   const { FindSceneObjectWithId, FindObjectWithId } = usePieces();
+  const { gl } = useThree();
 
+  const HandleDrop = () => {
+    if (DraggedRef.current && HoveredObject.current) {
+      HandleDroppedPlane(DraggedRef.current, HoveredObject.current);
+    }
+    DraggedRef.current = null;
+  };
+
+  const { createdPlanes } = usePieces();
+
+  useEffect(() => {
+    gl.domElement.onmouseup = HandleDrop;
+    gl.domElement.ondrop = HandleDrop;
+
+    return () => {
+      gl.domElement.onmouseup = null;
+      gl.domElement.ondrop = null;
+    };
+  }, [createdPlanes]);
   useFrame(({ camera, scene }) => {
     //return early if nothing dragged to be handled.
     if (!DraggedRef.current) return;

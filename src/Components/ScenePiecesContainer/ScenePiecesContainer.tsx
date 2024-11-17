@@ -36,9 +36,11 @@ export const ScenePiecesContainer = forwardRef<
               {...item}
               rotation={new Vector3(90, 0, 0)}
             >
-              {item.children.map((itemm) => (
-                <PngPlane key={itemm.id} {...itemm} applyOffset />
-              ))}
+              {item.layers.map((layer) =>
+                layer.children.map((itemm) => (
+                  <PngPlane key={itemm.id} {...itemm} applyOffset />
+                ))
+              )}
             </PngPlane>
           );
         else {

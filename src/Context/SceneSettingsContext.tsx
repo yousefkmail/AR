@@ -17,6 +17,7 @@ export const SceneSettingsContextProvider = ({ children }: any) => {
   const [movementMode, setMovementMode] = useState<MovementMode>(
     MovementMode.Parent
   );
+
   return (
     <SceneSettingsContext.Provider
       value={{ movementMode: movementMode, SetMovementMode: setMovementMode }}

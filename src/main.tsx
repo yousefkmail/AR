@@ -11,17 +11,18 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { PlanesContainerContextProvider } from "./Context/PlanesContainerContext.tsx";
 import { SceneSettingsContextProvider } from "./Context/SceneSettingsContext.tsx";
+import { ContextMenuProvider } from "./Features/ContextMenu/ContextMenuProvider.tsx";
 
 const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <SceneSettingsContextProvider>
-      <QueryClientProvider client={queryClient}>
-        <PlanesContainerContextProvider>
-          <DndProvider backend={HTML5Backend}>
-            <PiecesContextProvider>
-              <DraggedPieceContextProvider>
-                <DragContextProvider>
+    <ContextMenuProvider>
+      <SceneSettingsContextProvider>
+        <QueryClientProvider client={queryClient}>
+          <PlanesContainerContextProvider>
+            <DndProvider backend={HTML5Backend}>
+              <PiecesContextProvider>
+                <DraggedPieceContextProvider>
                   <SkeletonTheme
                     baseColor="#b3aaa6"
                     highlightColor="#eaeaea"
@@ -29,12 +30,12 @@ createRoot(document.getElementById("root")!).render(
                   >
                     <App />
                   </SkeletonTheme>
-                </DragContextProvider>
-              </DraggedPieceContextProvider>
-            </PiecesContextProvider>
-          </DndProvider>
-        </PlanesContainerContextProvider>
-      </QueryClientProvider>
-    </SceneSettingsContextProvider>
+                </DraggedPieceContextProvider>
+              </PiecesContextProvider>
+            </DndProvider>
+          </PlanesContainerContextProvider>
+        </QueryClientProvider>
+      </SceneSettingsContextProvider>
+    </ContextMenuProvider>
   </StrictMode>
 );

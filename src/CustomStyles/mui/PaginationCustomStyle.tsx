@@ -6,7 +6,7 @@ export const PaginationCustomStyle = {
       color: "var(--text-secondary)",
     },
     "&:hover": {
-      backgroundColor: "var(--hover-secondary)", // Hover color
+      backgroundColor: "var(--hover-secondary) !important", // Hover color
     },
   },
 };

@@ -1,17 +1,11 @@
 import { createContext, MutableRefObject, useRef } from "react";
-import {
-  Euler,
-  Group,
-  MathUtils,
-  Matrix4,
-  Object3D,
-  Object3DEventMap,
-  Quaternion,
-  Vector3,
-} from "three";
+import { Group, MathUtils, Object3D, Object3DEventMap, Vector3 } from "three";
 import { usePieces } from "../Hooks/usePieces";
 import { BasisPlane } from "../Core/BasisPlane";
 import { PiecePlane } from "../Core/PiecePlane";
+import { NDCToObjectWorld } from "../Utils/ThreeUtils";
+import { useMousePosition } from "../Hooks/useMousePositiion";
+import { useThree } from "@react-three/fiber";
 
 interface DragContextProps {
   DraggedRef: MutableRefObject<Group | null>;
@@ -36,6 +30,8 @@ export const DragContextProvider = ({ children }: any) => {
     setCreatedPlanes,
   } = usePieces();
 
+  const { mousePos } = useMousePosition();
+  const { camera } = useThree();
   const HandleDroppedPlane = (
     obj1: Object3D<Object3DEventMap>,
     obj2: Object3D<Object3DEventMap>
@@ -44,48 +40,23 @@ export const DragContextProvider = ({ children }: any) => {
     let plane2 = FindObjectWithId(obj2.userData.id);
 
     if (plane1 && plane2) {
+      const parent = FindSceneObjectWithId(plane2.id);
+      const child = FindSceneObjectWithId(plane1.id);
+
       const newObjects = createdPlanes.filter((item) => plane1 !== item);
       if (plane2 instanceof BasisPlane && plane1 instanceof PiecePlane) {
-        plane2.addChild(plane1);
-        plane1.setParent(plane2);
-        const parent = FindSceneObjectWithId(plane2.id);
-        const child = FindSceneObjectWithId(plane1.id);
-
         if (parent && child) {
-          const pos = new Vector3();
-          const rot = new Quaternion();
-          child.getWorldPosition(pos);
-          child.getWorldQuaternion(rot);
-          const position = parent.worldToLocal(pos);
-          plane1.position = position;
+          const position = NDCToObjectWorld(mousePos, parent, camera);
 
-          parent.updateMatrixWorld(true);
-          child.updateMatrixWorld(true);
-
-          // Step 1: Get the child's current world rotation as a rotation matrix
-          const worldRotationMatrix = new Matrix4().makeRotationFromEuler(
-            child.rotation
+          const worldPos = MathUtils.clamp(
+            parent?.worldToLocal(position).x,
+            -(plane2.width / 100),
+            plane2.width / 100
           );
-
-          // Step 2: Convert the world rotation matrix to the local space of the new parent
-          const parentInverseMatrix = new Matrix4()
-            .copy(parent.matrixWorld)
-            .invert();
-          const localRotationMatrix = new Matrix4().multiplyMatrices(
-            parentInverseMatrix,
-            worldRotationMatrix
-          );
-
-          // Step 3: Extract the local rotation as Euler angles
-          const localRotation = new Euler().setFromRotationMatrix(
-            localRotationMatrix
-          );
-          plane1.rotation = new Vector3(
-            MathUtils.radToDeg(localRotation.x),
-            MathUtils.radToDeg(localRotation.y),
-            MathUtils.radToDeg(localRotation.z)
-          );
-          // Step 4: Apply the calculated local rotation to the child object
+          const pos: Vector3 = new Vector3();
+          plane2.position = parent.getWorldPosition(pos);
+          plane2.addChild(plane1, 0, new Vector3(worldPos, 0, 0));
+          plane1.setParent(plane2);
         }
         setCreatedPlanes(newObjects);
       }

@@ -7,6 +7,8 @@
     --hover-primary: rgb(199, 189, 189);
     --hover-secondary: rgb(54, 53, 53);
 
+
+
     /* break points */
 
     /* Small devices (phones) */
@@ -55,9 +57,7 @@ body {
 }
 
 .drag-image {
-    -webkit-box-shadow: 0px 0px 77px -18px rgba(255, 255, 255, 1);
-    -moz-box-shadow: 0px 0px 77px -18px rgba(255, 255, 255, 255, 1);
-    box-shadow: 0px 0px 77px -18px rgba(255, 255, 255, 1);
+
     margin: 5px;
     border-radius: 7px;
     overflow: hidden;
@@ -69,24 +69,8 @@ body {
 }
 
 .drag-image-inner:hover {
-    scale: 1.125;
+    scale: 1.05;
 }
-
-.pieces-container {
-    -webkit-box-shadow: inset 0px 0px 12px 10px rgba(255, 255, 255, 1);
-    -moz-box-shadow: inset 0px 0px 12px 10px rgba(255, 255, 255, 1);
-    box-shadow: inset 0px 0px 12px 10px rgba(255, 255, 255, 1);
-}
-
-.pieces-inner-container {
-    overflow-y: auto;
-}
-
-/*
-.pieces-inner-container::-webkit-scrollbar
-{
-    display: none;
-} */
 
 .header {
     border-bottom: var(--default-border);
@@ -97,10 +81,6 @@ body {
 
 }
 
-.active {
-    background-color: purple;
-    color: var(--text-secondary);
-}
 
 .start-creating {
     background-color: var(--color-secondary);
@@ -182,4 +162,41 @@ body {
 
 .footer-link {
     color: var(--text-secondary)
+}
+
+
+.resizable {
+    position: absolute !important;
+    z-index: var(--z-index-modal);
+    background-color: var(--color-primary);
+    margin: 0;
+    padding: 0;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.pieces-container-select-label {
+    color: var(--text-primary);
+}
+
+
+.settings-movemode-button-active {
+    background-color: var(--color-secondary);
+    color: var(--text-secondary);
+}
+
+
+.flex {
+    display: flex;
+}
+
+.contextMenu_container {
+    z-index: 1;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.contextMenu_container>* {
+    pointer-events: auto;
 }

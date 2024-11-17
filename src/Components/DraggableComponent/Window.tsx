@@ -17,26 +17,21 @@ export default function Window(props: WindowProps) {
       bounds="parent"
     >
       <Resizable
+        style={{ display: "flex", flexDirection: "column" }}
         {...rest}
-        style={{
-          position: "absolute",
-          zIndex: "var(--z-index-modal)",
-          backgroundColor: "#333436",
-        }}
-        minWidth={200}
+        className="resizable"
+        minWidth={280}
         minHeight={300}
       >
-        <div className="handle" style={{ width: "100%", height: "30px" }}>
-          <CenterLayout>
-            <FontAwesomeIcon
-              size="lg"
-              style={{ margin: "10px" }}
-              color="white"
-              icon={faGripLines}
-            />
-          </CenterLayout>
-        </div>
-        {children}
+        <CenterLayout className="handle" horizontal>
+          <FontAwesomeIcon
+            size="xl"
+            style={{ margin: "10px" }}
+            color="var(--color-secondary)"
+            icon={faGripLines}
+          />
+        </CenterLayout>
+        <div style={{ flexGrow: 1, overflow: "hidden" }}>{children}</div>
       </Resizable>
     </Draggable>
   );

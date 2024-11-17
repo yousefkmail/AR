@@ -9,9 +9,11 @@ export default function CenterLayout({
   children,
   horizontal,
   vertical,
+  className,
 }: CenterLayoutProps) {
   return (
     <div
+      className={className}
       style={{
         display: "flex",
         justifyContent: horizontal ? "center" : "flex-start",
