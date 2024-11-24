@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export const useTemplatesQuery = () => {
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(3);
+  const [pageSize, setPageSize] = useState<number>(10);
 
   const { data, isLoading } = useQuery({
     queryKey: ["templates", page],

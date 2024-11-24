@@ -3,6 +3,7 @@ import { BasisModel } from "../Models/BasisModel";
 import { PieceModel } from "../Models/PieceModel";
 import { TemplateModel } from "../Models/TemplateMode";
 import { GetAllPiecee, GetAllBasis, GetAllTemplates } from "./ContentfulClient";
+import { Layer } from "./Types/BasisType";
 export class ContentfulDataService implements IDataService {
   GetAllTemplates: (
     page: number,
@@ -11,11 +12,13 @@ export class ContentfulDataService implements IDataService {
     const data = await GetAllTemplates(page, pageSize);
 
     const items: TemplateModel[] = [];
+
     data.items.forEach((item) => {
       items.push({
         name: item.fields.name,
         preview: item.fields.preview?.fields.file?.url ?? "",
         tags: item.fields.tags,
+        price: item.fields.price,
       });
     });
 
@@ -33,6 +36,10 @@ export class ContentfulDataService implements IDataService {
         texture: item.fields.texture?.fields.file?.url ?? "",
         width: item.fields.width,
         assetId: item.sys.id,
+        layers: (item.fields.layers as Layer[]).map((item) => ({
+          name: item.name,
+          positionOffset: item.positionOffset,
+        })),
       };
 
       items.push(modelItem);

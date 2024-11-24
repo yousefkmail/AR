@@ -10,18 +10,15 @@ export default function FloatingContainer({
   children,
 }: Partial<FloatingContainerProps>) {
   return (
-    <span
+    <div
       style={{
         position: "absolute",
-        display: "flex",
-        alignItems: "stretch",
-        backgroundColor: "white",
         borderRadius: "10px",
         left: posX,
         top: posY,
       }}
     >
       {children}
-    </span>
+    </div>
   );
 }

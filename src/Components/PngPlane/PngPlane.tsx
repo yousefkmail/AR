@@ -67,7 +67,11 @@ export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
         }}
       >
         <Plane
-          position={[0, props.applyOffset ? (props?.height ?? 0) / 100 : 0, 0]}
+          position={[
+            0,
+            props.applyOffset ? ((props?.height ?? 0) + 0.1) / 100 : 0,
+            0,
+          ]}
           args={[(props?.width ?? 0) / 50, (props?.height ?? 0) / 50]}
           userData={{ id: id }}
         >
@@ -76,7 +80,9 @@ export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
             transparent={true}
             side={2}
             map={texture}
-            depthWrite={false}
+            // depthWrite={false}
+            depthTest={true} // Ensures proper depth testing
+            alphaTest={0.5}
             userData={{ id: id }}
           />
           {hover && <Edges color={Color.NAMES.yellow} />}

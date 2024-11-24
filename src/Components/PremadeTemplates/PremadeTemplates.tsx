@@ -2,13 +2,19 @@ import PremadeTemplatesSkeleton from "../PremadeTemplates/PremadeTemplatesSkelet
 import GridLayout from "../../Layout/GridLayout";
 import Pagination from "@mui/material/Pagination";
 import { useTemplatesQuery } from "../../Hooks/useTemplatesQuery";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { GetPageCount } from "../../Utils/PageUtils";
 import CenterLayout from "../../Layout/CenterLayout";
 import Template from "./Template";
 import PageWidthLayout from "../../Layout/PageWidthLayout";
 import { PaginationCustomStyle } from "../../CustomStyles/mui/PaginationCustomStyle";
-export default function PremadeTemplates() {
+
+interface PremadeTemplatesProps {
+  cellMinWidth?: number;
+}
+export default function PremadeTemplates({
+  cellMinWidth,
+}: PremadeTemplatesProps) {
   const { templates, isLoading, setPage, count, pageSize, page } =
     useTemplatesQuery();
 
@@ -16,11 +22,14 @@ export default function PremadeTemplates() {
     setPage(page);
   };
 
+  useEffect(() => {
+    console.log(templates);
+  });
   return (
     <CenterLayout horizontal>
       <PageWidthLayout maxWidth={1600}>
         <h2>Start from a template</h2>
-        <GridLayout cellMinWidth={250}>
+        <GridLayout cellMinWidth={cellMinWidth ?? 300}>
           {templates ? (
             templates?.map((item, index) => <Template key={index} {...item} />)
           ) : (

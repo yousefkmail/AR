@@ -2,7 +2,6 @@ import { useState } from "react";
 import Select, { SingleValue } from "react-select";
 import FloatingContainer from "../../Components/FloatingContainer/FloatingContainer";
 import { Slider } from "@mui/material";
-
 interface ObjectContextMenuProps {
   posX: number;
   posY: number;
@@ -38,27 +37,64 @@ export default function ObjectContextMenu({
 
   return (
     <FloatingContainer posX={posX} posY={posY}>
-      <Select onChange={LayerChanged} options={options} />
+      <div>
+        <div
+          style={{
+            height: "50px",
+            marginBottom: "20px",
+          }}
+        >
+          {isRotationOpened && (
+            <div
+              style={{
+                height: "100%",
+                backgroundColor: "white",
+                display: "flex",
+              }}
+            >
+              <Slider
+                style={{ flexGrow: "1" }}
+                onChange={RotationChanged}
+                defaultValue={0}
+                min={-180}
+                max={180}
+              />
+              <input
+                defaultValue={0}
+                min={-180}
+                max={180}
+                style={{ width: "40px", marginLeft: "10px" }}
+                type="number"
+                name=""
+                id=""
+              />
+            </div>
+          )}
+        </div>
+        <div style={{ backgroundColor: "white", display: "flex" }}>
+          <span style={{ padding: "10px", width: "130px" }}>
+            <label
+              style={{ marginBottom: "5px", display: "inline-block" }}
+              htmlFor=""
+            >
+              Layer
+            </label>
+            <Select onChange={LayerChanged} options={options} />
+          </span>
 
-      <button
-        onClick={() => setIsRotationOpened(!isRotationOpened)}
-        style={{
-          backgroundColor: "transparent",
-          border: "none",
-          borderLeft: "1px solid black",
-          borderRight: "1px solid black",
-        }}
-      >
-        Rotate
-      </button>
-      {isRotationOpened && (
-        <Slider
-          onChange={RotationChanged}
-          defaultValue={0}
-          min={-180}
-          max={180}
-        />
-      )}
+          <button
+            onClick={() => setIsRotationOpened(!isRotationOpened)}
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              borderLeft: "1px solid black",
+              borderRight: "1px solid black",
+            }}
+          >
+            Rotate
+          </button>
+        </div>
+      </div>
     </FloatingContainer>
   );
 }

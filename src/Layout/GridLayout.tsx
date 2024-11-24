@@ -10,7 +10,7 @@ export default function GridLayout(props: GridLayoutProps) {
       style={{
         display: "grid",
         gridTemplateColumns: `repeat(auto-fill, minmax(${props.cellMinWidth}px, 1fr))`,
-        padding: "10px",
+        // padding: "10px",
       }}
     >
       {props.children}

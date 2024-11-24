@@ -1,0 +1,52 @@
+$color-primary: white;
+$color-secondary: white;
+$text-primary: black;
+$text-secondary: black;
+/* Hover */
+$hover-primary: rgb(228, 227, 227);
+$hover-secondary: #e2e2e29c;
+/* Active */
+$active-primary: rgb(196, 196, 196);
+$border-primary-color: black;
+$border-secondary-color: white;
+$footer-color: black;
+$footer-text: white;
+$default-border: 1px solid var(--border-primary-color);
+$secondary-border: 1px solid var(--border-secondary-color);
+
+
+
+/* break points */
+
+/* Small devices (phones) */
+$breakpoint-xs: 480px;
+/* Medium devices (tablets) */
+$breakpoint-sm: 768px;
+/* Larger tablets and small desktops */
+$breakpoint-md: 1024px;
+/* Desktops and larger screens */
+$breakpoint-lg: 1200px;
+
+
+/* z indicies */
+
+/* Navbar z-index */
+$z-navbar: 100;
+/* Modal z-index */
+$z-modal: 200;
+/* Tooltip z-index */
+$z-tooltip: 300;
+
+
+/* spacing */
+
+/* Extra small spacing */
+$space-xs: 8px;
+/* Small spacing */
+$space-sm: 16px;
+/* Medium spacing */
+$space-md: 32px;
+/* Large spacing */
+$space-lg: 64px;
+/* Extra large spacing */
+$space-xl: 128px;

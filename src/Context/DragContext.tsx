@@ -48,14 +48,9 @@ export const DragContextProvider = ({ children }: any) => {
         if (parent && child) {
           const position = NDCToObjectWorld(mousePos, parent, camera);
 
-          const worldPos = MathUtils.clamp(
-            parent?.worldToLocal(position).x,
-            -(plane2.width / 100),
-            plane2.width / 100
-          );
           const pos: Vector3 = new Vector3();
           plane2.position = parent.getWorldPosition(pos);
-          plane2.addChild(plane1, 0, new Vector3(worldPos, 0, 0));
+          plane2.addChild(plane1, 0, parent?.worldToLocal(position).x);
           plane1.setParent(plane2);
         }
         setCreatedPlanes(newObjects);

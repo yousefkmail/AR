@@ -1,37 +1,57 @@
 import { PiecePlane } from "./PiecePlane";
 import { PlaneBase } from "./PlaneBase";
 import { BasisModel } from "../Models/BasisModel";
-import { Vector3 } from "three";
+import { MathUtils, Vector3 } from "three";
 
 class BasisLayer {
-  children: PiecePlane[] = [];
+  name: string = "";
   positionOffset: number = 0;
 }
+class LayeredChild {
+  child: PiecePlane;
+  layerIndex: number = 0;
 
+  constructor(child: PiecePlane, layerIndex: number = 0) {
+    this.child = child;
+    this.layerIndex = layerIndex;
+  }
+}
 export class BasisPlane extends PlaneBase {
-  children: PiecePlane[] = [];
   layers: BasisLayer[] = [new BasisLayer()];
+  children: LayeredChild[] = [];
   constructor(data: BasisModel, id: number) {
     super(id, data);
+    this.layers = data.layers.map((layer) => ({
+      children: [],
+      positionOffset: layer.positionOffset,
+      name: layer.name,
+    }));
   }
 
-  addChild(child: PiecePlane, layer: number = 0, pos: Vector3) {
-    if (!this.layers[layer].children.includes(child)) {
-      this.layers[layer].children.push(child);
+  addChild(child: PiecePlane, layer: number = 0, pos: number) {
+    if (!this.children.find((childd) => childd.child === child)) {
       child.setParent(this);
+      child.position = new Vector3(pos, 0, 0);
       child.rotation = new Vector3(-90, 0, 0);
-      child.position = pos;
+
+      this.children.push(new LayeredChild(child, layer));
     }
   }
 
-  // Method to remove a child node
-  removeChild(child: PiecePlane) {
-    this.layers.forEach((layer) => {
-      const index = layer.children.indexOf(child);
-      if (index !== -1) {
-        layer.children.splice(index, 1);
-        child.parent = null;
-      }
-    });
+  UpdateChildLayer(child: PiecePlane, layer: number) {
+    this.children = this.children.map((item) =>
+      item.child === child ? { child: item.child, layerIndex: layer } : item
+    );
   }
+
+  // Method to remove a child node
+  // removeChild(child: PiecePlane) {
+  //   this.layers.forEach((layer) => {
+  //     const index = layer.children.indexOf(child);
+  //     if (index !== -1) {
+  //       layer.children.splice(index, 1);
+  //       child.parent = null;
+  //     }
+  //   });
+  // }
 }

@@ -6,5 +6,6 @@ export type CollectionTemplate = {
     name: EntryFieldTypes.Text;
     preview: EntryFieldTypes.AssetLink;
     tags: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;
+    price: EntryFieldTypes.Number;
   };
 };

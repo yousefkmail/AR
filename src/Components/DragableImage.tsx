@@ -58,16 +58,26 @@ export default function DragableImage({ id, item }: DragableImageProps) {
           src={item.texture}
           alt=""
         />
-        <div style={{ display: "grid", placeItems: "center" }}>
-          <span>{item.name}</span>
+        <div
+          style={{ display: "grid", placeItems: "center", marginBottom: "7px" }}
+        >
+          <span style={{ fontWeight: "bolder" }}>{item.name}</span>
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <span> Size: </span>
-          <span> {item.width} </span>
+          <span style={{ fontWeight: "bolder" }}> {item.width} </span>
           <span> X </span>
-          <span> {item.height} </span>
-          <span> cm </span>
+          <span style={{ fontWeight: "bolder" }}> {item.height} </span>
+          <span
+            style={{
+              borderRadius: "3px",
+              marginLeft: "3px",
+            }}
+          >
+            cm
+          </span>
         </div>
+        <div></div>
       </div>
     </div>
   );

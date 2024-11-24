@@ -1,8 +1,15 @@
 import { RouterProvider } from "react-router-dom";
-import "./App.css";
+import "./Styles/Css/App.css";
+import "./Styles/Scss/index.scss";
 import { AppRouter } from "./Routes/Router";
+import NotificationList from "./Features/NotificationService/Notification";
 
 function App() {
-  return <RouterProvider router={AppRouter}></RouterProvider>;
+  return (
+    <div style={{ height: "100vh" }}>
+      <RouterProvider router={AppRouter}></RouterProvider>
+      <NotificationList />
+    </div>
+  );
 }
 export default App;
