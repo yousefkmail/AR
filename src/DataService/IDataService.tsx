@@ -1,6 +1,6 @@
 import { BasisModel } from "../Models/BasisModel";
 import { PieceModel } from "../Models/PieceModel";
-import { TemplateModel } from "../Models/TemplateMode";
+import { TemplateModel } from "../Models/TemplateModel";
 
 export interface IDataService {
   GetAllBasis: () => Promise<BasisModel[]>;

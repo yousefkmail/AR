@@ -5,35 +5,37 @@ import { useDragPiece } from "./Hooks/useDragPiece";
 import { useMousePosition } from "./Hooks/useMousePositiion";
 import { usePieces } from "./Hooks/usePieces";
 import { NDCToObjectWorld, SetObjectLayerTraverse } from "./Utils/ThreeUtils";
-import { PiecePlane } from "./Core/PiecePlane";
 import { useObjectContextMenu } from "./Features/ContextMenu/useObjectContextMenu";
 
 export default function DraggableBehaviour() {
   const raycaster = useRef(new THREE.Raycaster());
   const { mousePos } = useMousePosition();
   const { DraggedRef, HoveredObject, HandleDroppedPlane } = useDragPiece();
-  const { FindSceneObjectWithId, FindObjectWithId } = usePieces();
+  const { FindSceneObjectWithId, FindPieceWithId, FindBaseWithId } =
+    usePieces();
   const { gl } = useThree();
-  const { open, setMenuPosition, setManagedId, close } = useObjectContextMenu();
+  const { open, setMenuPosition, close, setActivePiece, setActiveBasis } =
+    useObjectContextMenu();
   const HandleDrop = (event: MouseEvent) => {
     if (DraggedRef.current && HoveredObject.current) {
       HandleDroppedPlane(DraggedRef.current, HoveredObject.current);
     }
-
     if (event.button === 0 && DraggedRef.current) {
       open();
-      console.log("Opened");
       const offsetX =
         event.clientX - gl.domElement.getBoundingClientRect().left;
       const offsetY = event.clientY - gl.domElement.getBoundingClientRect().top;
       setMenuPosition({ x: offsetX - 80, y: offsetY - 80 });
-      setManagedId(DraggedRef.current?.userData.id);
+
+      setActivePiece(FindPieceWithId(DraggedRef.current?.userData.id));
+
+      setActiveBasis(FindBaseWithId(DraggedRef.current?.userData.id));
     }
 
     DraggedRef.current = null;
   };
 
-  const { createdPlanes } = usePieces();
+  const { createdBasis, createdPieces } = usePieces();
   const HandlePointerDown = () => {
     close();
   };
@@ -47,32 +49,32 @@ export default function DraggableBehaviour() {
       gl.domElement.removeEventListener("drop", HandleDrop);
       gl.domElement.removeEventListener("pointerdown", HandlePointerDown);
     };
-  }, [createdPlanes]);
+  }, [createdBasis, createdPieces]);
   useFrame(({ camera, scene }) => {
     //return early if nothing dragged to be handled.
     if (!DraggedRef.current) return;
 
-    const draggedObjectData = FindObjectWithId(DraggedRef.current.userData.id);
-    console.log(draggedObjectData);
-    if (draggedObjectData instanceof PiecePlane && draggedObjectData?.parent) {
+    const draggedPieceData = FindPieceWithId(DraggedRef.current.userData.id);
+
+    if (draggedPieceData && draggedPieceData?.parent) {
       const child = FindSceneObjectWithId(DraggedRef.current.userData.id);
-      const parent = FindSceneObjectWithId(draggedObjectData.parent.id);
+      const parent = FindSceneObjectWithId(draggedPieceData.parent.id);
 
       if (parent && child) {
         const position = NDCToObjectWorld(mousePos, parent, camera);
 
         const rightOffset =
-          (draggedObjectData.parent.width / 2 -
-            draggedObjectData.width / 2 +
-            (draggedObjectData.width -
-              draggedObjectData.baseWidth -
-              draggedObjectData.baseOffset)) /
+          (draggedPieceData.parent.width / 2 -
+            draggedPieceData.width / 2 +
+            (draggedPieceData.width -
+              draggedPieceData.baseWidth -
+              draggedPieceData.baseOffset)) /
           50;
 
         const leftOffset =
           -(
-            draggedObjectData.parent.width -
-            (draggedObjectData.width - draggedObjectData.baseOffset)
+            draggedPieceData.parent.width -
+            (draggedPieceData.width - draggedPieceData.baseOffset)
           ) / 100;
 
         child.position.set(
@@ -84,7 +86,6 @@ export default function DraggableBehaviour() {
           child.position.y,
           0
         );
-        console.log(child.position);
       }
     } else {
       raycaster.current.setFromCamera(mousePos, camera);

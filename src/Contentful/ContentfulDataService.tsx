@@ -1,7 +1,7 @@
 import { IDataService } from "../DataService/IDataService";
 import { BasisModel } from "../Models/BasisModel";
 import { PieceModel } from "../Models/PieceModel";
-import { TemplateModel } from "../Models/TemplateMode";
+import { TemplateModel } from "../Models/TemplateModel";
 import { GetAllPiecee, GetAllBasis, GetAllTemplates } from "./ContentfulClient";
 import { Layer } from "./Types/BasisType";
 export class ContentfulDataService implements IDataService {

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TemplateModel } from "../../Models/TemplateMode";
+import { TemplateModel } from "../../Models/TemplateModel";
 import CategoryTag from "../CategoryTag/CategoryTag";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as FaSolidHeart } from "@fortawesome/free-solid-svg-icons";

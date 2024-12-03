@@ -2,14 +2,7 @@ import { useContext } from "react";
 import { ContextMenu_Context } from "./ContextMenu_Context";
 
 export const useObjectContextMenu = () => {
-  let {
-    isOpened,
-    managedId,
-    setIsOpened,
-    setManagedId,
-    menuPosition,
-    setMenuPosition,
-  } = useContext(ContextMenu_Context);
+  let { isOpened, setIsOpened, ...rest } = useContext(ContextMenu_Context);
 
   const open = () => {
     setIsOpened(true);
@@ -27,10 +20,7 @@ export const useObjectContextMenu = () => {
     open,
     close,
     toggleVisibility,
-    managedId,
-    setManagedId,
     isOpened,
-    menuPosition,
-    setMenuPosition,
+    ...rest,
   };
 };

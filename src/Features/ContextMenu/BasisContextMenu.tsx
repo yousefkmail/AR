@@ -1,35 +1,20 @@
 import { useState } from "react";
-import Select, { SingleValue } from "react-select";
 import FloatingContainer from "../../Components/FloatingContainer/FloatingContainer";
 import { Slider } from "@mui/material";
+
 interface ObjectContextMenuProps {
   posX: number;
   posY: number;
-  OnLayerChanged: (layer: number) => void;
+  OnDelete: () => void;
   OnRotationChangd: (number: number) => void;
 }
-export default function ObjectContextMenu({
+export default function BasisContextMenu({
   posX,
   posY,
-  OnLayerChanged,
   OnRotationChangd,
+  OnDelete,
 }: Partial<ObjectContextMenuProps>) {
-  interface LayerOption {
-    label: string;
-    value: number;
-  }
-
-  const [options, setOptions] = useState<LayerOption[]>([
-    { label: "1", value: 1 },
-    { label: "2", value: 2 },
-    { label: "3", value: 3 },
-  ]);
-
-  const LayerChanged = (data: SingleValue<LayerOption>) => {
-    if (data?.value) OnLayerChanged?.(data.value);
-  };
-
-  const RotationChanged = (event: Event, value: number | number[]) => {
+  const RotationChanged = (_event: Event, value: number | number[]) => {
     OnRotationChangd?.(value as number);
   };
 
@@ -72,16 +57,6 @@ export default function ObjectContextMenu({
           )}
         </div>
         <div style={{ backgroundColor: "white", display: "flex" }}>
-          <span style={{ padding: "10px", width: "130px" }}>
-            <label
-              style={{ marginBottom: "5px", display: "inline-block" }}
-              htmlFor=""
-            >
-              Layer
-            </label>
-            <Select onChange={LayerChanged} options={options} />
-          </span>
-
           <button
             onClick={() => setIsRotationOpened(!isRotationOpened)}
             style={{
@@ -93,6 +68,7 @@ export default function ObjectContextMenu({
           >
             Rotate
           </button>
+          <button onClick={() => OnDelete?.()}>Delete</button>
         </div>
       </div>
     </FloatingContainer>

@@ -35,7 +35,11 @@ export default function WindowsContainer() {
   };
 
   return (
-    <Window name="Pieces" isShown={true}>
+    <Window
+      defaultSize={{ height: 500, width: 400 }}
+      name="Pieces"
+      isShown={true}
+    >
       <Windowsbar
         activeWindow={activeWidnow}
         windowsData={windowsData}

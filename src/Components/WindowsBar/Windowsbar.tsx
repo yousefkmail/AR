@@ -1,5 +1,4 @@
 import { WindowData } from "../WindowsContainer/WindowsContainer";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import FontawesomeIconButton from "../Button/FontawesomeIconButton";
 interface WindowsBarProps {
   windowsData?: (WindowData | null)[];
@@ -11,7 +10,6 @@ interface WindowsBarProps {
 export default function Windowsbar({
   windowsData,
   onToggle,
-  OnScreenshotPressed,
   activeWindow,
 }: WindowsBarProps) {
   return (
@@ -44,12 +42,6 @@ export default function Windowsbar({
               />
             )
         )}
-
-        <FontawesomeIconButton
-          onClick={() => OnScreenshotPressed?.()}
-          icon={faCamera}
-          isActive={false}
-        />
       </div>
     </div>
   );

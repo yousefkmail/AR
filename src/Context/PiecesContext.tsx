@@ -3,21 +3,24 @@ import React, {
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { Object3D, Object3DEventMap } from "three";
 import { PlanesContainerContext } from "./PlanesContainerContext";
 import { PiecePlane } from "../Core/PiecePlane";
-import { PlaneBase } from "../Core/PlaneBase";
 import { BasisPlane } from "../Core/BasisPlane";
 export const PiecesContext = createContext<PiecesContextProps>(
   {} as PiecesContextProps
 );
 
 interface PiecesContextProps {
-  createdPlanes: PlaneBase[];
-  setCreatedPlanes: Dispatch<SetStateAction<PlaneBase[]>>;
-  FindObjectWithId: (id: number) => PlaneBase | null;
+  createdBasis: BasisPlane[];
+  setCreatedBasis: Dispatch<SetStateAction<BasisPlane[]>>;
+  createdPieces: PiecePlane[];
+  setCreatedPieces: Dispatch<SetStateAction<PiecePlane[]>>;
+  FindPieceWithId: (id: number) => PiecePlane | null;
+  FindBaseWithId: (id: number) => BasisPlane | null;
   FindSceneObjectWithId: (id: number) => Object3D<Object3DEventMap> | null;
 }
 
@@ -28,8 +31,14 @@ interface PiecesContextProviderProps {
 export const PiecesContextProvider = ({
   children,
 }: PiecesContextProviderProps) => {
-  const [createdPlanes, setCreatedPlanes] = useState<PlaneBase[]>([]);
+  const [createdBasis, setCreatedBasis] = useState<BasisPlane[]>([]);
+  const [createdPieces, setCreatedPieces] = useState<PiecePlane[]>([]);
   const { ContainerRef } = useContext(PlanesContainerContext);
+
+  useEffect(() => {
+    console.log(createdBasis);
+    console.log(createdPieces);
+  }, [createdBasis, createdPieces]);
 
   const FindSceneObjectWithId = (
     id: number
@@ -42,38 +51,38 @@ export const PiecesContextProvider = ({
     });
     return foundObject;
   };
-  const FindObjectWithId = (id: number): PlaneBase | null => {
-    let objj: PiecePlane | null = null;
-    for (const node of createdPlanes) {
-      const found = FindObjectInNodeWithId(node, id);
-      if (found) {
-        return found;
-      }
-    }
 
-    return objj;
+  const FindBaseWithId = (id: number): BasisPlane | null => {
+    for (const base of createdBasis) {
+      if (base.id === id) return base;
+    }
+    return null;
   };
 
-  const FindObjectInNodeWithId = (
-    node: PlaneBase,
-    id: number
-  ): PlaneBase | null => {
-    if (node.id === id) return node;
+  const FindPieceWithId = (id: number): PiecePlane | null => {
+    for (const piece of createdPieces) {
+      if (piece.id === id) return piece;
+    }
 
-    if (node instanceof BasisPlane) {
-      for (const nodee of node.children) {
-        if (nodee.child.id === id) return nodee.child;
+    for (const base of createdBasis) {
+      for (const child of base.children) {
+        if (child.child.id === id) return child.child;
       }
     }
 
     return null;
   };
+
   return (
     <PiecesContext.Provider
       value={{
-        createdPlanes,
-        setCreatedPlanes,
-        FindObjectWithId,
+        createdBasis,
+        createdPieces,
+        setCreatedBasis,
+        setCreatedPieces,
+        FindPieceWithId,
+
+        FindBaseWithId,
         FindSceneObjectWithId,
       }}
     >

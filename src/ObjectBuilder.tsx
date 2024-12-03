@@ -17,7 +17,7 @@ import WindowsContainer from "./Components/WindowsContainer/WindowsContainer";
 export function ObjectBuilder() {
   const ScreenshotterRef = useRef<ScreenShotHandlerRef>(null);
   const { DraggedId } = useContext(DraggedPieceContext);
-  const { setCreatedPlanes } = useContext(PiecesContext);
+  const { setCreatedBasis, setCreatedPieces } = useContext(PiecesContext);
 
   const { basis, pieces } = usePlanesQuery();
 
@@ -29,7 +29,7 @@ export function ObjectBuilder() {
       const piece = pieces.find((item) => item.assetId === DraggedId);
 
       if (piece) {
-        setCreatedPlanes((prevPlanes) => [
+        setCreatedPieces((prevPlanes) => [
           ...prevPlanes,
           new PiecePlane(piece, counterRef.current),
         ]);
@@ -43,7 +43,7 @@ export function ObjectBuilder() {
       const base = basis.find((item) => item.assetId === DraggedId);
 
       if (base) {
-        setCreatedPlanes((prevPlanes) => [
+        setCreatedBasis((prevPlanes) => [
           ...prevPlanes,
           new BasisPlane(base, counterRef.current),
         ]);

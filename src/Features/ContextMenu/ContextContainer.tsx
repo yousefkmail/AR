@@ -1,69 +1,118 @@
 import { MathUtils, Vector3 } from "three";
 import { usePieces } from "../../Hooks/usePieces";
-import ObjectContextMenu from "./ObjectContextMenu";
 import { useObjectContextMenu } from "./useObjectContextMenu";
 import { BasisPlane } from "../../Core/BasisPlane";
-import { PiecePlane } from "../../Core/PiecePlane";
+import PieceContextMenu from "./PieceContextMenu";
+import BasisContextMenu from "./BasisContextMenu";
 export default function ContextContainer() {
-  const { isOpened, menuPosition } = useObjectContextMenu();
+  const { isOpened, menuPosition, activeBasis, activePiece } =
+    useObjectContextMenu();
 
-  const { managedId, close } = useObjectContextMenu();
+  const { close } = useObjectContextMenu();
   const {
     FindSceneObjectWithId,
-    FindObjectWithId,
-    createdPlanes,
-    setCreatedPlanes,
+    setCreatedBasis,
+    FindPieceWithId,
+    createdBasis,
+    FindBaseWithId,
+    setCreatedPieces,
   } = usePieces();
   const HandleRotationChanged = (rotation: number) => {
-    const piece = FindObjectWithId(managedId);
+    if (activeBasis) {
+      const Group = FindSceneObjectWithId(activeBasis.id);
 
-    const Group = FindSceneObjectWithId(managedId);
-    if (piece instanceof BasisPlane) {
       Group?.rotation.set(Group.rotation.x, 0, MathUtils.degToRad(rotation));
-    } else if (piece instanceof PiecePlane && !piece.parent) {
+    }
+
+    if (activePiece && !activePiece.parent) {
+      const Group = FindSceneObjectWithId(activePiece.id);
       Group?.rotation.set(0, MathUtils.degToRad(rotation), 0);
     }
   };
 
   const HandleLayerChanged = (layer: number) => {
-    const childToUpdate = FindObjectWithId(managedId);
-    setCreatedPlanes((prevData) =>
+    if (!activePiece) return;
+
+    setCreatedBasis((prevData) =>
       prevData.map((parent) => {
-        if (
-          parent instanceof BasisPlane &&
-          childToUpdate instanceof PiecePlane
-        ) {
-          const plane = new BasisPlane({ ...parent }, parent.id);
+        const plane = new BasisPlane({ ...parent }, parent.id);
 
-          const parentObj = FindSceneObjectWithId(parent.id);
-          if (parentObj) plane.position = parentObj.position;
+        const parentObj = FindSceneObjectWithId(parent.id);
+        if (parentObj) plane.position = parentObj.position;
 
-          plane.layers = parent.layers;
-          plane.children = parent.children;
+        plane.layers = parent.layers;
+        plane.children = parent.children;
 
-          const sceneObj = FindSceneObjectWithId(childToUpdate.id);
-          if (sceneObj) childToUpdate.position = sceneObj.position;
+        const sceneObj = FindSceneObjectWithId(activePiece.id);
+        if (sceneObj) activePiece.position = sceneObj.position;
 
-          plane.UpdateChildLayer(childToUpdate, layer);
-          return plane;
-        } else {
-          return parent;
-        }
+        plane.UpdateChildLayer(activePiece, layer);
+        return plane;
       })
     );
     close();
   };
 
+  const DeleteActiveBasis = () => {
+    setCreatedBasis((prevData) =>
+      prevData.filter((item) => item.id !== activeBasis?.id)
+    );
+
+    close();
+  };
+
+  const DeleteActivePiece = () => {
+    console.log(activePiece);
+    setCreatedPieces((prevData) =>
+      prevData.filter((item) => item.id !== activePiece?.id)
+    );
+
+    close();
+  };
+
+  const DeattachActiveObject = () => {
+    if (!activePiece) return;
+
+    const child = FindPieceWithId(activePiece.id);
+    if (child && child.parent !== null) {
+      console.log(child);
+      let result = createdBasis.map((item) => {
+        if (item.id === child.parent?.id) {
+          item.children = item.children.filter(
+            (item) => item.child.id !== child.id
+          );
+          return item;
+        } else return item;
+      });
+      setCreatedBasis(result);
+      child.parent = null;
+      child.position = new Vector3(1, 1, 1);
+      child.rotation = new Vector3();
+      setCreatedPieces((prev) => [...prev, child]);
+    }
+    close();
+  };
+
   return (
     <div className="contextMenu_container">
-      {isOpened && (
-        <ObjectContextMenu
-          OnRotationChangd={HandleRotationChanged}
-          OnLayerChanged={HandleLayerChanged}
-          posX={menuPosition.x}
-          posY={menuPosition.y}
-        />
-      )}
+      {isOpened &&
+        (activeBasis === null ? (
+          <PieceContextMenu
+            OnRotationChangd={HandleRotationChanged}
+            OnLayerChanged={HandleLayerChanged}
+            OnDelete={DeleteActivePiece}
+            OnDeattach={DeattachActiveObject}
+            posX={menuPosition.x}
+            posY={menuPosition.y}
+          />
+        ) : (
+          <BasisContextMenu
+            OnRotationChangd={HandleRotationChanged}
+            OnDelete={DeleteActiveBasis}
+            posX={menuPosition.x}
+            posY={menuPosition.y}
+          />
+        ))}
     </div>
   );
 }

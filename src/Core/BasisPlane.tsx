@@ -33,7 +33,6 @@ export class BasisPlane extends PlaneBase {
       child.setParent(this);
       child.position = new Vector3(pos, 0, 0);
       child.rotation = new Vector3(-90, 0, 0);
-
       this.children.push(new LayeredChild(child, layer));
     }
   }
@@ -44,14 +43,9 @@ export class BasisPlane extends PlaneBase {
     );
   }
 
-  // Method to remove a child node
-  // removeChild(child: PiecePlane) {
-  //   this.layers.forEach((layer) => {
-  //     const index = layer.children.indexOf(child);
-  //     if (index !== -1) {
-  //       layer.children.splice(index, 1);
-  //       child.parent = null;
-  //     }
-  //   });
-  // }
+  removeChild(child: PiecePlane) {
+    this.children = this.children.filter(
+      (childd) => childd.child.id === child.id
+    );
+  }
 }
