@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import { createContext, useState, useContext, ReactNode } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 type Notification = {
   id: string;
@@ -20,7 +21,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const addNotification = (message: string, type: Notification["type"]) => {
-    const id = Math.random().toString(36).substr(2, 9);
+    const id = uuidv4();
     setNotifications((prev) => [...prev, { id, message, type }]);
     // Automatically remove after 5 seconds
     setTimeout(() => removeNotification(id), 5000);
