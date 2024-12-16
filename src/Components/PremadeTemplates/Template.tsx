@@ -1,76 +1,120 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TemplateModel } from "../../Models/TemplateModel";
+import { TemplateModel } from "../../DataService/Models/TemplateModel";
 import CategoryTag from "../CategoryTag/CategoryTag";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as FaSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import Spacer from "../../Layout/Spacer";
-import { useState } from "react";
+import { DragEvent, useContext, useState } from "react";
 import { useNotification } from "../../Features/NotificationService/NotificationContext";
 import IconButton from "../Button/IconButton";
+import { useTemplatesQuery } from "../../Hooks/useTemplatesQuery";
+import DraggableItem from "../DragableItem";
+import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
+import { BasisPlane } from "../../Core/BasisPlane";
+import { v4 as uuidv4 } from "uuid";
+import { DraggedPieceContext } from "../../Context/DraggedPieceContext";
+import { PiecePlaneViewModel } from "../../Core/Viewmodels/PiecePlaneViewModel";
+import { PiecePlane } from "../../Core/PiecePlane";
+
 export default function Template(item: TemplateModel) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
-
   const { addNotification } = useNotification();
+  const { fetchFullTemplate } = useTemplatesQuery();
+  const { setDraggedItem } = useContext(DraggedPieceContext);
 
+  const handleDragStart = () => {
+    if (!item.loadedData) return;
+
+    const TemplateViewModel = new BasisPlaneViewModel(
+      new BasisPlane(item.loadedData.basis, uuidv4())
+    );
+
+    for (const child of item.loadedData.children) {
+      TemplateViewModel.addChild(
+        new PiecePlaneViewModel(new PiecePlane({ ...child.data }, uuidv4())),
+        child.layer,
+        child.position[0]
+      );
+    }
+
+    setDraggedItem(TemplateViewModel);
+  };
   return (
-    <div className="template" style={{ padding: "10px" }}>
-      <img className="template-img" src={item.preview} alt="" />
-      <Spacer padding={4}>
-        <div className="template-name">{item.name}</div>
-      </Spacer>
+    <DraggableItem
+      data={item}
+      onDragStart={(event: DragEvent) => {
+        const img = new Image();
+        img.src = "";
+        event.dataTransfer.setDragImage(img, 0, 0);
+        handleDragStart();
+      }}
+    >
+      <div className="template" style={{ padding: "10px" }}>
+        <img
+          draggable={false}
+          className="template-img"
+          src={item.preview}
+          alt=""
+        />
+        <Spacer padding={4}>
+          <div className="template-name">{item.name}</div>
+        </Spacer>
 
-      <Spacer padding={4}>
-        <div style={{ fontWeight: "bolder", fontSize: "1.25rem" }}>
-          {item.price}$
-        </div>
-      </Spacer>
+        <Spacer padding={4}>
+          <div style={{ fontWeight: "bolder", fontSize: "1.25rem" }}>
+            {item.price}$
+          </div>
+        </Spacer>
 
-      <Spacer padding={4}>
-        {item?.tags?.map((item) => (
-          <CategoryTag>{item}</CategoryTag>
-        ))}
-      </Spacer>
+        <Spacer padding={4}>
+          {item?.tags?.map((item) => (
+            <CategoryTag>{item}</CategoryTag>
+          ))}
+        </Spacer>
 
-      <Spacer padding={4}>
-        <div style={{ display: "flex" }}>
-          <button
-            onClick={() => {
-              addNotification(
-                isLiked
-                  ? "Item has been removed from your favorite"
-                  : "Item has been added from your favorite",
-                "info"
-              );
+        <Spacer padding={4}>
+          <div style={{ display: "flex" }}>
+            <button
+              onClick={() => {
+                addNotification(
+                  isLiked
+                    ? "Item has been removed from your favorite"
+                    : "Item has been added from your favorite",
+                  "info"
+                );
 
-              setIsLiked(!isLiked);
+                setIsLiked(!isLiked);
+              }}
+              className="template-like"
+            >
+              <FontAwesomeIcon
+                color={isLiked ? "red" : "black"}
+                size="xl"
+                className={
+                  (isLiked === true ? "template-like-pressed" : "") +
+                  " template-like-icon "
+                }
+                style={{ filter: "none" }}
+                icon={isLiked ? FaSolidHeart : faHeart}
+              />
+            </button>
+          </div>
+        </Spacer>
+        <Spacer padding={4}>
+          <IconButton
+            draggable={false}
+            style={{
+              border: "var(--default-border)",
+              backgroundColor: "purple",
+              color: "white",
             }}
-            className="template-like"
+            onClick={() => fetchFullTemplate(item.assetId)}
+            isActive={false}
           >
-            <FontAwesomeIcon
-              color={isLiked ? "red" : "black"}
-              size="xl"
-              className={
-                (isLiked === true ? "template-like-pressed" : "") +
-                " template-like-icon "
-              }
-              style={{ filter: "none" }}
-              icon={isLiked ? FaSolidHeart : faHeart}
-            />
-          </button>
-        </div>
-      </Spacer>
-      <Spacer padding={4}>
-        <IconButton
-          style={{
-            border: "var(--default-border)",
-            backgroundColor: "purple",
-            color: "white",
-          }}
-          isActive={false}
-        >
-          Try this out
-        </IconButton>
-      </Spacer>
-    </div>
+            {item.loadedData ? "loaded" : "Load template"}
+          </IconButton>
+        </Spacer>
+      </div>
+    </DraggableItem>
   );
 }

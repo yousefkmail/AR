@@ -28,10 +28,33 @@ export const GetAllBasis = async () => {
   return data;
 };
 
+export const GetBaseById = async (id: string) => {
+  const data =
+    await ContentfulCleint.withoutUnresolvableLinks.getEntry<BasisType>(id);
+
+  return data;
+};
+
+export const GetPieceById = async (id: string) => {
+  const data =
+    await ContentfulCleint.withoutUnresolvableLinks.getEntry<PieceType>(id);
+
+  return data;
+};
+
 export const GetAllPiecee = async () => {
   const data =
     await ContentfulCleint.withoutUnresolvableLinks.getEntries<PieceType>({
       content_type: "piecee",
     });
+  return data;
+};
+
+export const GetTemplateById = async (id: string) => {
+  const data =
+    await ContentfulCleint.withoutUnresolvableLinks.getEntry<CollectionTemplate>(
+      id
+    );
+
   return data;
 };

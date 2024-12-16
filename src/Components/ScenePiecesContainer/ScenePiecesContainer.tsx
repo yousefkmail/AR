@@ -1,8 +1,9 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import { usePieces } from "../../Hooks/usePieces";
-import { PngPlane, PngPlaneRef } from "../PngPlane/PngPlane";
-import { Group, Vector3 } from "three";
+import { PngPlaneRef } from "../PngPlane/PngPlane";
+import { Group } from "three";
 import { GroupProps } from "@react-three/fiber";
+import PreviewHandler from "../PreviewHandler";
 
 export type ScenePiecesContainerRef = {
   group: Group;
@@ -26,45 +27,24 @@ export const ScenePiecesContainer = forwardRef<
   }));
 
   const { createdBasis, createdPieces } = usePieces();
-
   return (
     <group ref={groupRef}>
       {createdBasis.map((item, index) => {
         return (
-          <PngPlane
+          <item.Render
+            key={item.BasisPlane.id}
             ref={(item) => (basisRefs.current[index] = item!)}
-            key={item.id}
-            {...item}
-            rotation={new Vector3(90, 0, 0)}
-          >
-            {item.children.map((child, index) => (
-              <PngPlane
-                key={child.child.id}
-                {...child.child}
-                applyOffset
-                position={
-                  new Vector3(
-                    child.child.position.x,
-                    ((item.layers[child.layerIndex - 1]?.positionOffset ?? 0) +
-                      index * 0.01) /
-                      50,
-                    child.child.position.z
-                  )
-                }
-              />
-            ))}
-          </PngPlane>
+          ></item.Render>
         );
       })}
 
       {createdPieces.map((piece, index) => (
-        <PngPlane
+        <piece.Render
+          key={piece.PiecePlane.id}
           ref={(item) => (piecesRefs.current[index] = item!)}
-          key={piece.id}
-          {...piece}
-          applyOffset
-        />
+        ></piece.Render>
       ))}
+      <PreviewHandler></PreviewHandler>
     </group>
   );
 });

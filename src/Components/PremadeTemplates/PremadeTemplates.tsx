@@ -22,16 +22,14 @@ export default function PremadeTemplates({
     setPage(page);
   };
 
-  useEffect(() => {
-    console.log(templates);
-  });
+  useEffect(() => console.log(templates), [templates]);
   return (
     <CenterLayout horizontal>
       <PageWidthLayout maxWidth={1600}>
         <h2>Start from a template</h2>
         <GridLayout cellMinWidth={cellMinWidth ?? 300}>
           {templates ? (
-            templates?.map((item, index) => <Template key={index} {...item} />)
+            templates?.map((item) => <Template key={item.assetId} {...item} />)
           ) : (
             <PremadeTemplatesSkeleton count={5} />
           )}

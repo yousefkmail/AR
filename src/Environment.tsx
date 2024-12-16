@@ -11,6 +11,7 @@ export function Environment() {
 
   useEffect(() => {
     environment.current = ref.current;
+    console.log(environment.current.layers);
   }, []);
 
   return <primitive object={scene} scale={1} />;

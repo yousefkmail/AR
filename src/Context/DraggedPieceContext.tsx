@@ -1,8 +1,9 @@
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 
 interface DraggedPieceContextProps {
-  DraggedId: string;
-  setDraggedId: Dispatch<SetStateAction<string>>;
+  CreateDraggedPiece: () => void;
+  DraggedItem: object | null;
+  setDraggedItem: Dispatch<SetStateAction<object | null>>;
 }
 
 export const DraggedPieceContext = createContext<DraggedPieceContextProps>(
@@ -10,10 +11,20 @@ export const DraggedPieceContext = createContext<DraggedPieceContextProps>(
 );
 
 export const DraggedPieceContextProvider = ({ children }: any) => {
-  const [DraggedId, setDraggedId] = useState<string>("");
+  const [DraggedItem, setDraggedItem] = useState<object | null>(null);
+
+  const CreateDraggedPiece = () => {
+    // DraggedItem?.Drop();
+  };
 
   return (
-    <DraggedPieceContext.Provider value={{ DraggedId, setDraggedId }}>
+    <DraggedPieceContext.Provider
+      value={{
+        CreateDraggedPiece,
+        DraggedItem,
+        setDraggedItem,
+      }}
+    >
       {children}
     </DraggedPieceContext.Provider>
   );

@@ -27,9 +27,13 @@ export default function DraggableBehaviour() {
       const offsetY = event.clientY - gl.domElement.getBoundingClientRect().top;
       setMenuPosition({ x: offsetX - 80, y: offsetY - 80 });
 
-      setActivePiece(FindPieceWithId(DraggedRef.current?.userData.id));
+      setActivePiece(
+        FindPieceWithId(DraggedRef.current?.userData.id)?.PiecePlane ?? null
+      );
 
-      setActiveBasis(FindBaseWithId(DraggedRef.current?.userData.id));
+      setActiveBasis(
+        FindBaseWithId(DraggedRef.current?.userData.id)?.BasisPlane ?? null
+      );
     }
 
     DraggedRef.current = null;
@@ -50,7 +54,9 @@ export default function DraggableBehaviour() {
       gl.domElement.removeEventListener("pointerdown", HandlePointerDown);
     };
   }, [createdBasis, createdPieces]);
+
   useFrame(({ camera, scene }) => {
+    // console.log(preview);
     //return early if nothing dragged to be handled.
     if (!DraggedRef.current) return;
 
@@ -58,23 +64,26 @@ export default function DraggableBehaviour() {
 
     if (draggedPieceData && draggedPieceData?.parent) {
       const child = FindSceneObjectWithId(DraggedRef.current.userData.id);
-      const parent = FindSceneObjectWithId(draggedPieceData.parent.id);
+      const parent = FindSceneObjectWithId(
+        draggedPieceData.parent.BasisPlane.id
+      );
 
       if (parent && child) {
         const position = NDCToObjectWorld(mousePos, parent, camera);
 
         const rightOffset =
-          (draggedPieceData.parent.width / 2 -
-            draggedPieceData.width / 2 +
-            (draggedPieceData.width -
-              draggedPieceData.baseWidth -
-              draggedPieceData.baseOffset)) /
+          (draggedPieceData.parent.BasisPlane.width / 2 -
+            draggedPieceData.PiecePlane.width / 2 +
+            (draggedPieceData.PiecePlane.width -
+              draggedPieceData.PiecePlane.baseWidth -
+              draggedPieceData.PiecePlane.baseOffset)) /
           50;
 
         const leftOffset =
           -(
-            draggedPieceData.parent.width -
-            (draggedPieceData.width - draggedPieceData.baseOffset)
+            draggedPieceData.parent.BasisPlane.width -
+            (draggedPieceData.PiecePlane.width -
+              draggedPieceData.PiecePlane.baseOffset)
           ) / 100;
 
         child.position.set(

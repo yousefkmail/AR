@@ -1,22 +1,26 @@
-import DragableImage from "../DragableImage";
 import Select from "react-select";
 import { OptionType, usePlanesQuery } from "../../Hooks/usePlanesQuery";
 import GridLayout from "../../Layout/GridLayout";
 import { PiecesSelectStyle } from "../../CustomStyles/react-select/PiecesSelectStyle";
 import Spacer from "../../Layout/Spacer";
+import DraggablePiece from "../DraggablePiece";
+import DraggableBasis from "../DraggableBasis";
 
 export const PiecesContainer = () => {
   const {
-    SetBasisAsActivePlanes,
-    SetPiecesCategoryAsActivePlanes,
-    activePlanes,
+    activePieces,
+    basis,
+    selectedOption,
+    setSelectedOption,
     categories,
+    SetPiecesCategoryAsActivePlanes,
   } = usePlanesQuery();
 
   const handleChange = (option: OptionType | null) => {
-    option?.value === "Base"
-      ? SetBasisAsActivePlanes()
-      : SetPiecesCategoryAsActivePlanes(option?.value ?? "");
+    if (option) {
+      SetPiecesCategoryAsActivePlanes(option.value);
+      setSelectedOption(option);
+    }
   };
 
   return (
@@ -26,8 +30,8 @@ export const PiecesContainer = () => {
       </Spacer>
 
       <Select
-        options={categories} // The list of options
-        placeholder="Select the piece type" // Placeholder text
+        options={categories}
+        placeholder="Select the piece type"
         onChange={handleChange}
         defaultValue={{ label: "Base", value: "Base" }}
         isSearchable
@@ -35,9 +39,13 @@ export const PiecesContainer = () => {
       />
 
       <GridLayout cellMinWidth={200}>
-        {activePlanes?.map((item) => (
-          <DragableImage key={item.assetId} item={item} id={item.assetId} />
-        ))}
+        {selectedOption?.value === "Base"
+          ? basis?.map((item) => (
+              <DraggableBasis key={item.assetId} item={item} />
+            ))
+          : activePieces?.map((item) => (
+              <DraggablePiece key={item.assetId} item={item} />
+            ))}
       </GridLayout>
     </Spacer>
   );

@@ -1,4 +1,4 @@
-import { useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import { Vector2 } from "three";
 
@@ -14,6 +14,7 @@ export function useMousePosition() {
 
   useEffect(() => {
     document.addEventListener("pointermove", updateMousePosition);
+    document.addEventListener("dragover", updateMousePosition);
   }, []);
 
   return { mousePos: mouse.current };

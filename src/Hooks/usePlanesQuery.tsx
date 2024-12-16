@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
-import { PlaneModel } from "../Models/PlaneModel";
 import { useQuery } from "@tanstack/react-query";
 import { dataService } from "../Services/Services";
+import { PieceModel } from "../DataService/Models/PieceModel";
 export interface OptionType {
   value: string;
   label: string;
 }
 
 export const usePlanesQuery = () => {
-  const [activePlanes, setActivePlanes] = useState<PlaneModel[]>([]);
+  const [activePieces, setActivePieces] = useState<PieceModel[]>([]);
+
+  const [selectedOption, setSelectedOption] = useState<
+    OptionType | undefined
+  >();
+
   const [categories, setCategories] = useState<OptionType[]>([]);
 
   const { data: pieces } = useQuery({
@@ -25,14 +30,10 @@ export const usePlanesQuery = () => {
     },
   });
 
-  const SetBasisAsActivePlanes = () => {
-    if (basis) setActivePlanes(basis);
-  };
-
   const SetPiecesCategoryAsActivePlanes = (category: string) => {
     const items = pieces?.filter((item) => item.category === category);
 
-    if (items) setActivePlanes(items);
+    if (items) setActivePieces(items);
   };
 
   const SetCategories = () => {
@@ -53,15 +54,21 @@ export const usePlanesQuery = () => {
   };
 
   useEffect(() => {
+    if (!selectedOption) {
+      setSelectedOption(categories[0]);
+    }
+  }, [categories]);
+
+  useEffect(() => {
     SetCategories();
-    SetBasisAsActivePlanes();
   }, [basis, pieces]);
 
   return {
     pieces,
     basis,
-    activePlanes,
-    SetBasisAsActivePlanes,
+    activePieces,
+    selectedOption,
+    setSelectedOption,
     SetPiecesCategoryAsActivePlanes,
     categories,
   };
