@@ -27,13 +27,9 @@ export default function DraggableBehaviour() {
       const offsetY = event.clientY - gl.domElement.getBoundingClientRect().top;
       setMenuPosition({ x: offsetX - 80, y: offsetY - 80 });
 
-      setActivePiece(
-        FindPieceWithId(DraggedRef.current?.userData.id)?.PiecePlane ?? null
-      );
+      setActivePiece(FindPieceWithId(DraggedRef.current?.userData.id) ?? null);
 
-      setActiveBasis(
-        FindBaseWithId(DraggedRef.current?.userData.id)?.BasisPlane ?? null
-      );
+      setActiveBasis(FindBaseWithId(DraggedRef.current?.userData.id) ?? null);
     }
 
     DraggedRef.current = null;

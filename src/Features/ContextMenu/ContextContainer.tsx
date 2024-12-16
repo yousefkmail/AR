@@ -4,6 +4,7 @@ import { useObjectContextMenu } from "./useObjectContextMenu";
 import { BasisPlane } from "../../Core/BasisPlane";
 import PieceContextMenu from "./PieceContextMenu";
 import BasisContextMenu from "./BasisContextMenu";
+import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
 export default function ContextContainer() {
   const { isOpened, menuPosition, activeBasis, activePiece } =
     useObjectContextMenu();
@@ -14,81 +15,87 @@ export default function ContextContainer() {
     setCreatedBasis,
     FindPieceWithId,
     createdBasis,
-    FindBaseWithId,
     setCreatedPieces,
   } = usePieces();
   const HandleRotationChanged = (rotation: number) => {
-    // if (activeBasis) {
-    //   const Group = FindSceneObjectWithId(activeBasis.id);
-    //   Group?.rotation.set(Group.rotation.x, 0, MathUtils.degToRad(rotation));
-    // }
-    // if (activePiece && !activePiece.) {
-    //   const Group = FindSceneObjectWithId(activePiece.id);
-    //   Group?.rotation.set(0, MathUtils.degToRad(rotation), 0);
-    // }
+    if (activeBasis) {
+      const Group = FindSceneObjectWithId(activeBasis.BasisPlane.id);
+      Group?.rotation.set(Group.rotation.x, 0, MathUtils.degToRad(rotation));
+    }
+    if (activePiece && !activePiece.parent) {
+      const Group = FindSceneObjectWithId(activePiece.PiecePlane.id);
+      Group?.rotation.set(0, MathUtils.degToRad(rotation), 0);
+    }
   };
 
-  // const HandleLayerChanged = (layer: number) => {
-  //   if (!activePiece) return;
+  const HandleLayerChanged = (layer: number) => {
+    if (!activePiece) return;
 
-  //   setCreatedBasis((prevData) =>
-  //     prevData.map((parent) => {
-  //       const plane = new BasisPlane({ ...parent }, parent.id);
+    setCreatedBasis((prevData) =>
+      prevData.map((parent) => {
+        const plane = new BasisPlane(
+          { ...parent.BasisPlane },
+          parent.BasisPlane.id
+        );
+        const planeViewModel = new BasisPlaneViewModel(plane);
+        const parentObj = FindSceneObjectWithId(parent.BasisPlane.id);
+        if (parentObj) plane.position = parentObj.position;
 
-  //       const parentObj = FindSceneObjectWithId(parent.id);
-  //       if (parentObj) plane.position = parentObj.position;
+        plane.layers = parent.BasisPlane.layers;
+        planeViewModel.children = parent.children;
 
-  //       plane.layers = parent.layers;
-  //       plane.children = parent.children;
+        const sceneObj = FindSceneObjectWithId(activePiece.PiecePlane.id);
+        if (sceneObj) activePiece.PiecePlane.position = sceneObj.position;
 
-  //       const sceneObj = FindSceneObjectWithId(activePiece.id);
-  //       if (sceneObj) activePiece.position = sceneObj.position;
-
-  //       plane.UpdateChildLayer(activePiece, layer);
-  //       return plane;
-  //     })
-  //   );
-  //   close();
-  // };
+        planeViewModel.UpdateChildLayer(activePiece, layer);
+        return planeViewModel;
+      })
+    );
+    close();
+  };
 
   const DeleteActiveBasis = () => {
-    // setCreatedBasis((prevData) =>
-    //   prevData.filter((item) => item.id !== activeBasis?.id)
-    // );
-    // close();
+    setCreatedBasis((prevData) =>
+      prevData.filter(
+        (item) => item.BasisPlane.id !== activeBasis?.BasisPlane.id
+      )
+    );
+    close();
   };
 
   const DeleteActivePiece = () => {
-    // setCreatedPieces((prevData) =>
-    //   prevData.filter((item) => item.id !== activePiece?.id)
-    // );
-    // close();
+    setCreatedPieces((prevData) =>
+      prevData.filter(
+        (item) => item.PiecePlane.id !== activePiece?.PiecePlane.id
+      )
+    );
+    close();
   };
 
   const DeattachActiveObject = () => {
-    // if (!activePiece) return;
-    // const child = FindPieceWithId(activePiece.id);
-    // if (child && child.parent !== null) {
-    //   let result = createdBasis.map((item) => {
-    //     if (item.id === child.parent?.id) {
-    //       item.children = item.children.filter(
-    //         (item) => item.child.id !== child.id
-    //       );
-    //       return item;
-    //     } else return item;
-    //   });
-    //   setCreatedBasis(result);
-    //   child.parent = null;
-    //   child.position = new Vector3(1, 1, 1);
-    //   child.rotation = new Vector3();
-    //   setCreatedPieces((prev) => [...prev, child]);
-    // }
-    // close();
+    if (!activePiece) return;
+    const child = FindPieceWithId(activePiece.PiecePlane.id);
+    if (child && child.parent !== null) {
+      let result = createdBasis.map((item) => {
+        if (item.BasisPlane.id === child.parent?.BasisPlane.id) {
+          item.children = item.children.filter(
+            (item) => item.child.PiecePlane.id !== child.PiecePlane.id
+          );
+          return item;
+        } else return item;
+      });
+      setCreatedBasis(result);
+      child.parent = null;
+      child.PiecePlane.position = new Vector3(1, 1, 1);
+      child.PiecePlane.rotation = new Vector3();
+      setCreatedPieces((prev) => [...prev, child]);
+    }
+    close();
   };
 
   return (
     <div className="contextMenu_container">
-      {/* {isOpened &&
+      {isOpened &&
         (activeBasis === null ? (
           <PieceContextMenu
             OnRotationChangd={HandleRotationChanged}
@@ -105,7 +112,7 @@ export default function ContextContainer() {
             posX={menuPosition.x}
             posY={menuPosition.y}
           />
-        ))} */}
+        ))}
     </div>
   );
 }

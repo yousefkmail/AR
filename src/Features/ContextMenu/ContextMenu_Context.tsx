@@ -1,16 +1,16 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-import { BasisPlane } from "../../Core/BasisPlane";
-import { PiecePlane } from "../../Core/PiecePlane";
+import { PiecePlaneViewModel } from "../../Core/Viewmodels/PiecePlaneViewModel";
+import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
 
 interface ContextMenuProps {
   isOpened: boolean;
   setIsOpened: Dispatch<SetStateAction<boolean>>;
   menuPosition: { x: number; y: number };
   setMenuPosition: Dispatch<SetStateAction<{ x: number; y: number }>>;
-  activeBasis?: BasisPlane | null;
-  setActiveBasis: Dispatch<SetStateAction<BasisPlane | null>>;
-  activePiece?: PiecePlane | null;
-  setActivePiece: Dispatch<SetStateAction<PiecePlane | null>>;
+  activeBasis?: BasisPlaneViewModel | null;
+  setActiveBasis: Dispatch<SetStateAction<BasisPlaneViewModel | null>>;
+  activePiece?: PiecePlaneViewModel | null;
+  setActivePiece: Dispatch<SetStateAction<PiecePlaneViewModel | null>>;
 }
 
 export const ContextMenu_Context = createContext<ContextMenuProps>(
