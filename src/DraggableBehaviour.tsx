@@ -40,12 +40,12 @@ export default function DraggableBehaviour() {
     close();
   };
   useEffect(() => {
-    gl.domElement.addEventListener("mouseup", HandleDrop);
+    gl.domElement.addEventListener("pointerup", HandleDrop);
     gl.domElement.addEventListener("drop", HandleDrop);
     gl.domElement.addEventListener("pointerdown", HandlePointerDown);
 
     return () => {
-      gl.domElement.removeEventListener("mouseup", HandleDrop);
+      gl.domElement.removeEventListener("pointerup", HandleDrop);
       gl.domElement.removeEventListener("drop", HandleDrop);
       gl.domElement.removeEventListener("pointerdown", HandlePointerDown);
     };
