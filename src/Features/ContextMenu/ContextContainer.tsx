@@ -5,10 +5,11 @@ import { BasisPlane } from "../../Core/BasisPlane";
 import PieceContextMenu from "./PieceContextMenu";
 import BasisContextMenu from "./BasisContextMenu";
 import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
+import { useState } from "react";
 export default function ContextContainer() {
   const { isOpened, menuPosition, activeBasis, activePiece } =
     useObjectContextMenu();
-
+  const [rotation, setRotation] = useState<number>(0);
   const { close } = useObjectContextMenu();
   const {
     FindSceneObjectWithId,
@@ -21,10 +22,12 @@ export default function ContextContainer() {
     if (activeBasis) {
       const Group = FindSceneObjectWithId(activeBasis.BasisPlane.id);
       Group?.rotation.set(Group.rotation.x, 0, MathUtils.degToRad(rotation));
+      setRotation(rotation);
     }
     if (activePiece && !activePiece.parent) {
       const Group = FindSceneObjectWithId(activePiece.PiecePlane.id);
       Group?.rotation.set(0, MathUtils.degToRad(rotation), 0);
+      setRotation(rotation);
     }
   };
 
@@ -109,6 +112,7 @@ export default function ContextContainer() {
           <BasisContextMenu
             OnRotationChangd={HandleRotationChanged}
             OnDelete={DeleteActiveBasis}
+            RotationValue={rotation}
             posX={menuPosition.x}
             posY={menuPosition.y}
           />

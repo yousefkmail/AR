@@ -20,12 +20,12 @@ export interface WindowData {
 export default function WindowsContainer() {
   const [windowsData] = useState<WindowData[]>([
     { name: "Pieces", icon: faNewspaper, window: () => <PiecesContainer /> },
-    { name: "Settings", icon: faGear, window: () => <SceneSettings /> },
     {
       name: "Templates",
       icon: faPuzzlePiece,
       window: () => <PremadeTemplates />,
     },
+    { name: "Settings", icon: faGear, window: () => <SceneSettings /> },
   ]);
 
   const [activeWidnow, setActiveWindow] = useState<WindowData>(windowsData[0]);
