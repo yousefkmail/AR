@@ -50,10 +50,25 @@ export default function BasisContextMenu({
                 display: "flex",
                 padding: "0 0 0 15px",
                 borderRadius: "7px",
+                overflow: "hidden",
               }}
             >
               <Slider
-                color="black"
+                sx={{
+                  color: "black", // Change the slider thumb and track color to black
+                  "& .MuiSlider-thumb": {
+                    backgroundColor: "black", // Thumb color
+                    "&:hover, &.Mui-focusVisible": {
+                      boxShadow: "0px 0px 0px 8px rgba(0, 0, 0, 0.16)", // Hover effect
+                    },
+                  },
+                  "& .MuiSlider-track": {
+                    backgroundColor: "black", // Track color
+                  },
+                  "& .MuiSlider-rail": {
+                    backgroundColor: "#bfbfbf", // Rail color (default gray, optional)
+                  },
+                }}
                 style={{ flexGrow: "1" }}
                 onChange={RotationChanged}
                 defaultValue={0}
@@ -84,12 +99,8 @@ export default function BasisContextMenu({
           }}
         >
           <button
+            className={"contextmenu-button"}
             onClick={() => setIsRotationOpened(!isRotationOpened)}
-            style={{
-              backgroundColor: "transparent",
-              border: "none",
-              padding: "7px",
-            }}
           >
             <div style={{ marginBottom: "5px" }}>
               <FontAwesomeIcon
@@ -100,16 +111,7 @@ export default function BasisContextMenu({
             </div>
             Rotate
           </button>
-          <button
-            style={{
-              padding: "7px",
-              backgroundColor: "transparent",
-              border: "none",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-            onClick={() => OnDelete?.()}
-          >
+          <button className={"contextmenu-button"} onClick={() => OnDelete?.()}>
             <div style={{ marginBottom: "5px" }}>
               <FontAwesomeIcon
                 style={{ marginBottom: "3px" }}

@@ -29,7 +29,9 @@ export default function PremadeTemplates({
         <h2>Start from a template</h2>
         <GridLayout cellMinWidth={cellMinWidth ?? 300}>
           {templates ? (
-            templates?.map((item) => <Template key={item.assetId} {...item} />)
+            templates?.map((item) => (
+              <Template key={item.template.assetId} {...item} />
+            ))
           ) : (
             <PremadeTemplatesSkeleton count={5} />
           )}

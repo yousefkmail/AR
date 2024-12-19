@@ -1,5 +1,5 @@
 import { createContext, MutableRefObject, useRef } from "react";
-import { Group, Object3D, Object3DEventMap, Vector3 } from "three";
+import { Group, Object3D, Object3DEventMap } from "three";
 import { usePieces } from "../Hooks/usePieces";
 import { NDCToObjectWorld } from "../Utils/ThreeUtils";
 import { useMousePosition } from "../Hooks/useMousePositiion";
@@ -23,11 +23,9 @@ export const DragContextProvider = ({ children }: any) => {
   const HoveredObject = useRef<Object3D<Object3DEventMap> | undefined>();
   const {
     FindSceneObjectWithId,
-    setCreatedPieces,
     FindBaseWithId,
     FindPieceWithId,
-    createdPieces,
-    setCreatedBasis,
+    HandlePieceDroppedOnPlane,
   } = usePieces();
 
   const { mousePos } = useMousePosition();
@@ -40,27 +38,10 @@ export const DragContextProvider = ({ children }: any) => {
     let plane2 = FindBaseWithId(obj2.userData.id);
     if (plane1 && plane2) {
       const parent = FindSceneObjectWithId(plane2.BasisPlane.id);
-      const child = FindSceneObjectWithId(plane1.PiecePlane.id);
-
-      const newObjects = createdPieces.filter((item) => plane1 !== item);
-
-      if (parent && child) {
+      if (parent) {
         const position = NDCToObjectWorld(mousePos, parent, camera);
-
-        const pos: Vector3 = new Vector3();
-        plane2.BasisPlane.position = parent.getWorldPosition(pos);
-        plane2.addChild(plane1, 0, parent?.worldToLocal(position).x);
-        plane1.setParent(plane2);
+        HandlePieceDroppedOnPlane(plane1, plane2, position);
       }
-      setCreatedBasis((prev) =>
-        prev.map((item) => {
-          if (item.BasisPlane.id === plane2.BasisPlane.id) {
-            return plane2;
-          } else return item;
-        })
-      );
-
-      setCreatedPieces(newObjects);
     }
   };
 

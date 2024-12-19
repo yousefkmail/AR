@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { CanvasContainer } from "./CanvasContainer";
-import { DragEvent, memo, MouseEvent, useContext, useRef } from "react";
+import { DragEvent, MouseEvent, useContext, useRef } from "react";
 import { DraggedPieceContext } from "./Context/DraggedPieceContext";
 import { DragContextProvider } from "./Context/DragContext";
 import ContextContainer from "./Features/ContextMenu/ContextContainer";
@@ -15,10 +15,11 @@ import { useObjectPreview } from "./Features/UIToCanvasDrag/Hooks/useObjectPrevi
 import { PiecePlaneViewModel } from "./Core/Viewmodels/PiecePlaneViewModel";
 import { usePieces } from "./Hooks/usePieces";
 
-export const ObjectBuilder = memo(() => {
+export const ObjectBuilder = () => {
   const ScreenshotterRef = useRef<ScreenShotHandlerRef>(null);
-  const { CreateDraggedPiece, DraggedItem } = useContext(DraggedPieceContext);
-  const { setCreatedBasis, setCreatedPieces } = usePieces();
+  const { CreateDraggedPiece, DraggedItem, setDraggedItem } =
+    useContext(DraggedPieceContext);
+  const { DispatchCreatedBasis, setCreatedPieces } = usePieces();
   const { setPreview, previewRef } = useObjectPreview();
   const handleDragEnter = () => {
     if (DraggedItem && DraggedItem instanceof BasisPlaneViewModel) {
@@ -35,13 +36,13 @@ export const ObjectBuilder = memo(() => {
     event.preventDefault();
   };
 
-  const onDrop = (event: MouseEvent) => {
+  const onDrop = (_event: MouseEvent) => {
     if (DraggedItem && DraggedItem instanceof BasisPlaneViewModel) {
       console.log(previewRef.current);
       if (previewRef.current) {
         DraggedItem.BasisPlane.position = previewRef.current.position;
       }
-      setCreatedBasis((prev) => [...prev, DraggedItem]);
+      DispatchCreatedBasis({ type: "add", payload: DraggedItem });
     }
 
     if (DraggedItem && DraggedItem instanceof PiecePlaneViewModel) {
@@ -51,7 +52,7 @@ export const ObjectBuilder = memo(() => {
       }
       setCreatedPieces((prev) => [...prev, DraggedItem]);
     }
-
+    setDraggedItem(null);
     setPreview(null);
   };
 
@@ -79,4 +80,4 @@ export const ObjectBuilder = memo(() => {
       <ContextContainer />
     </div>
   );
-});
+};

@@ -11,8 +11,12 @@ export default function DraggableBehaviour() {
   const raycaster = useRef(new THREE.Raycaster());
   const { mousePos } = useMousePosition();
   const { DraggedRef, HoveredObject, HandleDroppedPlane } = useDragPiece();
-  const { FindSceneObjectWithId, FindPieceWithId, FindBaseWithId } =
-    usePieces();
+  const {
+    FindSceneObjectWithId,
+    FindPieceWithId,
+    FindBaseWithId,
+    DispatchCreatedBasis,
+  } = usePieces();
   const { gl } = useThree();
   const { open, setMenuPosition, close, setActivePiece, setActiveBasis } =
     useObjectContextMenu();
@@ -26,8 +30,8 @@ export default function DraggableBehaviour() {
         event.clientX - gl.domElement.getBoundingClientRect().left;
       const offsetY = event.clientY - gl.domElement.getBoundingClientRect().top;
       setMenuPosition({ x: offsetX - 80, y: offsetY - 80 });
-
-      setActivePiece(FindPieceWithId(DraggedRef.current?.userData.id) ?? null);
+      const piece = FindPieceWithId(DraggedRef.current?.userData.id) ?? null;
+      setActivePiece(piece);
 
       setActiveBasis(FindBaseWithId(DraggedRef.current?.userData.id) ?? null);
     }
@@ -49,7 +53,7 @@ export default function DraggableBehaviour() {
       gl.domElement.removeEventListener("drop", HandleDrop);
       gl.domElement.removeEventListener("pointerdown", HandlePointerDown);
     };
-  }, [createdBasis, createdPieces]);
+  }, [createdBasis, createdPieces, FindPieceWithId, FindBaseWithId]);
 
   useFrame(({ camera, scene }) => {
     // console.log(preview);
@@ -66,7 +70,7 @@ export default function DraggableBehaviour() {
 
       if (parent && child) {
         const position = NDCToObjectWorld(mousePos, parent, camera);
-
+        const xPos = parent?.worldToLocal(position).x;
         const rightOffset =
           (draggedPieceData.parent.BasisPlane.width / 2 -
             draggedPieceData.PiecePlane.width / 2 +
@@ -82,15 +86,97 @@ export default function DraggableBehaviour() {
               draggedPieceData.PiecePlane.baseOffset)
           ) / 100;
 
-        child.position.set(
-          THREE.MathUtils.clamp(
-            parent?.worldToLocal(position).x,
-            leftOffset,
-            rightOffset
-          ),
-          child.position.y,
-          0
-        );
+        const basis = FindBaseWithId(draggedPieceData.parent.BasisPlane.id);
+
+        let leftChild: THREE.Object3D<THREE.Object3DEventMap> | null = null;
+        let rightChild: THREE.Object3D<THREE.Object3DEventMap> | null = null;
+
+        if (!basis) return;
+
+        for (let i = 0; i < basis.children.length; i++) {
+          if (
+            basis.children[i].child.PiecePlane.id !==
+              draggedPieceData.PiecePlane.id &&
+            basis.children[i].layerIndex ===
+              basis.children.filter(
+                (item) =>
+                  item.child.PiecePlane.id === draggedPieceData.PiecePlane.id
+              )[0].layerIndex
+          ) {
+            const childObject = FindSceneObjectWithId(
+              basis.children[i].child.PiecePlane.id
+            );
+
+            if (childObject) {
+              if (child.position.x - childObject.position.x > 0) {
+                if (leftChild === null) {
+                  leftChild = childObject;
+                }
+                if (
+                  leftChild &&
+                  childObject.position.x > leftChild.position.x
+                ) {
+                  leftChild = childObject;
+                }
+              } else {
+                if (rightChild === null) {
+                  rightChild = childObject;
+                }
+
+                if (
+                  rightChild &&
+                  childObject.position.x < rightChild.position.x
+                ) {
+                  rightChild = childObject;
+                }
+              }
+            }
+          }
+        }
+
+        if (child.position.x - xPos > 0) {
+          if (!leftChild) {
+            child.position.set(
+              THREE.MathUtils.clamp(xPos, leftOffset, rightOffset),
+              child.position.y,
+              0
+            );
+          } else {
+            if (
+              child.position.x - draggedPieceData.PiecePlane.width / 100 >
+              leftChild.position.x +
+                (FindPieceWithId(leftChild?.userData.id)?.PiecePlane.width ??
+                  0) /
+                  100
+            ) {
+              child.position.set(
+                THREE.MathUtils.clamp(xPos, leftOffset, rightOffset),
+                child.position.y,
+                0
+              );
+            }
+          }
+        } else {
+          if (!rightChild) {
+            child.position.set(
+              THREE.MathUtils.clamp(xPos, leftOffset, rightOffset),
+              child.position.y,
+              0
+            );
+          } else if (
+            child.position.x + draggedPieceData.PiecePlane.width / 100 <
+            rightChild?.position.x -
+              (FindPieceWithId(rightChild?.userData.id)?.PiecePlane.width ??
+                0) /
+                100
+          ) {
+            child.position.set(
+              THREE.MathUtils.clamp(xPos, leftOffset, rightOffset),
+              child.position.y,
+              0
+            );
+          }
+        }
       }
     } else {
       raycaster.current.setFromCamera(mousePos, camera);
@@ -101,18 +187,26 @@ export default function DraggableBehaviour() {
         scene.children,
         true
       );
+      const basis = FindBaseWithId(DraggedRef.current.userData.id);
 
-      if (intersects.length > 0) {
+      if (intersects.length > 0 && basis) {
         const intersectionPoint = intersects[0].point;
-        DraggedRef.current.position.set(
-          intersectionPoint.x,
-          intersectionPoint.y + 0.01,
-          intersectionPoint.z
-        );
 
         HoveredObject.current = intersects[0].object;
-      }
-      SetObjectLayerTraverse(DraggedRef.current, 0);
+        SetObjectLayerTraverse(DraggedRef.current, 0);
+
+        DispatchCreatedBasis({
+          type: "move",
+          payload: {
+            basis,
+            position: new THREE.Vector3(
+              intersectionPoint.x,
+              intersectionPoint.y + 0.01,
+              intersectionPoint.z
+            ),
+          },
+        });
+      } else SetObjectLayerTraverse(DraggedRef.current, 0);
     }
   });
   return <></>;

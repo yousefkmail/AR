@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import Select, { SingleValue } from "react-select";
 import FloatingContainer from "../../Components/FloatingContainer/FloatingContainer";
 import { Slider } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faRotate,
+  faTrash,
+  faPaperclip,
+} from "@fortawesome/free-solid-svg-icons";
 
-interface LayerOption {
+export interface LayerOption {
   label: string;
   value: number;
 }
@@ -16,6 +22,7 @@ interface ObjectContextMenuProps {
   OnRotationChangd: (number: number) => void;
   OnDelete: () => void;
   OnDeattach: () => void;
+  RotationValue: number;
 }
 export default function PieceContextMenu({
   posX,
@@ -25,6 +32,7 @@ export default function PieceContextMenu({
   OnRotationChangd,
   OnDelete,
   OnDeattach,
+  RotationValue,
 }: Partial<ObjectContextMenuProps>) {
   const [options] = useState<LayerOption[]>([
     { label: "1", value: 1 },
@@ -40,37 +48,68 @@ export default function PieceContextMenu({
     OnRotationChangd?.(value as number);
   };
 
+  function handleInputValue(event: ChangeEvent<HTMLInputElement>): void {
+    OnRotationChangd?.(parseInt(event.target.value));
+  }
+
   const [isRotationOpened, setIsRotationOpened] = useState<boolean>(false);
 
   return (
     <FloatingContainer posX={posX} posY={posY}>
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <div
           style={{
-            height: "50px",
+            height: "30px",
             marginBottom: "20px",
+            width: "317px",
           }}
         >
           {isRotationOpened && (
             <div
               style={{
-                height: "100%",
                 backgroundColor: "white",
                 display: "flex",
+                padding: "0 0 0 15px",
+                borderRadius: "7px",
+                overflow: "hidden",
               }}
             >
               <Slider
+                sx={{
+                  color: "black", // Change the slider thumb and track color to black
+                  "& .MuiSlider-thumb": {
+                    backgroundColor: "black", // Thumb color
+                    "&:hover, &.Mui-focusVisible": {
+                      boxShadow: "0px 0px 0px 8px rgba(0, 0, 0, 0.16)", // Hover effect
+                    },
+                  },
+                  "& .MuiSlider-track": {
+                    backgroundColor: "black", // Track color
+                  },
+                  "& .MuiSlider-rail": {
+                    backgroundColor: "#bfbfbf", // Rail color (default gray, optional)
+                  },
+                }}
                 style={{ flexGrow: "1" }}
                 onChange={RotationChanged}
                 defaultValue={0}
+                value={RotationValue}
                 min={-180}
                 max={180}
               />
               <input
                 defaultValue={0}
                 min={-180}
+                onChange={handleInputValue}
                 max={180}
-                style={{ width: "40px", marginLeft: "10px" }}
+                value={RotationValue}
+                style={{ width: "50px", marginLeft: "27px", border: "none" }}
                 type="number"
                 name=""
                 id=""
@@ -78,7 +117,14 @@ export default function PieceContextMenu({
             </div>
           )}
         </div>
-        <div style={{ backgroundColor: "white", display: "flex" }}>
+        <div
+          style={{
+            backgroundColor: "white",
+            display: "flex",
+            padding: "0 7px",
+            borderRadius: "7px",
+          }}
+        >
           <span style={{ padding: "10px", width: "130px" }}>
             <label
               style={{ marginBottom: "5px", display: "inline-block" }}
@@ -90,18 +136,38 @@ export default function PieceContextMenu({
           </span>
 
           <button
+            className="contextmenu-button"
             onClick={() => setIsRotationOpened(!isRotationOpened)}
-            style={{
-              backgroundColor: "transparent",
-              border: "none",
-              borderLeft: "1px solid black",
-              borderRight: "1px solid black",
-            }}
           >
+            <div style={{ marginBottom: "5px" }}>
+              <FontAwesomeIcon
+                style={{ marginBottom: "3px" }}
+                size="xl"
+                icon={faRotate}
+              />
+            </div>
             Rotate
           </button>
-          <button onClick={() => OnDelete?.()}>Delete</button>
-          <button onClick={() => OnDeattach?.()}>Deattach</button>
+          <button className="contextmenu-button" onClick={() => OnDelete?.()}>
+            <div style={{ marginBottom: "5px" }}>
+              <FontAwesomeIcon
+                style={{ marginBottom: "3px" }}
+                size="xl"
+                icon={faTrash}
+              />
+            </div>
+            Delete
+          </button>
+          <button className="contextmenu-button" onClick={() => OnDeattach?.()}>
+            <div style={{ marginBottom: "5px" }}>
+              <FontAwesomeIcon
+                style={{ marginBottom: "3px" }}
+                size="xl"
+                icon={faPaperclip}
+              />
+            </div>
+            Deattach
+          </button>
         </div>
       </div>
     </FloatingContainer>

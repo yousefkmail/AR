@@ -1,7 +1,8 @@
-import React, { HTMLAttributes } from "react";
+import { ButtonHTMLAttributes } from "react";
 import { ClassnameMerge } from "../../Utils/CssUtils";
 
-export interface IconButtonProps extends HTMLAttributes<HTMLButtonElement> {
+export interface IconButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
   isActive: boolean;
 }
 
@@ -10,18 +11,14 @@ const GetClass = (isActive: boolean) => {
   return "windowsbar-button";
 };
 export default function IconButton({
-  onClick,
   children,
   className,
   isActive,
+
   ...rest
 }: IconButtonProps) {
   return (
-    <button
-      {...rest}
-      onClick={onClick}
-      className={ClassnameMerge(GetClass(isActive), className)}
-    >
+    <button {...rest} className={ClassnameMerge(GetClass(isActive), className)}>
       {children}
     </button>
   );

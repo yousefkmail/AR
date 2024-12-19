@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TemplateModel } from "../../DataService/Models/TemplateModel";
 import CategoryTag from "../CategoryTag/CategoryTag";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as FaSolidHeart } from "@fortawesome/free-solid-svg-icons";
@@ -7,7 +6,10 @@ import Spacer from "../../Layout/Spacer";
 import { DragEvent, useContext, useState } from "react";
 import { useNotification } from "../../Features/NotificationService/NotificationContext";
 import IconButton from "../Button/IconButton";
-import { useTemplatesQuery } from "../../Hooks/useTemplatesQuery";
+import {
+  LoadableTemplate,
+  useTemplatesQuery,
+} from "../../Hooks/useTemplatesQuery";
 import DraggableItem from "../DragableItem";
 import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
 import { BasisPlane } from "../../Core/BasisPlane";
@@ -15,21 +17,27 @@ import { v4 as uuidv4 } from "uuid";
 import { DraggedPieceContext } from "../../Context/DraggedPieceContext";
 import { PiecePlaneViewModel } from "../../Core/Viewmodels/PiecePlaneViewModel";
 import { PiecePlane } from "../../Core/PiecePlane";
+import { CircularProgress } from "@mui/material";
 
-export default function Template(item: TemplateModel) {
+export default function Template(item: LoadableTemplate) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const { addNotification } = useNotification();
   const { fetchFullTemplate } = useTemplatesQuery();
   const { setDraggedItem } = useContext(DraggedPieceContext);
-
   const handleDragStart = () => {
-    if (!item.loadedData) return;
+    if (!item.template.loadedData) {
+      addNotification(
+        `you need to load template ${item.template.name} before dragging it.`,
+        "warning"
+      );
 
+      return;
+    }
     const TemplateViewModel = new BasisPlaneViewModel(
-      new BasisPlane(item.loadedData.basis, uuidv4())
+      new BasisPlane(item.template.loadedData.basis, uuidv4())
     );
 
-    for (const child of item.loadedData.children) {
+    for (const child of item.template.loadedData.children) {
       TemplateViewModel.addChild(
         new PiecePlaneViewModel(new PiecePlane({ ...child.data }, uuidv4())),
         child.layer,
@@ -41,7 +49,6 @@ export default function Template(item: TemplateModel) {
   };
   return (
     <DraggableItem
-      data={item}
       onDragStart={(event: DragEvent) => {
         const img = new Image();
         img.src = "";
@@ -53,21 +60,21 @@ export default function Template(item: TemplateModel) {
         <img
           draggable={false}
           className="template-img"
-          src={item.preview}
+          src={item.template.preview}
           alt=""
         />
         <Spacer padding={4}>
-          <div className="template-name">{item.name}</div>
+          <div className="template-name">{item.template.name}</div>
         </Spacer>
 
         <Spacer padding={4}>
           <div style={{ fontWeight: "bolder", fontSize: "1.25rem" }}>
-            {item.price}$
+            {item.template.price}$
           </div>
         </Spacer>
 
         <Spacer padding={4}>
-          {item?.tags?.map((item) => (
+          {item?.template.tags?.map((item) => (
             <CategoryTag>{item}</CategoryTag>
           ))}
         </Spacer>
@@ -105,13 +112,23 @@ export default function Template(item: TemplateModel) {
             draggable={false}
             style={{
               border: "var(--default-border)",
-              backgroundColor: "purple",
+              backgroundColor: "black",
               color: "white",
             }}
-            onClick={() => fetchFullTemplate(item.assetId)}
+            disabled={item.template.loadedData !== undefined}
+            onClick={() => fetchFullTemplate(item.template.assetId)}
             isActive={false}
           >
-            {item.loadedData ? "loaded" : "Load template"}
+            {item.template.loadedData ? (
+              "Loaded"
+            ) : item.isLoading ? (
+              <CircularProgress
+                size={"10px"}
+                sx={{ color: "white" }}
+              ></CircularProgress>
+            ) : (
+              "Load template"
+            )}
           </IconButton>
         </Spacer>
       </div>

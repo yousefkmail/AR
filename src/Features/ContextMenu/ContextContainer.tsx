@@ -1,23 +1,22 @@
-import { MathUtils, Vector3 } from "three";
+import { MathUtils } from "three";
 import { usePieces } from "../../Hooks/usePieces";
 import { useObjectContextMenu } from "./useObjectContextMenu";
-import { BasisPlane } from "../../Core/BasisPlane";
-import PieceContextMenu from "./PieceContextMenu";
+import PieceContextMenu, { LayerOption } from "./PieceContextMenu";
 import BasisContextMenu from "./BasisContextMenu";
-import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export default function ContextContainer() {
   const { isOpened, menuPosition, activeBasis, activePiece } =
     useObjectContextMenu();
   const [rotation, setRotation] = useState<number>(0);
+  const [layer, setLayer] = useState<LayerOption>({ label: "1", value: 1 });
   const { close } = useObjectContextMenu();
   const {
     FindSceneObjectWithId,
-    setCreatedBasis,
-    FindPieceWithId,
-    createdBasis,
+    DispatchCreatedBasis,
     setCreatedPieces,
+    Deattach_Piece,
   } = usePieces();
+
   const HandleRotationChanged = (rotation: number) => {
     if (activeBasis) {
       const Group = FindSceneObjectWithId(activeBasis.BasisPlane.id);
@@ -31,38 +30,31 @@ export default function ContextContainer() {
     }
   };
 
+  useEffect(() => {
+    if (activeBasis) {
+      const Group = FindSceneObjectWithId(activeBasis.BasisPlane.id);
+      setRotation(MathUtils.radToDeg(Group?.rotation.x ?? 0));
+    }
+    if (activePiece) {
+      const Group1 = FindSceneObjectWithId(activePiece.PiecePlane.id);
+      setRotation(MathUtils.radToDeg(Group1?.rotation.y ?? 0));
+    }
+  }, [activeBasis, activePiece]);
+
   const HandleLayerChanged = (layer: number) => {
     if (!activePiece) return;
+    DispatchCreatedBasis({
+      type: "changeLayer",
+      payload: { layer, piece: activePiece },
+    });
 
-    setCreatedBasis((prevData) =>
-      prevData.map((parent) => {
-        const plane = new BasisPlane(
-          { ...parent.BasisPlane },
-          parent.BasisPlane.id
-        );
-        const planeViewModel = new BasisPlaneViewModel(plane);
-        const parentObj = FindSceneObjectWithId(parent.BasisPlane.id);
-        if (parentObj) plane.position = parentObj.position;
-
-        plane.layers = parent.BasisPlane.layers;
-        planeViewModel.children = parent.children;
-
-        const sceneObj = FindSceneObjectWithId(activePiece.PiecePlane.id);
-        if (sceneObj) activePiece.PiecePlane.position = sceneObj.position;
-
-        planeViewModel.UpdateChildLayer(activePiece, layer);
-        return planeViewModel;
-      })
-    );
     close();
   };
 
   const DeleteActiveBasis = () => {
-    setCreatedBasis((prevData) =>
-      prevData.filter(
-        (item) => item.BasisPlane.id !== activeBasis?.BasisPlane.id
-      )
-    );
+    if (!activeBasis) return;
+    DispatchCreatedBasis({ type: "delete", payload: activeBasis });
+
     close();
   };
 
@@ -77,22 +69,7 @@ export default function ContextContainer() {
 
   const DeattachActiveObject = () => {
     if (!activePiece) return;
-    const child = FindPieceWithId(activePiece.PiecePlane.id);
-    if (child && child.parent !== null) {
-      let result = createdBasis.map((item) => {
-        if (item.BasisPlane.id === child.parent?.BasisPlane.id) {
-          item.children = item.children.filter(
-            (item) => item.child.PiecePlane.id !== child.PiecePlane.id
-          );
-          return item;
-        } else return item;
-      });
-      setCreatedBasis(result);
-      child.parent = null;
-      child.PiecePlane.position = new Vector3(1, 1, 1);
-      child.PiecePlane.rotation = new Vector3();
-      setCreatedPieces((prev) => [...prev, child]);
-    }
+    Deattach_Piece(activePiece);
     close();
   };
 
@@ -105,8 +82,10 @@ export default function ContextContainer() {
             OnLayerChanged={HandleLayerChanged}
             OnDelete={DeleteActivePiece}
             OnDeattach={DeattachActiveObject}
+            layer={layer}
             posX={menuPosition.x}
             posY={menuPosition.y}
+            RotationValue={rotation}
           />
         ) : (
           <BasisContextMenu

@@ -6,5 +6,6 @@ export interface PlaneBase {
     texture: EntryFieldTypes.AssetLink;
     width: EntryFieldTypes.Number;
     height: EntryFieldTypes.Number;
+    price: EntryFieldTypes.Number;
   };
 }

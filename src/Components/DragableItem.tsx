@@ -2,11 +2,10 @@ import { HTMLAttributes } from "react";
 
 interface DragableItemProps extends HTMLAttributes<HTMLDivElement> {
   OnDragStart?: () => void;
-  data: any;
 }
 export default function DraggableItem({
   OnDragStart,
-  data,
+
   children,
   ...rest
 }: DragableItemProps) {

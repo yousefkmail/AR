@@ -10,6 +10,7 @@ export class PlaneBase {
   assetId: string = "";
   position: Vector3 = new Vector3(1, 1, 1);
   rotation: Vector3 = new Vector3(0, 0, 0);
+  price: number = 0;
   constructor(id: string, data: PlaneModel) {
     this.id = id;
     this.assetId = data.assetId;

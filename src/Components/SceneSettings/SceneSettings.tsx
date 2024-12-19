@@ -4,7 +4,7 @@ import MovementModeButton from "./MovementModeButton";
 
 export const SceneSettings = () => {
   return (
-    <Spacer padding={10}>
+    <div>
       <Spacer marginBottom={8}>Piece Movement Mode</Spacer>
       <Spacer marginBottom={24}>
         <div className="settings-movemode-buttons">
@@ -16,6 +16,6 @@ export const SceneSettings = () => {
           </MovementModeButton>
         </div>
       </Spacer>
-    </Spacer>
+    </div>
   );
 };

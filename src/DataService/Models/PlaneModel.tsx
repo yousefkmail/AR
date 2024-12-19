@@ -4,4 +4,5 @@ export interface PlaneModel {
   width: number;
   height: number;
   assetId: string;
+  price: number;
 }

@@ -113,7 +113,9 @@ body {
 
 .drag-image-inner {
     scale: 1;
+    padding: 10px;
     transition: all 0.1s ease-out;
+
 }
 
 .drag-image-inner:hover {
@@ -337,4 +339,23 @@ body {
 
 .windowsbar-button-active {
     background-color: var(--active-primary);
+}
+
+
+.contextmenu-button {
+    pointer-events: all;
+    padding: 7px;
+    background-color: transparent;
+    border: none,
+}
+
+.contextmenu-button:hover {
+    background-color: var(--hover-secondary);
+    cursor: pointer;
+}
+
+.piece-card-image {
+    -webkit-box-shadow: 0px 2px 17px -1px rgba(0, 0, 0, 0.43);
+    -moz-box-shadow: 0px 2px 17px -1px rgba(0, 0, 0, 0.43);
+    box-shadow: 0px 2px 17px -1px rgba(0, 0, 0, 0.43);
 }

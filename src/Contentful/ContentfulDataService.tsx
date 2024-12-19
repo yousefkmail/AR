@@ -103,6 +103,7 @@ export class ContentfulDataService implements IDataService {
     data.items.forEach((base) => {
       const modelbase: BasisModel = {
         height: base.fields.height,
+        price: base.fields.price,
         name: base.fields.name,
         texture: base.fields.texture?.fields.file?.url ?? "",
         width: base.fields.width,
@@ -133,6 +134,7 @@ export class ContentfulDataService implements IDataService {
         baseWidth: base.fields.baseWidth,
         assetId: base.sys.id,
         category: base.fields.category,
+        price: base.fields.price,
       };
 
       bases.push(modelbase);

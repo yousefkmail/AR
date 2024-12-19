@@ -36,7 +36,7 @@ export default function WindowsContainer() {
 
   return (
     <Window
-      defaultSize={{ height: 500, width: 400 }}
+      defaultSize={{ height: 800, width: 400 }}
       name="Pieces"
       isShown={true}
     >
@@ -45,7 +45,7 @@ export default function WindowsContainer() {
         windowsData={windowsData}
         onToggle={HandleVisuals}
       />
-      {<activeWidnow.window />}
+      <div style={{ margin: "0 48px" }}>{<activeWidnow.window />}</div>
     </Window>
   );
 }

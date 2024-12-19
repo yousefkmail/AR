@@ -1,4 +1,4 @@
-import { Asset, Entry, EntryFieldTypes } from "contentful";
+import { Entry, EntryFieldTypes } from "contentful";
 import { PieceType } from "./PieceeType";
 
 export type TemplateData = {

@@ -15,7 +15,7 @@ const NotificationList = () => {
             autoHideDuration={1000}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
           >
-            <Alert severity="success" variant="filled">
+            <Alert severity={type} variant="filled">
               {message}
             </Alert>
           </Snackbar>
