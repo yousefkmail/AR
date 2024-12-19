@@ -47,7 +47,7 @@ export const PiecesContainer = () => {
 
       <GridLayout cellMinWidth={300}>
         {selectedOption?.value === "Base"
-          ? basis?.map((item) => (
+          ? basis?.map(({ assetId, ...item }) => (
               <DraggableBasis
                 onDragStart={(event: DragEvent) => {
                   const img = new Image();
@@ -55,10 +55,12 @@ export const PiecesContainer = () => {
                   event.dataTransfer.setDragImage(img, 0, 0);
                   const id = uuidv4();
                   setDraggedItem(
-                    new BasisPlaneViewModel(new BasisPlane(item, id))
+                    new BasisPlaneViewModel(
+                      new BasisPlane({ assetId, ...item }, id)
+                    )
                   );
                 }}
-                key={item.assetId}
+                key={assetId}
                 {...item}
               />
             ))

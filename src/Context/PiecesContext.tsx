@@ -1,42 +1,21 @@
-import React, {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import React, { createContext, Dispatch, useContext } from "react";
 import { Object3D, Object3DEventMap, Vector3 } from "three";
 import { PlanesContainerContext } from "./PlanesContainerContext";
 import { BasisPlaneViewModel } from "../Core/Viewmodels/BasisPlaneViewModel";
 import { PiecePlaneViewModel } from "../Core/Viewmodels/PiecePlaneViewModel";
-import { BasisPlane } from "../Core/BasisPlane";
 import { PiecePlane } from "../Core/PiecePlane";
 import { v4 } from "uuid";
+import { CreatedBasisAction, useBasis } from "../Hooks/useBasis";
+import { CreatedPiecesAction, usePieces } from "../Hooks/usePieces";
 export const PiecesContext = createContext<PiecesContextProps>(
   {} as PiecesContextProps
 );
-
-type CreatedBasisAction =
-  | { type: "add"; payload: BasisPlaneViewModel }
-  | {
-      type: "changeLayer";
-      payload: { layer: number; piece: PiecePlaneViewModel };
-    }
-  | { type: "delete"; payload: BasisPlaneViewModel }
-  | { type: "deattach_piece"; payload: PiecePlaneViewModel }
-  | { type: "set"; payload: BasisPlaneViewModel[] }
-  | {
-      type: "move";
-      payload: { basis: BasisPlaneViewModel; position: Vector3 };
-    };
 
 interface PiecesContextProps {
   createdBasis: BasisPlaneViewModel[];
   DispatchCreatedBasis: Dispatch<CreatedBasisAction>;
   createdPieces: PiecePlaneViewModel[];
-  setCreatedPieces: Dispatch<SetStateAction<PiecePlaneViewModel[]>>;
+  DispatchCreatedPieces: Dispatch<CreatedPiecesAction>;
   FindPieceWithId: (id: string) => PiecePlaneViewModel | null;
   FindBaseWithId: (id: string) => BasisPlaneViewModel | null;
   FindSceneObjectWithId: (id: string) => Object3D<Object3DEventMap> | null;
@@ -67,82 +46,10 @@ export const PiecesContextProvider = ({
     });
     return foundObject;
   };
-  const [createdPieces, setCreatedPieces] = useState<PiecePlaneViewModel[]>([]);
-  const [createdBasis, DispatchCreatedBasis] = useReducer(
-    CreatedBasisReducer,
-    []
-  );
 
-  function CreatedBasisReducer(
-    state: BasisPlaneViewModel[],
-    action: CreatedBasisAction
-  ) {
-    switch (action.type) {
-      case "add": {
-        return [...state, action.payload];
-      }
+  const { DispatchCreatedBasis, createdBasis } = useBasis();
 
-      case "delete": {
-        return state.filter(
-          (item) => item.BasisPlane.id !== action.payload.BasisPlane.id
-        );
-      }
-
-      case "changeLayer": {
-        return state.map((parent) => {
-          const plane = new BasisPlane(
-            { ...parent.BasisPlane },
-            parent.BasisPlane.id
-          );
-          const planeViewModel = new BasisPlaneViewModel(plane);
-          const parentObj = FindSceneObjectWithId(parent.BasisPlane.id);
-          if (parentObj) plane.position = parentObj.position;
-
-          plane.layers = parent.BasisPlane.layers;
-          planeViewModel.children = parent.children;
-
-          const sceneObj = FindSceneObjectWithId(
-            action.payload.piece.PiecePlane.id
-          );
-          if (sceneObj)
-            action.payload.piece.PiecePlane.position = sceneObj.position;
-
-          planeViewModel.UpdateChildLayer(
-            action.payload.piece,
-            action.payload.layer
-          );
-          return planeViewModel;
-        });
-      }
-      case "deattach_piece": {
-        let result = state.map((item) => {
-          if (item.BasisPlane.id === action.payload.parent?.BasisPlane.id) {
-            item.children = item.children.filter(
-              (item) =>
-                item.child.PiecePlane.id !== action.payload.PiecePlane.id
-            );
-            return item;
-          } else return item;
-        });
-
-        return result;
-      }
-
-      case "move": {
-        return state.map((item) => {
-          if (item.BasisPlane.id === action.payload.basis.BasisPlane.id) {
-            item.BasisPlane.position = action.payload.position;
-            return item;
-          } else return item;
-        });
-      }
-      case "set": {
-        return action.payload;
-      }
-      default:
-        return state;
-    }
-  }
+  const { DispatchCreatedPieces, createdPieces } = usePieces();
 
   const Deattach_Piece = (piece: PiecePlaneViewModel) => {
     if (!piece.parent) return;
@@ -162,13 +69,8 @@ export const PiecesContextProvider = ({
       worldPosition.z
     );
     newPiece.PiecePlane.rotation = new Vector3();
-    console.log(createdPieces);
-    setCreatedPieces((prev) => [...prev, newPiece]);
+    DispatchCreatedPieces({ type: "add", payload: newPiece });
   };
-
-  useEffect(() => {
-    console.log(createdPieces);
-  }, [createdPieces]);
 
   const FindBaseWithId = (id: string): BasisPlaneViewModel | null => {
     for (const base of createdBasis) {
@@ -199,8 +101,6 @@ export const PiecesContextProvider = ({
     const parent = FindSceneObjectWithId(basis.BasisPlane.id);
     const child = FindSceneObjectWithId(piece.PiecePlane.id);
 
-    const newObjects = createdPieces.filter((item) => piece !== item);
-
     if (parent && child) {
       const pos: Vector3 = new Vector3();
       basis.BasisPlane.position = parent.getWorldPosition(pos);
@@ -216,7 +116,10 @@ export const PiecesContextProvider = ({
         } else return item;
       }),
     });
-    setCreatedPieces(newObjects);
+    DispatchCreatedPieces({
+      type: "delete",
+      payload: piece,
+    });
   };
 
   return (
@@ -226,7 +129,7 @@ export const PiecesContextProvider = ({
         Deattach_Piece,
         createdPieces,
         DispatchCreatedBasis,
-        setCreatedPieces,
+        DispatchCreatedPieces,
         FindPieceWithId,
         FindBaseWithId,
         FindSceneObjectWithId,

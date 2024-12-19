@@ -13,13 +13,13 @@ import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { BasisPlaneViewModel } from "./Core/Viewmodels/BasisPlaneViewModel";
 import { useObjectPreview } from "./Features/UIToCanvasDrag/Hooks/useObjectPreview";
 import { PiecePlaneViewModel } from "./Core/Viewmodels/PiecePlaneViewModel";
-import { usePieces } from "./Hooks/usePieces";
+import { useFullPieces } from "./Hooks/useFullPieces";
 
 export const ObjectBuilder = () => {
   const ScreenshotterRef = useRef<ScreenShotHandlerRef>(null);
   const { CreateDraggedPiece, DraggedItem, setDraggedItem } =
     useContext(DraggedPieceContext);
-  const { DispatchCreatedBasis, setCreatedPieces } = usePieces();
+  const { DispatchCreatedBasis, DispatchCreatedPieces } = useFullPieces();
   const { setPreview, previewRef } = useObjectPreview();
   const handleDragEnter = () => {
     if (DraggedItem && DraggedItem instanceof BasisPlaneViewModel) {
@@ -50,7 +50,7 @@ export const ObjectBuilder = () => {
       if (previewRef.current) {
         DraggedItem.PiecePlane.position = previewRef.current.position;
       }
-      setCreatedPieces((prev) => [...prev, DraggedItem]);
+      DispatchCreatedPieces({ type: "add", payload: DraggedItem });
     }
     setDraggedItem(null);
     setPreview(null);

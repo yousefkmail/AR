@@ -1,6 +1,6 @@
 import { createContext, MutableRefObject, useRef } from "react";
 import { Group, Object3D, Object3DEventMap } from "three";
-import { usePieces } from "../Hooks/usePieces";
+import { useFullPieces } from "../Hooks/useFullPieces";
 import { NDCToObjectWorld } from "../Utils/ThreeUtils";
 import { useMousePosition } from "../Hooks/useMousePositiion";
 import { useThree } from "@react-three/fiber";
@@ -26,7 +26,7 @@ export const DragContextProvider = ({ children }: any) => {
     FindBaseWithId,
     FindPieceWithId,
     HandlePieceDroppedOnPlane,
-  } = usePieces();
+  } = useFullPieces();
 
   const { mousePos } = useMousePosition();
   const { camera } = useThree();

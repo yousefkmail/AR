@@ -1,5 +1,5 @@
 import { MathUtils } from "three";
-import { usePieces } from "../../Hooks/usePieces";
+import { useFullPieces } from "../../Hooks/useFullPieces";
 import { useObjectContextMenu } from "./useObjectContextMenu";
 import PieceContextMenu, { LayerOption } from "./PieceContextMenu";
 import BasisContextMenu from "./BasisContextMenu";
@@ -13,9 +13,9 @@ export default function ContextContainer() {
   const {
     FindSceneObjectWithId,
     DispatchCreatedBasis,
-    setCreatedPieces,
+    DispatchCreatedPieces,
     Deattach_Piece,
-  } = usePieces();
+  } = useFullPieces();
 
   const HandleRotationChanged = (rotation: number) => {
     if (activeBasis) {
@@ -59,11 +59,12 @@ export default function ContextContainer() {
   };
 
   const DeleteActivePiece = () => {
-    setCreatedPieces((prevData) =>
-      prevData.filter(
-        (item) => item.PiecePlane.id !== activePiece?.PiecePlane.id
-      )
-    );
+    if (!activePiece) return;
+    DispatchCreatedPieces({ type: "delete", payload: activePiece });
+    DispatchCreatedBasis({
+      type: "delete_child",
+      payload: { piece: activePiece },
+    });
     close();
   };
 

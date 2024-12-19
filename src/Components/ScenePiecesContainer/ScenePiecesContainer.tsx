@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
-import { usePieces } from "../../Hooks/usePieces";
+import { useFullPieces } from "../../Hooks/useFullPieces";
 import { PngPlaneRef } from "../PngPlane/PngPlane";
 import { Group } from "three";
 import { GroupProps } from "@react-three/fiber";
@@ -26,7 +26,7 @@ export const ScenePiecesContainer = forwardRef<
     Basis: basisRefs.current,
   }));
 
-  const { createdBasis, createdPieces } = usePieces();
+  const { createdBasis, createdPieces } = useFullPieces();
   return (
     <group ref={groupRef}>
       {createdBasis.map((item, index) => {
