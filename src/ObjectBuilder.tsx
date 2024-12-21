@@ -9,11 +9,16 @@ import {
   ScreenShotHandlerRef,
 } from "./Components/ScreenShotHandler/ScreenShotHandler";
 import WindowsContainer from "./Components/WindowsContainer/WindowsContainer";
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import {
+  OrbitControls,
+  PerspectiveCamera,
+  useProgress,
+} from "@react-three/drei";
 import { BasisPlaneViewModel } from "./Core/Viewmodels/BasisPlaneViewModel";
 import { useObjectPreview } from "./Features/UIToCanvasDrag/Hooks/useObjectPreview";
 import { PiecePlaneViewModel } from "./Core/Viewmodels/PiecePlaneViewModel";
 import { useFullPieces } from "./Hooks/useFullPieces";
+import { CircularProgress } from "@mui/material";
 
 export const ObjectBuilder = () => {
   const ScreenshotterRef = useRef<ScreenShotHandlerRef>(null);
@@ -54,6 +59,8 @@ export const ObjectBuilder = () => {
     setPreview(null);
   };
 
+  const { progress } = useProgress();
+
   return (
     <div style={{ height: "100%", position: "relative" }}>
       <WindowsContainer />
@@ -76,6 +83,20 @@ export const ObjectBuilder = () => {
         <ScreenShotHandler ref={ScreenshotterRef} />
       </Canvas>
       <ContextContainer />
+      {progress < 100 && (
+        <div
+          style={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            inset: 0,
+            zIndex: 10000,
+          }}
+        >
+          <CircularProgress style={{ position: "absolute" }} />
+        </div>
+      )}
     </div>
   );
 };

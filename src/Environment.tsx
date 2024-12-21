@@ -2,7 +2,7 @@ import { useGLTF } from "@react-three/drei";
 import { useContext, useEffect, useRef } from "react";
 import { EnvironmentContext } from "./Context/EnvironmentContext";
 
-export function Environment() {
+export default function Environment() {
   const { scene } = useGLTF("../Room/scene.gltf");
 
   const ref = useRef(scene);
