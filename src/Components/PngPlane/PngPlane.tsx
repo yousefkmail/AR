@@ -90,7 +90,7 @@ export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
             alphaTest={0.5}
             userData={{ id: id }}
           />
-          {hover && <Edges color={Color.NAMES.yellow} />}
+          {hover && <Edges side={2} color={Color.NAMES.yellow} />}
         </Plane>
         {props.children}
       </group>

@@ -1,6 +1,5 @@
 import { HTMLAttributes } from "react";
 import DraggableItem from "./DragableItem";
-import Spacer from "../Layout/Spacer";
 interface DraggablebasisProps extends HTMLAttributes<HTMLDivElement> {
   texture: string;
   name: string;
@@ -51,11 +50,9 @@ export default function DraggableBasis({
             <span style={{ fontWeight: "bolder" }}>{name}</span>
           </div>
 
-          <Spacer padding={4}>
-            <div style={{ fontWeight: "bolder", fontSize: "1.25rem" }}>
-              {price}$
-            </div>
-          </Spacer>
+          <div style={{ fontWeight: "bolder", fontSize: "1.25rem" }}>
+            {price}$
+          </div>
           <div>
             <span> Size: </span>
             <span> {width} </span>
