@@ -62,7 +62,6 @@ export const useBasis = () => {
             action.payload.piece,
             action.payload.layer
           );
-          console.log(parent.BasisPlane.position);
           planeViewModel.BasisPlane.position = parent.BasisPlane.position;
           planeViewModel.BasisPlane.rotation = parent.BasisPlane.rotation;
           return planeViewModel;

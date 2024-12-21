@@ -68,172 +68,60 @@ export default function DraggableBehaviour() {
         draggedPieceData.parent.BasisPlane.id
       );
 
-      if (parent) {
-        const position = NDCToObjectWorld(mousePos, parent, camera);
-        let xPos = parent?.worldToLocal(position).x;
+      if (!parent) return;
+      const position = NDCToObjectWorld(mousePos, parent, camera);
+      let xPos = parent?.worldToLocal(position).x;
 
-        const rightOffset =
-          (draggedPieceData.parent.BasisPlane.width / 2 -
-            draggedPieceData.PiecePlane.width / 2 +
-            (draggedPieceData.PiecePlane.width -
-              draggedPieceData.PiecePlane.baseWidth -
-              draggedPieceData.PiecePlane.baseOffset)) /
-          50;
+      const rightOffset =
+        (draggedPieceData.parent.BasisPlane.width / 2 -
+          draggedPieceData.baseRight()) /
+        50;
 
-        const leftOffset =
-          -(
-            draggedPieceData.parent.BasisPlane.width -
-            (draggedPieceData.PiecePlane.width -
-              draggedPieceData.PiecePlane.baseOffset * 2)
-          ) / 100;
+      const leftOffset =
+        -(
+          draggedPieceData.parent.BasisPlane.width / 2 -
+          draggedPieceData.baseLeft()
+        ) / 50;
 
-        const basis = FindBaseWithId(draggedPieceData.parent.BasisPlane.id);
+      const basis = FindBaseWithId(draggedPieceData.parent.BasisPlane.id);
 
-        let leftChild: THREE.Object3D<THREE.Object3DEventMap> | null = null;
-        let rightChild: THREE.Object3D<THREE.Object3DEventMap> | null = null;
+      if (!basis) return;
 
-        if (!basis) return;
+      let [leftChild, rightChild] = basis.getNeighbours(draggedPieceData);
 
-        for (let i = 0; i < basis.children.length; i++) {
-          if (
-            basis.children[i].child.PiecePlane.id !==
-              draggedPieceData.PiecePlane.id &&
-            basis.children[i].layerIndex ===
-              basis.children.filter(
-                (item) =>
-                  item.child.PiecePlane.id === draggedPieceData.PiecePlane.id
-              )[0].layerIndex
-          ) {
-            const childObject = FindSceneObjectWithId(
-              basis.children[i].child.PiecePlane.id
-            );
-
-            if (childObject) {
-              if (
-                draggedPieceData.PiecePlane.position.x -
-                  childObject.position.x >
-                0
-              ) {
-                if (leftChild === null) {
-                  leftChild = childObject;
-                }
-                if (
-                  leftChild &&
-                  childObject.position.x > leftChild.position.x
-                ) {
-                  leftChild = childObject;
-                }
-              } else {
-                if (rightChild === null) {
-                  rightChild = childObject;
-                }
-
-                if (
-                  rightChild &&
-                  childObject.position.x < rightChild.position.x
-                ) {
-                  rightChild = childObject;
-                }
-              }
-            }
-          }
+      if (draggedPieceData.PiecePlane.position.x - xPos > 0) {
+        if (leftChild) {
+          const minPosX = leftChild.rightPosition();
+          xPos = THREE.MathUtils.clamp(
+            xPos,
+            minPosX + draggedPieceData.PiecePlane.width / 100,
+            Infinity
+          );
         }
+      } else {
+        if (rightChild) {
+          const maxPosX = rightChild.leftPosition();
 
-        if (draggedPieceData.PiecePlane.position.x - xPos > 0) {
-          if (!leftChild) {
-            DispatchCreatedBasis({
-              type: "move_child",
-              payload: {
-                piece: draggedPieceData,
-                position: new THREE.Vector3(
-                  THREE.MathUtils.clamp(xPos, leftOffset, rightOffset),
-                  draggedPieceData.PiecePlane.position.y,
-                  0
-                ),
-              },
-            });
-          } else {
-            if (
-              draggedPieceData.PiecePlane.position.x -
-                draggedPieceData.PiecePlane.width / 100 >
-              leftChild.position.x +
-                (FindPieceWithId(leftChild?.userData.id)?.PiecePlane.width ??
-                  0) /
-                  100
-            ) {
-              const minPosX =
-                leftChild.position.x +
-                (FindPieceWithId(leftChild?.userData.id)?.PiecePlane.width ??
-                  0) /
-                  100;
-
-              xPos =
-                xPos - draggedPieceData.PiecePlane.width / 100 < minPosX
-                  ? minPosX + draggedPieceData.PiecePlane.width / 100
-                  : xPos;
-
-              DispatchCreatedBasis({
-                type: "move_child",
-                payload: {
-                  piece: draggedPieceData,
-                  position: new THREE.Vector3(
-                    THREE.MathUtils.clamp(xPos, leftOffset, rightOffset),
-                    draggedPieceData.PiecePlane.position.y,
-                    0
-                  ),
-                },
-              });
-            }
-          }
-        } else {
-          if (!rightChild) {
-            DispatchCreatedBasis({
-              type: "move_child",
-              payload: {
-                piece: draggedPieceData,
-                position: new THREE.Vector3(
-                  THREE.MathUtils.clamp(xPos, leftOffset, rightOffset),
-                  draggedPieceData.PiecePlane.position.y,
-                  0
-                ),
-              },
-            });
-          } else if (
-            draggedPieceData.PiecePlane.position.x +
-              draggedPieceData.PiecePlane.width / 100 <
-            rightChild?.position.x -
-              (FindPieceWithId(rightChild?.userData.id)?.PiecePlane.width ??
-                0) /
-                100
-          ) {
-            const maxPosX =
-              rightChild.position.x -
-              (FindPieceWithId(rightChild?.userData.id)?.PiecePlane.width ??
-                0) /
-                100;
-
-            xPos =
-              xPos + draggedPieceData.PiecePlane.width / 100 > maxPosX
-                ? maxPosX - draggedPieceData.PiecePlane.width / 100
-                : xPos;
-
-            DispatchCreatedBasis({
-              type: "move_child",
-              payload: {
-                piece: draggedPieceData,
-                position: new THREE.Vector3(
-                  THREE.MathUtils.clamp(xPos, leftOffset, rightOffset),
-                  draggedPieceData.PiecePlane.position.y,
-                  0
-                ),
-              },
-            });
-          }
+          xPos = THREE.MathUtils.clamp(
+            xPos,
+            -Infinity,
+            maxPosX - draggedPieceData.PiecePlane.width / 100
+          );
         }
       }
+      DispatchCreatedBasis({
+        type: "move_child",
+        payload: {
+          piece: draggedPieceData,
+          position: new THREE.Vector3(
+            THREE.MathUtils.clamp(xPos, leftOffset, rightOffset),
+            draggedPieceData.PiecePlane.position.y,
+            0
+          ),
+        },
+      });
     } else {
       raycaster.current.setFromCamera(mousePos, camera);
-      //set the layer other than 0 so the raycast doesn't detect the object itself
       SetObjectLayerTraverse(DraggedRef.current, 1);
 
       const intersects = raycaster.current.intersectObjects(

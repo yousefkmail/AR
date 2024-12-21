@@ -1,10 +1,6 @@
 import IconButton, { IconButtonProps } from "./IconButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Icon,
-  IconDefinition,
-  SizeProp,
-} from "@fortawesome/fontawesome-svg-core";
+import { IconDefinition, SizeProp } from "@fortawesome/fontawesome-svg-core";
 
 interface FontawesomeIconButtonProps extends IconButtonProps {
   icon: IconDefinition;

@@ -10,7 +10,7 @@ export const PlanesContainerContext = createContext<PlanesContainerProps>(
 );
 
 export const PlanesContainerContextProvider = ({ children }: any) => {
-  const ContainerRef = useRef<ScenePiecesContainerRef>(null);
+  const ContainerRef = useRef<ScenePiecesContainerRef>(null!);
   return (
     <PlanesContainerContext.Provider value={{ ContainerRef }}>
       {children}

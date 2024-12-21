@@ -2,7 +2,6 @@ import Select from "react-select";
 import { OptionType, usePlanesQuery } from "../../Hooks/usePlanesQuery";
 import GridLayout from "../../Layout/GridLayout";
 import { PiecesSelectStyle } from "../../CustomStyles/react-select/PiecesSelectStyle";
-import Spacer from "../../Layout/Spacer";
 import DraggableBasis from "../DraggableBasis";
 import { DragEvent, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -32,20 +31,22 @@ export const PiecesContainer = () => {
 
   return (
     <div>
-      <Spacer padding={4} margin={3}>
+      <div style={{ padding: " 5px 20px" }}>
         <label className="pieces-container-select-label">Pieces Category</label>
-      </Spacer>
+      </div>
 
-      <Select
-        options={categories}
-        placeholder="Select the piece type"
-        onChange={handleChange}
-        defaultValue={{ label: "Base", value: "Base" }}
-        isSearchable
-        styles={PiecesSelectStyle}
-      />
+      <div style={{ padding: "0 20px" }}>
+        <Select
+          options={categories}
+          placeholder="Select the piece type"
+          onChange={handleChange}
+          defaultValue={{ label: "Base", value: "Base" }}
+          isSearchable
+          styles={PiecesSelectStyle}
+        />
+      </div>
 
-      <GridLayout cellMinWidth={300}>
+      <GridLayout cellMinWidth={250}>
         {selectedOption?.value === "Base"
           ? basis?.map(({ assetId, ...item }) => (
               <DraggableBasis

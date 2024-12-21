@@ -2,7 +2,7 @@ import PremadeTemplatesSkeleton from "../PremadeTemplates/PremadeTemplatesSkelet
 import GridLayout from "../../Layout/GridLayout";
 import Pagination from "@mui/material/Pagination";
 import { useTemplatesQuery } from "../../Hooks/useTemplatesQuery";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 import { GetPageCount } from "../../Utils/PageUtils";
 import CenterLayout from "../../Layout/CenterLayout";
 import Template from "./Template";
@@ -15,14 +15,20 @@ interface PremadeTemplatesProps {
 export default function PremadeTemplates({
   cellMinWidth,
 }: PremadeTemplatesProps) {
-  const { templates, isLoading, setPage, count, pageSize, page } =
-    useTemplatesQuery();
+  const {
+    templates,
+    isLoading,
+    setPage,
+    count,
+    pageSize,
+    page,
+    fetchFullTemplate,
+  } = useTemplatesQuery();
 
   const HandleChange = (_data: ChangeEvent<unknown>, page: number) => {
     setPage(page);
   };
 
-  useEffect(() => console.log(templates), [templates]);
   return (
     <CenterLayout horizontal>
       <PageWidthLayout maxWidth={1600}>
@@ -30,7 +36,13 @@ export default function PremadeTemplates({
         <GridLayout cellMinWidth={cellMinWidth ?? 300}>
           {templates ? (
             templates?.map((item) => (
-              <Template key={item.template.assetId} {...item} />
+              <Template
+                OnLoadPresed={() =>
+                  fetchFullTemplate({ id: item.template.assetId, page: page })
+                }
+                key={item.template.assetId}
+                item={item}
+              />
             ))
           ) : (
             <PremadeTemplatesSkeleton count={5} />

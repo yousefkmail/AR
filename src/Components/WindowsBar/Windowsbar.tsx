@@ -15,33 +15,42 @@ export default function Windowsbar({
   return (
     <div
       style={{
-        display: "flex",
-        justifyContent: "center",
-        width: "100%",
-        pointerEvents: "none",
+        position: "sticky",
+        top: "0",
+        backgroundColor: "var(--color-primary)",
+        zIndex: 1000,
       }}
     >
       <div
         style={{
-          width: "max-content",
-          backgroundColor: "var(--color-primary)",
-          padding: "10px",
           display: "flex",
-          borderRadius: "7px",
           justifyContent: "center",
+          width: "100%",
+          pointerEvents: "none",
         }}
       >
-        {windowsData?.map(
-          (item, index) =>
-            item && (
-              <FontawesomeIconButton
-                onClick={() => onToggle?.(index)}
-                key={index}
-                isActive={item.name === activeWindow.name}
-                icon={item.icon}
-              />
-            )
-        )}
+        <div
+          style={{
+            width: "max-content",
+            backgroundColor: "var(--color-primary)",
+            padding: "10px",
+            display: "flex",
+            borderRadius: "7px",
+            justifyContent: "center",
+          }}
+        >
+          {windowsData?.map(
+            (item, index) =>
+              item && (
+                <FontawesomeIconButton
+                  onClick={() => onToggle?.(index)}
+                  key={index}
+                  isActive={item.name === activeWindow.name}
+                  icon={item.icon}
+                />
+              )
+          )}
+        </div>
       </div>
     </div>
   );

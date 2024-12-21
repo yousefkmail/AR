@@ -7,6 +7,7 @@ import {
   faRotate,
   faTrash,
   faPaperclip,
+  faRepeat,
 } from "@fortawesome/free-solid-svg-icons";
 
 export interface LayerOption {
@@ -23,6 +24,9 @@ interface ObjectContextMenuProps {
   OnDelete: () => void;
   OnDeattach: () => void;
   RotationValue: number;
+  OnFlip: () => void;
+  Flipable: boolean;
+  layersOptions: LayerOption[];
 }
 export default function PieceContextMenu({
   posX,
@@ -32,14 +36,11 @@ export default function PieceContextMenu({
   OnRotationChangd,
   OnDelete,
   OnDeattach,
+  OnFlip,
+  Flipable,
   RotationValue,
+  layersOptions,
 }: Partial<ObjectContextMenuProps>) {
-  const [options] = useState<LayerOption[]>([
-    { label: "1", value: 1 },
-    { label: "2", value: 2 },
-    { label: "3", value: 3 },
-  ]);
-
   const LayerChanged = (data: SingleValue<LayerOption>) => {
     if (data?.value) OnLayerChanged?.(data.value);
   };
@@ -132,7 +133,11 @@ export default function PieceContextMenu({
             >
               Layer
             </label>
-            <Select onChange={LayerChanged} options={options} value={layer} />
+            <Select
+              onChange={LayerChanged}
+              options={layersOptions}
+              value={layer}
+            ></Select>
           </span>
 
           <button
@@ -167,6 +172,22 @@ export default function PieceContextMenu({
               />
             </div>
             Deattach
+          </button>
+
+          <button
+            disabled={!Flipable}
+            style={{ minWidth: "50px" }}
+            className="contextmenu-button"
+            onClick={() => OnFlip?.()}
+          >
+            <div style={{ marginBottom: "5px" }}>
+              <FontAwesomeIcon
+                style={{ marginBottom: "3px" }}
+                size="xl"
+                icon={faRepeat}
+              />
+            </div>
+            Flip
           </button>
         </div>
       </div>

@@ -9,7 +9,8 @@ export type CreatedPiecesAction =
   | {
       type: "move";
       payload: { piece: PiecePlaneViewModel; position: Vector3 };
-    };
+    }
+  | { type: "flip"; payload: { piece: PiecePlaneViewModel } };
 
 export const usePieces = () => {
   const [createdPieces, DispatchCreatedPieces] = useReducer(
@@ -36,6 +37,20 @@ export const usePieces = () => {
           if (item.PiecePlane.id === action.payload.piece.PiecePlane.id) {
             item.PiecePlane.position = action.payload.position;
             return item;
+          } else return item;
+        });
+      }
+
+      case "flip": {
+        return state.map((item) => {
+          if (
+            item.PiecePlane.id === action.payload.piece.PiecePlane.id &&
+            item.PiecePlane.isFlipable
+          ) {
+            const newItem = new PiecePlaneViewModel(item.PiecePlane);
+            newItem.isFlipped = !item.isFlipped;
+            newItem.parent = item.parent;
+            return newItem;
           } else return item;
         });
       }

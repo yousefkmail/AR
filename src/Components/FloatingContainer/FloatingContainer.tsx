@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from "react";
+import { HTMLAttributes } from "react";
 
 interface FloatingContainerProps extends HTMLAttributes<HTMLDivElement> {
   posX: number;

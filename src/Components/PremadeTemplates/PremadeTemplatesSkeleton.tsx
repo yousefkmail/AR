@@ -10,7 +10,7 @@ export default function PremadeTemplatesSkeleton(
     <>
       {Array(props.count)
         .fill(0)
-        .map((item) => (
+        .map(() => (
           <div style={{ margin: "10px" }}>
             <Skeleton width={275} height={300}></Skeleton>
             <Skeleton width={100}></Skeleton>

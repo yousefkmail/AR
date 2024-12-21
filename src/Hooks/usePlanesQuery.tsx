@@ -10,9 +10,10 @@ export interface OptionType {
 export const usePlanesQuery = () => {
   const [activePieces, setActivePieces] = useState<PieceModel[]>([]);
 
-  const [selectedOption, setSelectedOption] = useState<
-    OptionType | undefined
-  >();
+  const [selectedOption, setSelectedOption] = useState<OptionType>({
+    value: "Base",
+    label: "Base",
+  });
 
   const [categories, setCategories] = useState<OptionType[]>([]);
 
@@ -28,6 +29,8 @@ export const usePlanesQuery = () => {
     queryFn: async () => {
       return await dataService.GetAllBasis();
     },
+    cacheTime: Infinity,
+    staleTime: Infinity,
   });
 
   const SetPiecesCategoryAsActivePlanes = (category: string) => {

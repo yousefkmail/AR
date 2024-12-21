@@ -38,7 +38,6 @@ export const ObjectBuilder = () => {
 
   const onDrop = (_event: MouseEvent) => {
     if (DraggedItem && DraggedItem instanceof BasisPlaneViewModel) {
-      console.log(previewRef.current);
       if (previewRef.current) {
         DraggedItem.BasisPlane.position = previewRef.current.position;
       }
@@ -46,7 +45,6 @@ export const ObjectBuilder = () => {
     }
 
     if (DraggedItem && DraggedItem instanceof PiecePlaneViewModel) {
-      console.log(previewRef.current);
       if (previewRef.current) {
         DraggedItem.PiecePlane.position = previewRef.current.position;
       }

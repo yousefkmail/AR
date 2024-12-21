@@ -8,13 +8,17 @@ export default function ContextContainer() {
   const { isOpened, menuPosition, activeBasis, activePiece } =
     useObjectContextMenu();
   const [rotation, setRotation] = useState<number>(0);
+
   const [layer, setLayer] = useState<LayerOption>({ label: "1", value: 1 });
+
   const { close } = useObjectContextMenu();
   const {
     FindSceneObjectWithId,
     DispatchCreatedBasis,
     DispatchCreatedPieces,
     Deattach_Piece,
+    createdBasis,
+    FindBaseWithId,
   } = useFullPieces();
 
   const HandleRotationChanged = (rotation: number) => {
@@ -41,11 +45,43 @@ export default function ContextContainer() {
     }
   }, [activeBasis, activePiece]);
 
+  useEffect(() => {
+    if (!activePiece) return;
+    let layerIndex = 1;
+    createdBasis.forEach((basis) => {
+      basis.children.forEach((piece) => {
+        if (piece.child.PiecePlane.id === activePiece.PiecePlane.id) {
+          layerIndex = piece.layerIndex;
+        }
+      });
+    });
+
+    const base = FindBaseWithId(activePiece.parent?.BasisPlane.id ?? "");
+
+    if (base) {
+      setLayerOptions(
+        base.BasisPlane.layers.map((layer, index) => ({
+          label: layer.name,
+          value: index + 1,
+        }))
+      );
+    }
+    setLayer({
+      label: layerIndex.toString(),
+      value: layerIndex,
+    });
+  }, [activePiece, createdBasis]);
+
   const HandleLayerChanged = (layer: number) => {
     if (!activePiece) return;
     DispatchCreatedBasis({
       type: "changeLayer",
       payload: { layer, piece: activePiece },
+    });
+
+    setLayer({
+      label: layer.toString(),
+      value: layer,
     });
 
     close();
@@ -74,6 +110,13 @@ export default function ContextContainer() {
     close();
   };
 
+  const FlipActivePiece = () => {
+    if (!activePiece) return;
+    DispatchCreatedPieces({ type: "flip", payload: { piece: activePiece } });
+  };
+
+  const [layerOptions, setLayerOptions] = useState<LayerOption[] | null>(null);
+
   return (
     <div className="contextMenu_container">
       {isOpened &&
@@ -87,6 +130,9 @@ export default function ContextContainer() {
             posX={menuPosition.x}
             posY={menuPosition.y}
             RotationValue={rotation}
+            OnFlip={FlipActivePiece}
+            Flipable={activePiece?.PiecePlane.isFlipable}
+            layersOptions={layerOptions ?? []}
           />
         ) : (
           <BasisContextMenu

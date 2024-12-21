@@ -7,5 +7,6 @@ export interface PieceType extends PlaneBase {
     baseWidth: EntryFieldTypes.Number;
     baseOffset: EntryFieldTypes.Number;
     category: EntryFieldTypes.Text;
+    isFlipable: EntryFieldTypes.Boolean;
   };
 }

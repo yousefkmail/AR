@@ -37,8 +37,10 @@ export default function WindowsContainer() {
   return (
     <Window
       defaultSize={{ height: 800, width: 400 }}
+      defaultPosition={{ x: 30, y: 30 }}
       name="Pieces"
       isShown={true}
+      // style={{ borderRadius: "20px", overflow: "hidden" }}
     >
       <Windowsbar
         activeWindow={activeWidnow}

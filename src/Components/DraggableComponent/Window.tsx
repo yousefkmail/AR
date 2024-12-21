@@ -19,8 +19,15 @@ export interface Window {
 }
 
 export const Window = (props: WindowProps) => {
-  const { children, defaultPosition, name, defaultSize, isShown, ...rest } =
-    props;
+  const {
+    children,
+    defaultPosition,
+    name,
+    defaultSize,
+    isShown,
+    style,
+    ...rest
+  } = props;
 
   return (
     <Draggable
@@ -34,7 +41,7 @@ export const Window = (props: WindowProps) => {
         minWidth={280}
         minHeight={300}
         defaultSize={defaultSize ?? { width: 200, height: 300 }}
-        style={{ display: isShown ? "" : "none" }}
+        style={{ ...style, display: isShown ? "" : "none" }}
       >
         <CenterLayout className="handle" horizontal>
           <Spacer margin={8}>

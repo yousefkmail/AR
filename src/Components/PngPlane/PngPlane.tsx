@@ -46,6 +46,11 @@ export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
 
     return (
       <group
+        scale={[
+          props?.scale?.x ?? 1,
+          props?.scale?.y ?? 1,
+          props?.scale?.z ?? 1,
+        ]}
         ref={groupref}
         position={[
           props?.position?.x ?? 0,

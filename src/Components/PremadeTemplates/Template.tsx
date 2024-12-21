@@ -6,10 +6,6 @@ import Spacer from "../../Layout/Spacer";
 import { DragEvent, useContext, useState } from "react";
 import { useNotification } from "../../Features/NotificationService/NotificationContext";
 import IconButton from "../Button/IconButton";
-import {
-  LoadableTemplate,
-  useTemplatesQuery,
-} from "../../Hooks/useTemplatesQuery";
 import DraggableItem from "../DragableItem";
 import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
 import { BasisPlane } from "../../Core/BasisPlane";
@@ -18,11 +14,16 @@ import { DraggedPieceContext } from "../../Context/DraggedPieceContext";
 import { PiecePlaneViewModel } from "../../Core/Viewmodels/PiecePlaneViewModel";
 import { PiecePlane } from "../../Core/PiecePlane";
 import { CircularProgress } from "@mui/material";
+import { LoadableTemplate } from "../../Interfaces/LoadableTemplate";
 
-export default function Template(item: LoadableTemplate) {
+interface TemplateProps {
+  item: LoadableTemplate;
+  OnLoadPresed: () => void;
+}
+
+export default function Template({ item, OnLoadPresed }: TemplateProps) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const { addNotification } = useNotification();
-  const { fetchFullTemplate } = useTemplatesQuery();
   const { setDraggedItem } = useContext(DraggedPieceContext);
   const handleDragStart = () => {
     if (!item.template.loadedData) {
@@ -116,7 +117,7 @@ export default function Template(item: LoadableTemplate) {
               color: "white",
             }}
             disabled={item.template.loadedData !== undefined}
-            onClick={() => fetchFullTemplate(item.template.assetId)}
+            onClick={() => OnLoadPresed?.()}
             isActive={false}
           >
             {item.template.loadedData ? (

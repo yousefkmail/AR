@@ -35,6 +35,7 @@ export const PiecesContextProvider = ({
   children,
 }: PiecesContextProviderProps) => {
   const { ContainerRef } = useContext(PlanesContainerContext);
+
   const FindSceneObjectWithId = (
     id: string
   ): Object3D<Object3DEventMap> | null => {
@@ -102,10 +103,8 @@ export const PiecesContextProvider = ({
     const child = FindSceneObjectWithId(piece.PiecePlane.id);
 
     if (parent && child) {
-      const pos: Vector3 = new Vector3();
-      basis.BasisPlane.position = parent.getWorldPosition(pos);
-      basis.addChild(piece, 0, parent?.worldToLocal(NDCPosition).x);
       piece.setParent(basis);
+      basis.addChild(piece, 1, parent?.worldToLocal(NDCPosition).x);
     }
 
     DispatchCreatedBasis({

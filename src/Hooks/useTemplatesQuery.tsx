@@ -3,18 +3,13 @@ import { dataService } from "../Services/Services";
 import { useState } from "react";
 
 import { queryClient } from "../main";
-import { TemplateModel } from "../DataService/Models/TemplateModel";
 import { useNotification } from "../Features/NotificationService/NotificationContext";
-
-export interface LoadableTemplate {
-  template: TemplateModel;
-  isLoading: boolean;
-}
+import { LoadableTemplate } from "../Interfaces/LoadableTemplate";
 
 export const useTemplatesQuery = () => {
   const { addNotification } = useNotification();
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<number>(5);
 
   const { data, isLoading } = useQuery({
     queryKey: ["templates", page],
@@ -37,7 +32,7 @@ export const useTemplatesQuery = () => {
   });
 
   const fetchFullTemplate = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async ({ id, page }: { id: string; page: number }) => {
       queryClient.setQueryData(["templates", page], (oldData: any) => {
         if (!oldData) return;
         return {
@@ -56,7 +51,7 @@ export const useTemplatesQuery = () => {
 
       return fullTemplate;
     },
-    onSuccess: (fullTemplate) => {
+    onSuccess: (fullTemplate, { page }) => {
       queryClient.setQueryData(["templates", page], (oldData: any) => {
         if (!oldData) return;
 

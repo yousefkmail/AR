@@ -4,4 +4,5 @@ export interface PieceModel extends PlaneModel {
   baseWidth: number;
   baseOffset: number;
   category: string;
+  isFlipable: boolean;
 }

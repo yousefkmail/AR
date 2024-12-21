@@ -135,6 +135,7 @@ export class ContentfulDataService implements IDataService {
         assetId: base.sys.id,
         category: base.fields.category,
         price: base.fields.price,
+        isFlipable: base.fields.isFlipable,
       };
 
       bases.push(modelbase);
