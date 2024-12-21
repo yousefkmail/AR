@@ -8,7 +8,6 @@ export function Environment() {
   const ref = useRef(scene);
 
   const { environment } = useContext(EnvironmentContext);
-
   useEffect(() => {
     environment.current = ref.current;
   }, []);
