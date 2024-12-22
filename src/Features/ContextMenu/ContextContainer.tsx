@@ -56,16 +56,21 @@ export default function ContextContainer() {
       });
     });
 
-    const base = FindBaseWithId(activePiece.parent?.BasisPlane.id ?? "");
+    if (activePiece.parent) {
+      const base = FindBaseWithId(activePiece.parent.BasisPlane.id ?? "");
 
-    if (base) {
-      setLayerOptions(
-        base.BasisPlane.layers.map((layer, index) => ({
-          label: layer.name,
-          value: index + 1,
-        }))
-      );
+      if (base) {
+        setLayerOptions(
+          base.BasisPlane.layers.map((layer, index) => ({
+            label: layer.name,
+            value: index + 1,
+          }))
+        );
+      }
+    } else {
+      setLayerOptions([]);
     }
+
     setLayer({
       label: layerIndex.toString(),
       value: layerIndex,
@@ -113,9 +118,14 @@ export default function ContextContainer() {
   const FlipActivePiece = () => {
     if (!activePiece) return;
     DispatchCreatedPieces({ type: "flip", payload: { piece: activePiece } });
+
+    DispatchCreatedBasis({
+      type: "flip_child",
+      payload: { piece: activePiece },
+    });
   };
 
-  const [layerOptions, setLayerOptions] = useState<LayerOption[] | null>(null);
+  const [layerOptions, setLayerOptions] = useState<LayerOption[]>([]);
 
   return (
     <div className="contextMenu_container">
@@ -132,7 +142,7 @@ export default function ContextContainer() {
             RotationValue={rotation}
             OnFlip={FlipActivePiece}
             Flipable={activePiece?.PiecePlane.isFlipable}
-            layersOptions={layerOptions ?? []}
+            layersOptions={layerOptions}
           />
         ) : (
           <BasisContextMenu

@@ -24,7 +24,8 @@ export type CreatedBasisAction =
   | {
       type: "delete_child";
       payload: { piece: PiecePlaneViewModel };
-    };
+    }
+  | { type: "flip_child"; payload: { piece: PiecePlaneViewModel } };
 
 export const useBasis = () => {
   const [createdBasis, DispatchCreatedBasis] = useReducer(
@@ -114,6 +115,51 @@ export const useBasis = () => {
           );
           return item;
         });
+      }
+
+      case "flip_child": {
+        return state;
+        // return state.map((item) => {
+        //   if (
+        //     item.children.filter(
+        //       (child) =>
+        //         child.child.PiecePlane.id === action.payload.piece.PiecePlane.id
+        //     ).length > 0
+        //   ) {
+        //     item.children = item.children.map((child) => {
+        //       if (
+        //         child.child.PiecePlane.id === action.payload.piece.PiecePlane.id
+        //       ) {
+        //         child.child.isFlipped = !child.child.isFlipped;
+        //         const newChildPlane = new PiecePlane(
+        //           child.child.PiecePlane,
+        //           child.child.PiecePlane.id
+        //         );
+        //         newChildPlane.position = child.child.PiecePlane.position;
+        //         newChildPlane.rotation = child.child.PiecePlane.rotation;
+        //         const planeViewModel = new PiecePlaneViewModel(newChildPlane);
+
+        //         const newChild = new LayeredChild(
+        //           planeViewModel,
+        //           child.layerIndex
+        //         );
+        //         newChild.child.isFlipped = !newChild.child.isFlipped;
+        //         return newChild;
+        //       } else {
+        //         return child;
+        //       }
+        //     });
+
+        //     const newItem = new BasisPlaneViewModel(
+        //       new BasisPlane(item.BasisPlane, item.BasisPlane.id)
+        //     );
+        //     newItem.children = item.children;
+
+        //     return newItem;
+        //   } else {
+        //     return item;
+        //   }
+        // });
       }
 
       case "set": {

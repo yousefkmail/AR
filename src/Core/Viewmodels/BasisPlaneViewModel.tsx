@@ -5,7 +5,7 @@ import { Vector3 } from "three";
 import { PiecePlaneViewModel } from "./PiecePlaneViewModel";
 import { IRenderable } from "../../Interfaces/IRenderable";
 
-class LayeredChild {
+export class LayeredChild {
   child: PiecePlaneViewModel;
   layerIndex: number = 0;
 
