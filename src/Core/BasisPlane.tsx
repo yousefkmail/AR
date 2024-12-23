@@ -4,6 +4,7 @@ import { BasisModel } from "../DataService/Models/BasisModel";
 class BasisLayer {
   name: string = "";
   positionOffset: number = 0;
+  width: number = 0;
 }
 
 export class BasisPlane extends PlaneBase {
@@ -14,6 +15,7 @@ export class BasisPlane extends PlaneBase {
       children: [],
       positionOffset: layer.positionOffset,
       name: layer.name,
+      width: layer.width,
     }));
   }
 }

@@ -33,9 +33,10 @@ export const Window = (props: WindowProps) => {
 
   const [isMinimized, setIsMinimized] = useState<boolean>(false);
   const [size, setSize] = useState<Size>({
-    height: 200,
-    width: 200,
+    width: defaultSize?.width,
+    height: defaultSize?.height,
   });
+
   const Minimize = () => {
     setIsMinimized(!isMinimized);
   };
@@ -57,7 +58,7 @@ export const Window = (props: WindowProps) => {
     >
       <Resizable
         {...rest}
-        className="resizable"
+        className={"resizable"}
         minWidth={280}
         minHeight={isMinimized ? 40 : 300}
         onResizeStop={handleResizeStop}

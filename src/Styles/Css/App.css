@@ -275,6 +275,11 @@ body {
     padding-bottom: 10px;
 }
 
+.resizable-minimized {
+    transition: all ease-in-out 0.2s;
+
+}
+
 .pieces-container-select-label {
     color: var(--text-primary);
 }
