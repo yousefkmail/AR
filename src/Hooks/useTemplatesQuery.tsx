@@ -38,7 +38,7 @@ export const useTemplatesQuery = () => {
         return {
           ...oldData,
           templates: oldData.templates.map((template: LoadableTemplate) => {
-            if (template.template.assetId === id) {
+            if (template.template.id === id) {
               const templatee = { ...template };
               templatee.isLoading = true;
               return templatee;
@@ -62,7 +62,7 @@ export const useTemplatesQuery = () => {
         return {
           ...oldData,
           templates: oldData.templates.map((template: LoadableTemplate) =>
-            template.template.assetId === fullTemplate.assetId
+            template.template.id === fullTemplate.id
               ? { template: fullTemplate, isLoading: false }
               : template
           ),

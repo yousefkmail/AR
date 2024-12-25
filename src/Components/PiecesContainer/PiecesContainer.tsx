@@ -4,7 +4,6 @@ import GridLayout from "../../Layout/GridLayout";
 import { PiecesSelectStyle } from "../../CustomStyles/react-select/PiecesSelectStyle";
 import DraggableBasis from "../DraggableBasis";
 import { DragEvent, useContext } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { DraggedPieceContext } from "../../Context/DraggedPieceContext";
 import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
 import { BasisPlane } from "../../Core/BasisPlane";
@@ -48,20 +47,21 @@ export const PiecesContainer = () => {
 
       <GridLayout cellMinWidth={250}>
         {selectedOption?.value === "Base"
-          ? basis?.map(({ assetId, ...item }) => (
+          ? basis?.map(({ ...item }) => (
               <DraggableBasis
                 onDragStart={(event: DragEvent) => {
                   const img = new Image();
                   img.src = "";
                   event.dataTransfer.setDragImage(img, 0, 0);
-                  const id = uuidv4();
                   setDraggedItem(
                     new BasisPlaneViewModel(
-                      new BasisPlane({ assetId, ...item }, id)
+                      new BasisPlane({
+                        ...item,
+                      })
                     )
                   );
                 }}
-                key={assetId}
+                key={item.id}
                 {...item}
               />
             ))
@@ -71,12 +71,9 @@ export const PiecesContainer = () => {
                   const img = new Image();
                   img.src = "";
                   event.dataTransfer.setDragImage(img, 0, 0);
-                  const id = uuidv4();
-                  setDraggedItem(
-                    new PiecePlaneViewModel(new PiecePlane(item, id))
-                  );
+                  setDraggedItem(new PiecePlaneViewModel(new PiecePlane(item)));
                 }}
-                key={item.assetId}
+                key={item.id}
                 {...item}
               />
             ))}

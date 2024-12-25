@@ -43,17 +43,12 @@ export const useBasis = () => {
       }
 
       case "delete": {
-        return state.filter(
-          (item) => item.BasisPlane.id !== action.payload.BasisPlane.id
-        );
+        return state.filter((item) => item.id !== action.payload.id);
       }
 
       case "changeLayer": {
         return state.map((parent) => {
-          const plane = new BasisPlane(
-            { ...parent.BasisPlane },
-            parent.BasisPlane.id
-          );
+          const plane = new BasisPlane({ ...parent.BasisPlane });
           const planeViewModel = new BasisPlaneViewModel(plane);
 
           plane.layers = parent.BasisPlane.layers;
@@ -70,7 +65,7 @@ export const useBasis = () => {
       }
       case "deattach_piece": {
         let result = state.map((item) => {
-          if (item.BasisPlane.id === action.payload.parent?.BasisPlane.id) {
+          if (item.id === action.payload.parent?.id) {
             item.children = item.children.filter(
               (item) =>
                 item.child.PiecePlane.id !== action.payload.PiecePlane.id
@@ -84,7 +79,7 @@ export const useBasis = () => {
 
       case "move": {
         return state.map((item) => {
-          if (item.BasisPlane.id === action.payload.basis.BasisPlane.id) {
+          if (item.id === action.payload.basis.id) {
             item.BasisPlane.position = action.payload.position;
             return item;
           } else return item;
@@ -94,9 +89,7 @@ export const useBasis = () => {
       case "move_child": {
         return state.map((item) => {
           let result = item.children.map((child) => {
-            if (
-              child.child.PiecePlane.id === action.payload.piece.PiecePlane.id
-            ) {
+            if (child.child.id === action.payload.piece.id) {
               child.child.PiecePlane.position = action.payload.position;
               return child;
             } else return child;

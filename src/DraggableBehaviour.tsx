@@ -64,14 +64,11 @@ export default function DraggableBehaviour() {
     const draggedPieceData = FindPieceWithId(DraggedRef.current.userData.id);
 
     if (draggedPieceData && draggedPieceData?.parent) {
-      const parent = FindSceneObjectWithId(
-        draggedPieceData.parent.BasisPlane.id
-      );
+      const parent = FindSceneObjectWithId(draggedPieceData.parent.id);
 
       if (!parent) return;
       const position = NDCToObjectWorld(mousePos, parent, camera);
       let xPos = parent?.worldToLocal(position).x;
-
       const rightOffset =
         (draggedPieceData.parent.BasisPlane.width / 2 -
           draggedPieceData.baseRight()) /
@@ -83,7 +80,7 @@ export default function DraggableBehaviour() {
           draggedPieceData.baseLeft()
         ) / 50;
 
-      const basis = FindBaseWithId(draggedPieceData.parent.BasisPlane.id);
+      const basis = FindBaseWithId(draggedPieceData.parent.id);
 
       if (!basis) return;
 
@@ -109,6 +106,7 @@ export default function DraggableBehaviour() {
           );
         }
       }
+
       DispatchCreatedBasis({
         type: "move_child",
         payload: {
@@ -149,7 +147,7 @@ export default function DraggableBehaviour() {
           });
 
         const piece = FindPieceWithId(DraggedRef.current.userData.id);
-        if (piece)
+        if (piece) {
           DispatchCreatedPieces({
             type: "move",
             payload: {
@@ -161,6 +159,7 @@ export default function DraggableBehaviour() {
               ),
             },
           });
+        }
       } else SetObjectLayerTraverse(DraggedRef.current, 0);
     }
   });

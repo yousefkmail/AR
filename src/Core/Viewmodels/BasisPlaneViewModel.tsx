@@ -4,7 +4,7 @@ import { PngPlane, PngPlaneRef } from "../../Components/PngPlane/PngPlane";
 import { Vector3 } from "three";
 import { PiecePlaneViewModel } from "./PiecePlaneViewModel";
 import { IRenderable } from "../../Interfaces/IRenderable";
-
+import { v4 as uuidv4 } from "uuid";
 export class LayeredChild {
   child: PiecePlaneViewModel;
   layerIndex: number = 0;
@@ -17,9 +17,11 @@ export class LayeredChild {
 
 export class BasisPlaneViewModel implements IRenderable {
   public BasisPlane: BasisPlane;
+  public id: string;
   children: LayeredChild[] = [];
 
-  constructor(BasisPlane: BasisPlane) {
+  constructor(BasisPlane: BasisPlane, id?: string) {
+    this.id = id || uuidv4();
     this.BasisPlane = BasisPlane;
   }
 
@@ -40,7 +42,7 @@ export class BasisPlaneViewModel implements IRenderable {
 
   removeChild(child: PiecePlaneViewModel) {
     this.children = this.children.filter(
-      (childd) => childd.child.PiecePlane.id === child.PiecePlane.id
+      (childd) => childd.child.id === child.id
     );
   }
 
@@ -53,21 +55,24 @@ export class BasisPlaneViewModel implements IRenderable {
     let rightChild: PiecePlaneViewModel | null = null;
 
     for (let i = 0; i < this.children.length; i++) {
-      const PiecePlaneData = this.children[i].child.PiecePlane;
+      const PiecePlaneData = this.children[i].child;
       if (
-        PiecePlaneData.id !== child.PiecePlane.id &&
+        PiecePlaneData.id !== child.id &&
         this.children[i].layerIndex ===
-          this.children.filter(
-            (item) => item.child.PiecePlane.id === child.PiecePlane.id
-          )[0].layerIndex
+          this.children.filter((item) => item.child.id === child.id)[0]
+            .layerIndex
       ) {
-        if (child.PiecePlane.position.x - PiecePlaneData.position.x > 0) {
+        if (
+          child.PiecePlane.position.x - PiecePlaneData.PiecePlane.position.x >
+          0
+        ) {
           if (leftChild === null) {
             leftChild = this.children[i].child;
           }
           if (
             leftChild &&
-            PiecePlaneData.position.x > leftChild.PiecePlane.position.x
+            PiecePlaneData.PiecePlane.position.x >
+              leftChild.PiecePlane.position.x
           ) {
             leftChild = this.children[i].child;
           }
@@ -78,7 +83,8 @@ export class BasisPlaneViewModel implements IRenderable {
 
           if (
             rightChild &&
-            PiecePlaneData.position.x < rightChild.PiecePlane.position.x
+            PiecePlaneData.PiecePlane.position.x <
+              rightChild.PiecePlane.position.x
           ) {
             rightChild = this.children[i].child;
           }
@@ -122,11 +128,17 @@ export class BasisPlaneViewModel implements IRenderable {
 
   Render = forwardRef<PngPlaneRef>((_props, ref) => {
     return (
-      <PngPlane ref={ref} {...this.BasisPlane} rotation={new Vector3(90, 0, 0)}>
+      <PngPlane
+        ref={ref}
+        {...this.BasisPlane}
+        rotation={new Vector3(90, 0, 0)}
+        id={this.id}
+      >
         {this.children.map((child, index) => (
           <PngPlane
-            key={child.child.PiecePlane.id}
+            key={child.child.id}
             {...child.child.PiecePlane}
+            id={child.child.id}
             scale={
               child.child.isFlipped
                 ? new Vector3(-1, 1, 1)

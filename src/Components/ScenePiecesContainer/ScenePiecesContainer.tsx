@@ -32,7 +32,7 @@ export const ScenePiecesContainer = forwardRef<
       {createdBasis.map((item, index) => {
         return (
           <item.Render
-            key={item.BasisPlane.id}
+            key={item.id}
             ref={(item) => (basisRefs.current[index] = item!)}
           ></item.Render>
         );
@@ -40,7 +40,7 @@ export const ScenePiecesContainer = forwardRef<
 
       {createdPieces.map((piece, index) => (
         <piece.Render
-          key={piece.PiecePlane.id}
+          key={piece.id}
           ref={(item) => (piecesRefs.current[index] = item!)}
         ></piece.Render>
       ))}

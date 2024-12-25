@@ -1,6 +1,6 @@
 import { IDataService } from "../DataService/IDataService";
-import { BasisModel } from "../DataService/Models/BasisModel";
-import { PieceModel } from "../DataService/Models/PieceModel";
+import { Basis } from "../DataService/Models/BasisModel";
+import { Piece } from "../DataService/Models/PieceModel";
 import {
   TemplateDataModel,
   TemplateModel,
@@ -36,18 +36,21 @@ export class ContentfulDataService implements IDataService {
     }
 
     const model: TemplateModel = {
-      assetId: data.sys.id,
+      id: data.sys.id,
       data: data.fields.data,
       name: data.fields.name,
-      preview: data.fields.preview?.fields.file?.url ?? "",
+      previewImage: data.fields.preview?.fields.file?.url ?? "",
       price: data.fields.price,
+      description: "",
       loadedData: {
         basis: {
+          price: 0,
+          description: "",
           height: base.fields.height,
           name: base.fields.name,
-          texture: base.fields.texture?.fields.file?.url ?? "",
+          previewImage: base.fields.texture?.fields.file?.url ?? "",
           width: base.fields.width,
-          assetId: base.sys.id,
+          id: base.sys.id,
           layers: (base.fields.layers as Layer[]).map((base) => ({
             name: base.name,
             positionOffset: base.positionOffset,
@@ -57,13 +60,13 @@ export class ContentfulDataService implements IDataService {
           layer: item.layer,
           position: item.position,
           data: {
-            assetId: item.data.sys.id,
+            id: item.data.sys.id,
             baseOffset: item.data.fields.baseOffset,
             baseWidth: item.data.fields.baseWidth,
             category: item.data.fields.category,
             height: item.data.fields.height,
             name: item.data.fields.name,
-            texture: item.data.fields.texture?.fields.file?.url ?? "",
+            previewImage: item.data.fields.texture?.fields.file?.url ?? "",
             width: item.data.fields.width,
           },
         })),
@@ -85,31 +88,35 @@ export class ContentfulDataService implements IDataService {
     data.items.forEach((base) => {
       bases.push({
         name: base.fields.name,
-        preview: base.fields.preview?.fields.file?.url ?? "",
+        previewImage: base.fields.preview?.fields.file?.url ?? "",
         tags: base.fields.tags,
         price: base.fields.price,
-        assetId: base.sys.id,
+        id: base.sys.id,
         data: base.fields.data as TemplateData,
+        description: "",
       });
     });
 
     return [bases, data.total];
   };
-  GetAllBasis: () => Promise<BasisModel[]> = async () => {
+  GetAllBasis: () => Promise<Basis[]> = async () => {
     const data = await GetAllBasis();
 
-    const bases: BasisModel[] = [];
+    const bases: Basis[] = [];
 
     data.items.forEach((base) => {
-      const modelbase: BasisModel = {
+      const modelbase: Basis = {
         height: base.fields.height,
+        description: "",
         price: base.fields.price,
         name: base.fields.name,
-        texture: base.fields.texture?.fields.file?.url ?? "",
+        previewImage: base.fields.texture?.fields.file?.url ?? "",
         width: base.fields.width,
-        assetId: base.sys.id,
+        id: base.sys.id,
+
         layers: (base.fields.layers as Layer[]).map((base) => ({
           name: base.name,
+          width: 0,
           positionOffset: base.positionOffset,
         })),
       };
@@ -119,23 +126,24 @@ export class ContentfulDataService implements IDataService {
 
     return bases;
   };
-  GetAllPieces: () => Promise<PieceModel[]> = async () => {
+  GetAllPieces: () => Promise<Piece[]> = async () => {
     const data = await GetAllPiecee();
 
-    const bases: PieceModel[] = [];
+    const bases: Piece[] = [];
 
     data.items.forEach((base) => {
-      const modelbase: PieceModel = {
+      const modelbase: Piece = {
         height: base.fields.height,
         name: base.fields.name,
-        texture: base.fields.texture?.fields.file?.url ?? "",
+        previewImage: base.fields.texture?.fields.file?.url ?? "",
         width: base.fields.width,
         baseOffset: base.fields.baseOffset,
         baseWidth: base.fields.baseWidth,
-        assetId: base.sys.id,
+        id: base.sys.id,
         category: base.fields.category,
         price: base.fields.price,
         isFlipable: base.fields.isFlipable,
+        description: "",
       };
 
       bases.push(modelbase);

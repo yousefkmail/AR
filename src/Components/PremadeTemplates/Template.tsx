@@ -61,7 +61,7 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
         <img
           draggable={false}
           className="template-img"
-          src={item.template.preview}
+          src={item.template.previewImage}
           alt=""
         />
         <Spacer padding={4}>

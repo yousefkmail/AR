@@ -4,7 +4,6 @@ import { PlanesContainerContext } from "./PlanesContainerContext";
 import { BasisPlaneViewModel } from "../Core/Viewmodels/BasisPlaneViewModel";
 import { PiecePlaneViewModel } from "../Core/Viewmodels/PiecePlaneViewModel";
 import { PiecePlane } from "../Core/PiecePlane";
-import { v4 } from "uuid";
 import { CreatedBasisAction, useBasis } from "../Hooks/useBasis";
 import { CreatedPiecesAction, usePieces } from "../Hooks/usePieces";
 export const PiecesContext = createContext<PiecesContextProps>(
@@ -57,10 +56,10 @@ export const PiecesContextProvider = ({
     DispatchCreatedBasis({ type: "deattach_piece", payload: piece });
 
     const newPiece = new PiecePlaneViewModel(
-      new PiecePlane({ ...piece.PiecePlane }, v4())
+      new PiecePlane({ ...piece.PiecePlane, description: "" })
     );
     newPiece.parent = null;
-    const childWorld = FindSceneObjectWithId(piece.PiecePlane.id);
+    const childWorld = FindSceneObjectWithId(piece.id);
     const worldPosition = new Vector3();
     childWorld?.getWorldPosition(worldPosition);
 
@@ -75,19 +74,19 @@ export const PiecesContextProvider = ({
 
   const FindBaseWithId = (id: string): BasisPlaneViewModel | null => {
     for (const base of createdBasis) {
-      if (base.BasisPlane.id === id) return base;
+      if (base.id === id) return base;
     }
     return null;
   };
 
   const FindPieceWithId = (id: string): PiecePlaneViewModel | null => {
     for (const piece of createdPieces) {
-      if (piece.PiecePlane.id === id) return piece;
+      if (piece.id === id) return piece;
     }
 
     for (const base of createdBasis) {
       for (const child of base.children) {
-        if (child.child.PiecePlane.id === id) return child.child;
+        if (child.child.id === id) return child.child;
       }
     }
 
@@ -99,8 +98,8 @@ export const PiecesContextProvider = ({
     basis: BasisPlaneViewModel,
     NDCPosition: Vector3
   ) => {
-    const parent = FindSceneObjectWithId(basis.BasisPlane.id);
-    const child = FindSceneObjectWithId(piece.PiecePlane.id);
+    const parent = FindSceneObjectWithId(basis.id);
+    const child = FindSceneObjectWithId(piece.id);
 
     if (parent && child) {
       piece.setParent(basis);
@@ -110,7 +109,7 @@ export const PiecesContextProvider = ({
     DispatchCreatedBasis({
       type: "set",
       payload: createdBasis.map((item) => {
-        if (item.BasisPlane.id === basis.BasisPlane.id) {
+        if (item.id === basis.id) {
           return basis;
         } else return item;
       }),

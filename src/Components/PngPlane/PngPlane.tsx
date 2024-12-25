@@ -27,7 +27,7 @@ export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
   (props: PngPlaneProps, ref) => {
     const { id } = props;
 
-    const texture = useTexture(props.texture ?? "");
+    const texture = useTexture(props.previewImage ?? "");
     const groupref = useRef<Group>(null);
     const { DraggedRef } = useContext(DragContext);
     const { movementMode } = useSceneSettings();

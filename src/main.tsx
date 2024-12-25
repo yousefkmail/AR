@@ -12,34 +12,37 @@ import { ContextMenuProvider } from "./Features/ContextMenu/ContextMenuProvider.
 import { EnvironmentContextProvider } from "./Context/EnvironmentContext.tsx";
 import { NotificationProvider } from "./Features/NotificationService/NotificationContext.tsx";
 import { ObjectPreviewContextProvider } from "./Features/UIToCanvasDrag/ObjectPreview.tsx";
+import { CartContextProvider } from "./Features/Cart/CartContext.tsx";
 
 export const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <NotificationProvider>
-      <ObjectPreviewContextProvider>
-        <EnvironmentContextProvider>
-          <ContextMenuProvider>
-            <SceneSettingsContextProvider>
-              <QueryClientProvider client={queryClient}>
-                <PlanesContainerContextProvider>
-                  <PiecesContextProvider>
-                    <DraggedPieceContextProvider>
-                      <SkeletonTheme
-                        baseColor="#b3aaa6"
-                        highlightColor="#eaeaea"
-                        duration={2}
-                      >
-                        <App />
-                      </SkeletonTheme>
-                    </DraggedPieceContextProvider>
-                  </PiecesContextProvider>
-                </PlanesContainerContextProvider>
-              </QueryClientProvider>
-            </SceneSettingsContextProvider>
-          </ContextMenuProvider>
-        </EnvironmentContextProvider>
-      </ObjectPreviewContextProvider>
+      <CartContextProvider>
+        <ObjectPreviewContextProvider>
+          <EnvironmentContextProvider>
+            <ContextMenuProvider>
+              <SceneSettingsContextProvider>
+                <QueryClientProvider client={queryClient}>
+                  <PlanesContainerContextProvider>
+                    <PiecesContextProvider>
+                      <DraggedPieceContextProvider>
+                        <SkeletonTheme
+                          baseColor="#b3aaa6"
+                          highlightColor="#eaeaea"
+                          duration={2}
+                        >
+                          <App />
+                        </SkeletonTheme>
+                      </DraggedPieceContextProvider>
+                    </PiecesContextProvider>
+                  </PlanesContainerContextProvider>
+                </QueryClientProvider>
+              </SceneSettingsContextProvider>
+            </ContextMenuProvider>
+          </EnvironmentContextProvider>
+        </ObjectPreviewContextProvider>
+      </CartContextProvider>
     </NotificationProvider>
   </StrictMode>
 );

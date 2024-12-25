@@ -3,7 +3,7 @@ import Builder from "../Pages/Builder";
 import BottomFooterLayour from "../Layout/BottomFooterLayour";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer/Footer";
-import Cart from "../Features/Cart/Cart";
+import Cart from "../Pages/Cart";
 import Home from "../Pages/Home";
 
 export const AppRouter = createBrowserRouter([

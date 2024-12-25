@@ -24,9 +24,7 @@ export const usePieces = () => {
   ) {
     switch (action.type) {
       case "delete": {
-        return state.filter(
-          (item) => item.PiecePlane.id !== action.payload.PiecePlane.id
-        );
+        return state.filter((item) => item.id !== action.payload.id);
       }
 
       case "add": {
@@ -34,7 +32,7 @@ export const usePieces = () => {
       }
       case "move": {
         return state.map((item) => {
-          if (item.PiecePlane.id === action.payload.piece.PiecePlane.id) {
+          if (item.id === action.payload.piece.id) {
             item.PiecePlane.position = action.payload.position;
             return item;
           } else return item;
@@ -44,7 +42,7 @@ export const usePieces = () => {
       case "flip": {
         return state.map((item) => {
           if (
-            item.PiecePlane.id === action.payload.piece.PiecePlane.id &&
+            item.id === action.payload.piece.id &&
             item.PiecePlane.isFlipable
           ) {
             const newItem = new PiecePlaneViewModel(item.PiecePlane);

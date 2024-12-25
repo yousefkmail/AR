@@ -1,4 +1,4 @@
-import { PlaneModel } from "./PlaneModel";
+import { Plane } from "./PlaneModel";
 
 interface Layer {
   name: string;
@@ -6,6 +6,6 @@ interface Layer {
   width: number;
 }
 
-export interface BasisModel extends PlaneModel {
-  layers: Layer[];
+export class Basis extends Plane {
+  layers: Layer[] = [];
 }

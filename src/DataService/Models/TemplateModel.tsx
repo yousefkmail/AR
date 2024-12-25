@@ -1,24 +1,21 @@
 import { TemplateData } from "../../Contentful/Types/TemplateType";
-import { BasisModel } from "./BasisModel";
-import { PieceModel } from "./PieceModel";
+import { Basis } from "./BasisModel";
+import { Piece } from "./PieceModel";
+import { ProductItem } from "./ProductItem";
 
 interface BasisChild {
-  data: PieceModel;
+  data: Piece;
   position: [number, number, number];
   layer: number;
 }
 
 export interface TemplateDataModel {
-  basis: BasisModel;
+  basis: Basis;
   children: BasisChild[];
 }
 
-export interface TemplateModel {
-  preview: string;
-  price: number;
-  name: string;
-  tags: string[];
-  assetId: string;
-  data: TemplateData;
+export class TemplateModel extends ProductItem {
+  tags: string[] = [];
+  data: TemplateData | undefined;
   loadedData?: TemplateDataModel;
 }

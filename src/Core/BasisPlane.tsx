@@ -1,5 +1,5 @@
 import { PlaneBase } from "./PlaneBase";
-import { BasisModel } from "../DataService/Models/BasisModel";
+import { Basis } from "../DataService/Models/BasisModel";
 
 class BasisLayer {
   name: string = "";
@@ -9,8 +9,8 @@ class BasisLayer {
 
 export class BasisPlane extends PlaneBase {
   layers: BasisLayer[] = [new BasisLayer()];
-  constructor(data: BasisModel, id: string) {
-    super(id, data);
+  constructor(data: Basis) {
+    super(data);
     this.layers = data.layers.map((layer) => ({
       children: [],
       positionOffset: layer.positionOffset,

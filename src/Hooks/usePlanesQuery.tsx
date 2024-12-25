@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { dataService } from "../Services/Services";
-import { PieceModel } from "../DataService/Models/PieceModel";
+import { Piece } from "../DataService/Models/PieceModel";
 export interface OptionType {
   value: string;
   label: string;
 }
 
 export const usePlanesQuery = () => {
-  const [activePieces, setActivePieces] = useState<PieceModel[]>([]);
+  const [activePieces, setActivePieces] = useState<Piece[]>([]);
 
   const [selectedOption, setSelectedOption] = useState<OptionType>({
     value: "Base",

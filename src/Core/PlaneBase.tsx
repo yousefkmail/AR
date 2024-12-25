@@ -1,21 +1,20 @@
 import { Vector3 } from "three";
-import { PlaneModel } from "../DataService/Models/PlaneModel";
+import { Plane } from "../DataService/Models/PlaneModel";
 
 export class PlaneBase {
   id: string = "";
   name: string = "";
-  texture: string = "";
+  previewImage: string = "";
   width: number = 0;
   height: number = 0;
-  assetId: string = "";
   position: Vector3 = new Vector3(1, 1, 1);
   rotation: Vector3 = new Vector3(0, 0, 0);
   price: number = 0;
   scale: Vector3 = new Vector3(1, 1, 1);
-  constructor(id: string, data: PlaneModel) {
-    this.id = id;
-    this.assetId = data.assetId;
-    this.texture = data.texture;
+  description: string = "";
+  constructor(data: Plane) {
+    this.id = data.id;
+    this.previewImage = data.previewImage;
     this.height = data.height;
     this.width = data.width;
     this.name = data.name;

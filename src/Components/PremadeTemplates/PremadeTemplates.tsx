@@ -38,9 +38,9 @@ export default function PremadeTemplates({
             templates?.map((item) => (
               <Template
                 OnLoadPresed={() =>
-                  fetchFullTemplate({ id: item.template.assetId, page: page })
+                  fetchFullTemplate({ id: item.template.id, page: page })
                 }
-                key={item.template.assetId}
+                key={item.template.id}
                 item={item}
               />
             ))

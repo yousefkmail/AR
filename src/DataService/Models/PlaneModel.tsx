@@ -1,8 +1,6 @@
-export interface PlaneModel {
-  name: string;
-  texture: string;
-  width: number;
-  height: number;
-  assetId: string;
-  price: number;
+import { ProductItem } from "./ProductItem";
+
+export class Plane extends ProductItem {
+  width: number = 0;
+  height: number = 0;
 }

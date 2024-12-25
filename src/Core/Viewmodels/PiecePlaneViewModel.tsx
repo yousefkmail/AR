@@ -4,13 +4,17 @@ import { PngPlane, PngPlaneRef } from "../../Components/PngPlane/PngPlane";
 import { BasisPlaneViewModel } from "./BasisPlaneViewModel";
 import { IRenderable } from "../../Interfaces/IRenderable";
 import { Vector3 } from "three";
+import { v4 as uuidv4 } from "uuid";
 
 export class PiecePlaneViewModel implements IRenderable {
   public PiecePlane: PiecePlane;
+  public id: string;
+
   parent: BasisPlaneViewModel | null = null;
   isFlipped: boolean = false;
-  constructor(BasisPlane: PiecePlane) {
+  constructor(BasisPlane: PiecePlane, id?: string) {
     this.PiecePlane = BasisPlane;
+    this.id = id || uuidv4();
   }
 
   setParent(BasisPlane: BasisPlaneViewModel) {
@@ -55,6 +59,7 @@ export class PiecePlaneViewModel implements IRenderable {
       <PngPlane
         ref={ref}
         {...this.PiecePlane}
+        id={this.id}
         scale={this.isFlipped ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1)}
         applyOffset
       />

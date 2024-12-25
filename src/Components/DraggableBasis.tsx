@@ -1,7 +1,7 @@
 import { HTMLAttributes } from "react";
 import DraggableItem from "./DragableItem";
 interface DraggablebasisProps extends HTMLAttributes<HTMLDivElement> {
-  texture: string;
+  previewImage: string;
   name: string;
   price: number;
   width: number;
@@ -9,7 +9,7 @@ interface DraggablebasisProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export default function DraggableBasis({
-  texture,
+  previewImage,
   height,
   name,
   price,
@@ -32,7 +32,7 @@ export default function DraggableBasis({
 
             padding: "5px",
           }}
-          src={texture}
+          src={previewImage}
           alt=""
         />
         <div

@@ -4,6 +4,7 @@ import { useObjectContextMenu } from "./useObjectContextMenu";
 import PieceContextMenu, { LayerOption } from "./PieceContextMenu";
 import BasisContextMenu from "./BasisContextMenu";
 import { useEffect, useState } from "react";
+import { useCart } from "../Cart/useCart";
 export default function ContextContainer() {
   const { isOpened, menuPosition, activeBasis, activePiece } =
     useObjectContextMenu();
@@ -23,12 +24,12 @@ export default function ContextContainer() {
 
   const HandleRotationChanged = (rotation: number) => {
     if (activeBasis) {
-      const Group = FindSceneObjectWithId(activeBasis.BasisPlane.id);
+      const Group = FindSceneObjectWithId(activeBasis.id);
       Group?.rotation.set(Group.rotation.x, 0, MathUtils.degToRad(rotation));
       setRotation(rotation);
     }
     if (activePiece && !activePiece.parent) {
-      const Group = FindSceneObjectWithId(activePiece.PiecePlane.id);
+      const Group = FindSceneObjectWithId(activePiece.id);
       Group?.rotation.set(0, MathUtils.degToRad(rotation), 0);
       setRotation(rotation);
     }
@@ -36,11 +37,11 @@ export default function ContextContainer() {
 
   useEffect(() => {
     if (activeBasis) {
-      const Group = FindSceneObjectWithId(activeBasis.BasisPlane.id);
+      const Group = FindSceneObjectWithId(activeBasis.id);
       setRotation(MathUtils.radToDeg(Group?.rotation.x ?? 0));
     }
     if (activePiece) {
-      const Group1 = FindSceneObjectWithId(activePiece.PiecePlane.id);
+      const Group1 = FindSceneObjectWithId(activePiece.id);
       setRotation(MathUtils.radToDeg(Group1?.rotation.y ?? 0));
     }
   }, [activeBasis, activePiece]);
@@ -50,14 +51,14 @@ export default function ContextContainer() {
     let layerIndex = 1;
     createdBasis.forEach((basis) => {
       basis.children.forEach((piece) => {
-        if (piece.child.PiecePlane.id === activePiece.PiecePlane.id) {
+        if (piece.child.id === activePiece.id) {
           layerIndex = piece.layerIndex;
         }
       });
     });
 
     if (activePiece.parent) {
-      const base = FindBaseWithId(activePiece.parent.BasisPlane.id ?? "");
+      const base = FindBaseWithId(activePiece.parent.id ?? "");
 
       if (base) {
         setLayerOptions(
@@ -124,8 +125,13 @@ export default function ContextContainer() {
       payload: { piece: activePiece },
     });
   };
+  const { addItem } = useCart();
 
-  const AddToCart = (quantity: number) => {};
+  const AddToCart = (quantity: number) => {
+    if (activeBasis) {
+      addItem({ quantity: quantity, item: activeBasis.BasisPlane });
+    }
+  };
 
   const [layerOptions, setLayerOptions] = useState<LayerOption[]>([]);
 

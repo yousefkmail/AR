@@ -37,7 +37,7 @@ export const DragContextProvider = ({ children }: any) => {
     let plane1 = FindPieceWithId(obj1.userData.id);
     let plane2 = FindBaseWithId(obj2.userData.id);
     if (plane1 && plane2) {
-      const parent = FindSceneObjectWithId(plane2.BasisPlane.id);
+      const parent = FindSceneObjectWithId(plane2.id);
       if (parent) {
         const position = NDCToObjectWorld(mousePos, parent, camera);
         HandlePieceDroppedOnPlane(plane1, plane2, position);
