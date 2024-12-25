@@ -1,13 +1,18 @@
 import { ChangeEvent, useState } from "react";
 import FloatingContainer from "../../Components/FloatingContainer/FloatingContainer";
 import { Slider } from "@mui/material";
-import { faTrash, faRotate } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faRotate,
+  faCartShopping,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 interface ObjectContextMenuProps {
   posX: number;
   posY: number;
   OnDelete: () => void;
   OnRotationChangd: (number: number) => void;
+  onAddToCartPressed: (quantity: number) => void;
   RotationValue: number;
 }
 export default function BasisContextMenu({
@@ -16,13 +21,15 @@ export default function BasisContextMenu({
   OnRotationChangd,
   OnDelete,
   RotationValue,
+  onAddToCartPressed,
 }: Partial<ObjectContextMenuProps>) {
   const RotationChanged = (_event: Event, value: number | number[]) => {
     OnRotationChangd?.(value as number);
   };
 
   const [isRotationOpened, setIsRotationOpened] = useState<boolean>(false);
-
+  const [isAddToCartOpened, setIsAddToCartOpened] = useState<boolean>(false);
+  const [cartQuantity, setCartQuantity] = useState<number>(0);
   function handleInputValue(event: ChangeEvent<HTMLInputElement>): void {
     OnRotationChangd?.(parseInt(event.target.value));
   }
@@ -121,6 +128,45 @@ export default function BasisContextMenu({
             </div>
             Delete
           </button>
+          <button
+            className={"contextmenu-button"}
+            onClick={() => setIsAddToCartOpened((prev) => !prev)}
+          >
+            <div style={{ marginBottom: "5px" }}>
+              <FontAwesomeIcon
+                style={{ marginBottom: "3px" }}
+                size="xl"
+                icon={faCartShopping}
+              />
+            </div>
+            Cart
+          </button>
+          {isAddToCartOpened && (
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-25% , -25%)",
+              }}
+            >
+              <div>
+                <button
+                  disabled={cartQuantity < 1}
+                  onClick={() => setCartQuantity((prev) => prev - 1)}
+                >
+                  -
+                </button>
+                <span>{cartQuantity}</span>
+                <button onClick={() => setCartQuantity((prev) => prev + 1)}>
+                  +
+                </button>
+              </div>
+              <button onClick={() => onAddToCartPressed?.(cartQuantity)}>
+                Add to cart
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </FloatingContainer>

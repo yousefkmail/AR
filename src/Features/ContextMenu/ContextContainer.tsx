@@ -125,6 +125,8 @@ export default function ContextContainer() {
     });
   };
 
+  const AddToCart = (quantity: number) => {};
+
   const [layerOptions, setLayerOptions] = useState<LayerOption[]>([]);
 
   return (
@@ -151,6 +153,7 @@ export default function ContextContainer() {
             RotationValue={rotation}
             posX={menuPosition.x}
             posY={menuPosition.y}
+            onAddToCartPressed={AddToCart}
           />
         ))}
     </div>

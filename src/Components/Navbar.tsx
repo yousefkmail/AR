@@ -1,9 +1,10 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { faPlus, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import IconedNavlink from "./Button/IconedNavlink";
 import FontawesomeIconButton from "./Button/FontawesomeIconButton";
 export default function () {
+  const navigate = useNavigate();
   return (
     <header className="header">
       <div style={{ display: "flex", justifyContent: "center" }}>
@@ -13,7 +14,6 @@ export default function () {
             justifyContent: "space-between",
             maxWidth: "1600px",
             alignItems: "center",
-            padding: "0 48px",
             flexGrow: "1",
           }}
         >
@@ -45,6 +45,7 @@ export default function () {
               ></FontawesomeIconButton>
               <FontawesomeIconButton
                 size="xl"
+                onClick={() => navigate("/cart")}
                 isActive={false}
                 icon={faShoppingCart}
               ></FontawesomeIconButton>
