@@ -9,7 +9,6 @@ import IconButton from "../Button/IconButton";
 import DraggableItem from "../DragableItem";
 import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
 import { BasisPlane } from "../../Core/BasisPlane";
-import { v4 as uuidv4 } from "uuid";
 import { DraggedPieceContext } from "../../Context/DraggedPieceContext";
 import { PiecePlaneViewModel } from "../../Core/Viewmodels/PiecePlaneViewModel";
 import { PiecePlane } from "../../Core/PiecePlane";
@@ -35,12 +34,12 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
       return;
     }
     const TemplateViewModel = new BasisPlaneViewModel(
-      new BasisPlane(item.template.loadedData.basis, uuidv4())
+      new BasisPlane(item.template.loadedData.basis)
     );
 
     for (const child of item.template.loadedData.children) {
       TemplateViewModel.addChild(
-        new PiecePlaneViewModel(new PiecePlane({ ...child.data }, uuidv4())),
+        new PiecePlaneViewModel(new PiecePlane({ ...child.data })),
         child.layer,
         child.position[0]
       );

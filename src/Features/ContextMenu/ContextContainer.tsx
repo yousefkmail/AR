@@ -130,6 +130,9 @@ export default function ContextContainer() {
   const AddToCart = (quantity: number) => {
     if (activeBasis) {
       addItem({ quantity: quantity, item: activeBasis.BasisPlane });
+      activeBasis.children.forEach((child) => {
+        addItem({ quantity: quantity, item: child.child.PiecePlane });
+      });
     }
   };
 

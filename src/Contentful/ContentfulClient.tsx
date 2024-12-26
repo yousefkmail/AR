@@ -58,3 +58,11 @@ export const GetTemplateById = async (id: string) => {
 
   return data;
 };
+
+export const GetPiecesByIds = async (ids: string[]) => {
+  const data = await ContentfulCleint.withoutUnresolvableLinks.getEntries({
+    "sys.id[in]": ids,
+  });
+
+  return data.items;
+};

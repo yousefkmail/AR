@@ -1,6 +1,7 @@
 import { IDataService } from "../DataService/IDataService";
 import { Basis } from "../DataService/Models/BasisModel";
 import { Piece } from "../DataService/Models/PieceModel";
+import { ProductItem } from "../DataService/Models/ProductItem";
 import {
   TemplateDataModel,
   TemplateModel,
@@ -12,10 +13,27 @@ import {
   GetTemplateById,
   GetBaseById,
   GetPieceById,
+  GetPiecesByIds,
 } from "./ContentfulClient";
 import { Layer } from "./Types/BasisType";
 import { TemplateData } from "./Types/TemplateType";
 export class ContentfulDataService implements IDataService {
+  GetPiecesById: (assetIds: string[]) => Promise<ProductItem[]> = async (
+    ids: string[]
+  ) => {
+    const data = await GetPiecesByIds(ids);
+    console.log(data);
+
+    return data.map((item) => {
+      return {
+        description: "",
+        id: item.sys.id,
+        name: item.fields.name as string,
+        price: item.fields.price as number,
+        previewImage: (item.fields.texture as any)?.fields.file?.url ?? "",
+      };
+    });
+  };
   GetTemplateById: (assetId: string) => Promise<TemplateModel> = async (
     id: string
   ) => {

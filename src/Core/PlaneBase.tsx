@@ -18,5 +18,6 @@ export class PlaneBase {
     this.height = data.height;
     this.width = data.width;
     this.name = data.name;
+    this.price = data.price;
   }
 }
