@@ -45,7 +45,6 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
         child.position[0]
       );
     }
-    console.log(TemplateViewModel);
     setDraggedItem(TemplateViewModel);
   };
   return (

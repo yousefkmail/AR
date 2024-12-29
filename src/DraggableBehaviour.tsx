@@ -65,7 +65,6 @@ export default function DraggableBehaviour() {
 
     if (draggedPieceData && draggedPieceData?.parent) {
       const parent = FindSceneObjectWithId(draggedPieceData.parent.id);
-
       if (!parent) return;
       const position = NDCToObjectWorld(mousePos, parent, camera);
       let xPos = parent?.worldToLocal(position).x;

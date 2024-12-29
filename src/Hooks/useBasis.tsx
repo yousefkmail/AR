@@ -49,7 +49,7 @@ export const useBasis = () => {
       case "changeLayer": {
         return state.map((parent) => {
           const plane = new BasisPlane({ ...parent.BasisPlane });
-          const planeViewModel = new BasisPlaneViewModel(plane);
+          const planeViewModel = new BasisPlaneViewModel(plane, parent.id);
 
           plane.layers = parent.BasisPlane.layers;
           planeViewModel.children = parent.children;
@@ -67,8 +67,7 @@ export const useBasis = () => {
         let result = state.map((item) => {
           if (item.id === action.payload.parent?.id) {
             item.children = item.children.filter(
-              (item) =>
-                item.child.PiecePlane.id !== action.payload.PiecePlane.id
+              (item) => item.child.id !== action.payload.id
             );
             return item;
           } else return item;
@@ -103,8 +102,7 @@ export const useBasis = () => {
       case "delete_child": {
         return state.map((item) => {
           item.children = item.children.filter(
-            (child) =>
-              child.child.PiecePlane.id !== action.payload.piece.PiecePlane.id
+            (child) => child.child.id !== action.payload.piece.id
           );
           return item;
         });

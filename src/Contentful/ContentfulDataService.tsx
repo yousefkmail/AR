@@ -22,7 +22,6 @@ export class ContentfulDataService implements IDataService {
     ids: string[]
   ) => {
     const data = await GetPiecesByIds(ids);
-    console.log(data);
 
     return data.map((item) => {
       return {
@@ -92,7 +91,6 @@ export class ContentfulDataService implements IDataService {
       } as TemplateDataModel,
       tags: data.fields.tags,
     };
-    console.log(model);
     return model;
   };
 
