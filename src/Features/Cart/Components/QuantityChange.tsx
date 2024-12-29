@@ -1,4 +1,6 @@
 import { HTMLAttributes } from "react";
+import FontawesomeIconButton from "../../../Components/Button/FontawesomeIconButton";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 interface QuantityChangeProps extends HTMLAttributes<HTMLDivElement> {
   onIncrease?: () => void;
@@ -16,13 +18,21 @@ export default function QuantityChange({
 }: QuantityChangeProps) {
   return (
     <div>
-      <button disabled={!canDecrease} onClick={() => onDecrease?.()}>
-        -
-      </button>
+      <FontawesomeIconButton
+        className="btn-sec-color"
+        disabled={!canDecrease}
+        icon={faMinus}
+        isActive={false}
+        onClick={() => onDecrease?.()}
+      ></FontawesomeIconButton>
       {children}
-      <button disabled={!canIncrease} onClick={() => onIncrease?.()}>
-        +
-      </button>
+      <FontawesomeIconButton
+        className="btn-sec-color"
+        disabled={!canIncrease}
+        icon={faPlus}
+        isActive={false}
+        onClick={() => onIncrease?.()}
+      ></FontawesomeIconButton>
     </div>
   );
 }

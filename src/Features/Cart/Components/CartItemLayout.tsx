@@ -5,6 +5,7 @@ interface CartItemLayoutProps extends HTMLAttributes<HTMLDivElement> {
   Quantity: ReactNode;
   ProductDetails: ReactNode;
   TotalPrice: ReactNode;
+  Cancel?: ReactNode;
 }
 
 export default function CartItemLayout({
@@ -13,6 +14,7 @@ export default function CartItemLayout({
   Quantity,
   TotalPrice,
   className,
+  Cancel,
 }: CartItemLayoutProps) {
   return (
     <div
@@ -27,7 +29,7 @@ export default function CartItemLayout({
       <div
         style={{
           flexGrow: "1",
-          flexShrink: "2",
+          flexShrink: "1",
           paddingLeft: "10px",
           minWidth: "230px",
         }}
@@ -37,7 +39,7 @@ export default function CartItemLayout({
       <div
         style={{
           flexShrink: "1",
-          flexBasis: "300px",
+          flexBasis: "200px",
           paddingLeft: "20px",
         }}
       >
@@ -46,7 +48,7 @@ export default function CartItemLayout({
       <div
         style={{
           flexShrink: "1",
-          flexBasis: "300px",
+          flexBasis: "200px",
           paddingLeft: "20px",
         }}
       >
@@ -55,11 +57,19 @@ export default function CartItemLayout({
       <div
         style={{
           flexShrink: "1",
-          flexBasis: "300px",
+          flexBasis: "200px",
           paddingLeft: "20px",
         }}
       >
         {TotalPrice}
+      </div>
+      <div
+        style={{
+          flexShrink: "1",
+          flexBasis: "70px",
+        }}
+      >
+        {Cancel}
       </div>
     </div>
   );

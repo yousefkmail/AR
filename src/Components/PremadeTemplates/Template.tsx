@@ -33,6 +33,7 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
 
       return;
     }
+
     const TemplateViewModel = new BasisPlaneViewModel(
       new BasisPlane(item.template.loadedData.basis)
     );
@@ -44,7 +45,7 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
         child.position[0]
       );
     }
-
+    console.log(TemplateViewModel);
     setDraggedItem(TemplateViewModel);
   };
   return (

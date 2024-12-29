@@ -11,7 +11,7 @@ export default function FontawesomeIconButton(
   _props: FontawesomeIconButtonProps
 ) {
   return (
-    <IconButton onClick={_props.onClick} isActive={_props.isActive}>
+    <IconButton {..._props}>
       <FontAwesomeIcon size={_props.size} icon={_props.icon} />
     </IconButton>
   );

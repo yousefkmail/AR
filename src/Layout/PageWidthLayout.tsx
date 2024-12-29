@@ -10,6 +10,8 @@ export default function PageWidthLayout(props: PageWidthLayoutProps) {
       style={{
         maxWidth: props.maxWidth + "px",
         width: "100%",
+        margin: "auto",
+        padding: "0 48px",
         boxSizing: "border-box",
       }}
     >

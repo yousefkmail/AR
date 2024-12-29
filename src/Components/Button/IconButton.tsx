@@ -14,11 +14,13 @@ export default function IconButton({
   children,
   className,
   isActive,
-
   ...rest
 }: IconButtonProps) {
   return (
-    <button {...rest} className={ClassnameMerge(GetClass(isActive), className)}>
+    <button
+      {...rest}
+      className={ClassnameMerge("btn-color", GetClass(isActive), className)}
+    >
       {children}
     </button>
   );

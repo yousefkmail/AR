@@ -1,7 +1,8 @@
 import { HTMLAttributes } from "react";
 import CartItemLayout from "./CartItemLayout";
 import QuantityChange from "./QuantityChange";
-import { useCart } from "../useCart";
+import FontawesomeIconButton from "../../../Components/Button/FontawesomeIconButton";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 interface CartItemProps extends HTMLAttributes<HTMLDivElement> {
   quantity: number;
@@ -10,6 +11,9 @@ interface CartItemProps extends HTMLAttributes<HTMLDivElement> {
   previewImage: string;
   totalPrice?: number;
   price: number;
+  onIncrease?: () => void;
+  onDecrease?: () => void;
+  onRemove?: () => void;
 }
 
 export default function CartItem({
@@ -20,21 +24,29 @@ export default function CartItem({
   totalPrice,
   price,
   className,
+  onIncrease,
+  onDecrease,
+  onRemove,
 }: CartItemProps) {
-  const { increaseItem, decreaseItem } = useCart();
   return (
     <CartItemLayout
       className={className}
-      Price={`${price}$`}
+      Price={<div style={{ fontWeight: "bold" }}>{price}$</div>}
       ProductDetails={
-        <div style={{ display: "flex", flexWrap: "wrap", padding: "10px" }}>
-          <img
-            style={{ width: "100px", aspectRatio: "1/1", objectFit: "contain" }}
-            src={previewImage}
-          />
+        <div style={{ display: "flex", flexWrap: "wrap", padding: "0 10px" }}>
+          {previewImage && (
+            <img
+              style={{
+                width: "100px",
+                aspectRatio: "1/1",
+                objectFit: "contain",
+                marginRight: "10px",
+              }}
+              src={previewImage}
+            />
+          )}
           <div
             style={{
-              marginLeft: "10px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -46,31 +58,33 @@ export default function CartItem({
       }
       Quantity={
         <QuantityChange
-          onIncrease={() =>
-            increaseItem({
-              id: id,
-              description: "",
-              name: name,
-              previewImage: previewImage,
-              price,
-            })
-          }
-          onDecrease={() =>
-            decreaseItem({
-              id: id,
-              description: "",
-              name: name,
-              previewImage: previewImage,
-              price,
-            })
-          }
+          onIncrease={() => onIncrease?.()}
+          onDecrease={() => onDecrease?.()}
           canDecrease={quantity > 0}
         >
-          {quantity}
+          <span
+            style={{
+              fontSize: "1.125rem",
+              margin: "0 5px",
+              display: "inline-block",
+              minWidth: "20px",
+              textAlign: "center",
+            }}
+          >
+            {quantity}
+          </span>
         </QuantityChange>
       }
-      TotalPrice={`${totalPrice}$`}
+      TotalPrice={<div style={{ fontWeight: "bold" }}>{totalPrice}$</div>}
       key={id}
+      Cancel={
+        <FontawesomeIconButton
+          onClick={() => onRemove?.()}
+          size="lg"
+          icon={faXmark}
+          isActive={false}
+        />
+      }
     ></CartItemLayout>
   );
 }

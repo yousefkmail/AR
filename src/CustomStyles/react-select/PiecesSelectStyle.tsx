@@ -20,7 +20,7 @@ export const PiecesSelectStyle: StylesConfig<
   }),
   singleValue: (provided: CSSObjectWithLabel) => ({
     ...provided,
-    color: "var(--text-secondary)",
+    color: "var(--text-primary)",
   }),
 
   container: (provided: CSSObjectWithLabel) => ({

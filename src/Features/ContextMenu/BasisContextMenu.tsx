@@ -7,6 +7,7 @@ import {
   faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import QuantityChange from "../Cart/Components/QuantityChange";
 interface ObjectContextMenuProps {
   posX: number;
   posY: number;
@@ -148,21 +149,36 @@ export default function BasisContextMenu({
                 top: "50%",
                 left: "50%",
                 transform: "translate(-25% , -25%)",
+                backgroundColor: "white",
+                padding: "10px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                borderRadius: "7px",
               }}
             >
-              <div>
-                <button
-                  disabled={cartQuantity < 1}
-                  onClick={() => setCartQuantity((prev) => prev - 1)}
-                >
-                  -
-                </button>
-                <span>{cartQuantity}</span>
-                <button onClick={() => setCartQuantity((prev) => prev + 1)}>
-                  +
-                </button>
-              </div>
-              <button onClick={() => onAddToCartPressed?.(cartQuantity)}>
+              <QuantityChange
+                onIncrease={() => setCartQuantity((prev) => prev + 1)}
+                onDecrease={() =>
+                  setCartQuantity((prev) => {
+                    if (prev >= 1) return prev - 1;
+                    return prev;
+                  })
+                }
+                canDecrease={cartQuantity >= 1}
+              >
+                {<span style={{ padding: "20px" }}>{cartQuantity}</span>}
+              </QuantityChange>
+              <button
+                style={{
+                  marginTop: "7px",
+                  border: "none",
+                  padding: "8px",
+                }}
+                className="btn-color"
+                disabled={cartQuantity < 1}
+                onClick={() => onAddToCartPressed?.(cartQuantity)}
+              >
                 Add to cart
               </button>
             </div>

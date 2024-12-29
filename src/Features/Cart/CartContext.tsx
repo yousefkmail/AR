@@ -1,13 +1,23 @@
 import { createContext, useEffect, useReducer, useState } from "react";
 import { ProductItem } from "../../DataService/Models/ProductItem";
 import { dataService } from "../../Services/Services";
+import { TemplateModel } from "../../DataService/Models/TemplateModel";
 
 interface CartContextProps {
   addItem: (ProductItem: CartItem) => void;
   removeItem: (ProductItem: ProductItem) => void;
   increaseItem: (ProductItem: ProductItem) => void;
   decreaseItem: (ProductItem: ProductItem) => void;
+  increaseProductItem: (id: string) => void;
+  decreaseProductItem: (id: string) => void;
+  resetPieces: () => void;
+  productItems: CartItem[] | undefined;
   items: CartItem[];
+}
+
+interface RemovedItem {
+  id: string;
+  amount: number;
 }
 
 interface CartItem {
@@ -32,10 +42,23 @@ export function CartContextProvider({ children }: any) {
   const DispatchCartItems = (state: CartItem[], action: DispatchCartAction) => {
     switch (action.type) {
       case "add": {
-        const exists = state.some(
+        const existsIndex = state.findIndex(
           (item) => item.item.id === action.payload.item.id
         );
-        return exists ? state : [...state, action.payload];
+
+        if (existsIndex !== -1) {
+          // Item exists, increase the amount
+          const updatedState = [...state];
+          updatedState[existsIndex] = {
+            ...updatedState[existsIndex],
+            quantity:
+              updatedState[existsIndex].quantity + action.payload.quantity,
+          };
+          return updatedState;
+        } else {
+          // Item does not exist, add it
+          return [...state, action.payload];
+        }
       }
 
       case "remove": {
@@ -68,25 +91,33 @@ export function CartContextProvider({ children }: any) {
 
   const getInitialCart = async () => {
     const ids = localStorage.getItem("cart");
-    if (!ids) {
+    if (!ids || ids.length < 1) {
       setUpdated(true);
       return [];
     }
+
     const data = await dataService.GetPiecesById(
-      JSON.parse(ids).map((item: { id: string; quantity: number }) => item.id)
+      JSON.parse(ids).map(
+        (item: { item: ProductItem; quantity: number }) => item.item.id
+      )
     );
     setUpdated(true);
+
     dispatchCartItems({
       type: "set",
-      payload: data.map((item) => ({
-        item: item,
-        quantity:
-          (JSON.parse(ids) as { id: string; quantity: number }[]).find(
-            (itemm) => itemm.id === item.id
-          )?.quantity ?? 0,
+      payload: (JSON.parse(ids) as CartItem[]).map(({ ...item }) => ({
+        quantity: item.quantity,
+        item: {
+          ...item.item,
+          price:
+            data.find((itemm) => itemm.id === item.item.id)?.price ??
+            item.item.price,
+          previewImage:
+            data.find((itemm) => itemm.id === item.item.id)?.previewImage ??
+            item.item.previewImage,
+        },
       })),
     });
-    console.log(data);
   };
 
   useEffect(() => {
@@ -95,14 +126,86 @@ export function CartContextProvider({ children }: any) {
 
   const [items, dispatchCartItems] = useReducer(DispatchCartItems, []);
 
+  const [removedItems, setRemovedItems] = useState<RemovedItem[]>([]);
+
+  const [productItems, setProductItems] = useState<CartItem[]>();
+
+  useEffect(() => {
+    const itemss: CartItem[] = [];
+    items.forEach((cartItem) => {
+      if ("loadedData" in cartItem.item) {
+        const parent = cartItem.item as TemplateModel;
+
+        if (parent.loadedData) {
+          const item = itemss.find(
+            (itemmm) => itemmm.item.id === parent.loadedData?.basis.id
+          );
+
+          if (item) {
+            item.quantity += cartItem.quantity;
+          } else {
+            itemss.push({
+              quantity: cartItem.quantity,
+              item: parent.loadedData.basis,
+            });
+          }
+        }
+
+        parent.loadedData?.children.forEach((child) => {
+          const item = itemss.find((item) => item.item.id === child.data.id);
+
+          if (item) {
+            item.quantity += cartItem.quantity;
+          } else {
+            itemss.push({ quantity: cartItem.quantity, item: child.data });
+          }
+        });
+      } else {
+        const itemmm = itemss.find(
+          (itemm) => itemm.item.id === cartItem?.item.id
+        );
+
+        if (itemmm) {
+          itemmm.quantity++;
+        } else {
+          itemss.push({ quantity: cartItem.quantity, item: cartItem.item });
+        }
+      }
+    });
+    for (let item of itemss) {
+      const foundItem = removedItems.find((itemm) => itemm.id === item.item.id);
+      if (foundItem) {
+        item.quantity = item.quantity + foundItem.amount;
+      }
+      if (item.quantity < 0) item.quantity = 0;
+    }
+
+    setProductItems(itemss);
+  }, [items, removedItems]);
+
+  const decreaseProductItem = (id: string) => {
+    setRemovedItems((prev) =>
+      prev.some((item) => item.id === id)
+        ? prev.map((item) =>
+            id === item.id ? { id, amount: item.amount - 1 } : item
+          )
+        : [...prev, { id, amount: -1 }]
+    );
+  };
+
+  const increaseProductItem = (id: string) => {
+    setRemovedItems((prev) =>
+      prev.some((item) => item.id === id)
+        ? prev.map((item) =>
+            id === item.id ? { id, amount: item.amount + 1 } : item
+          )
+        : [...prev, { id, amount: 1 }]
+    );
+  };
+
   useEffect(() => {
     if (!updated) return;
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(
-        items.map((item) => ({ id: item.item.id, quantity: item.quantity }))
-      )
-    );
+    localStorage.setItem("cart", JSON.stringify(items));
   }, [updated, items]);
 
   const addItem = (item: CartItem) =>
@@ -117,9 +220,22 @@ export function CartContextProvider({ children }: any) {
   const decreaseItem = (item: ProductItem) =>
     dispatchCartItems({ type: "decrease", payload: item });
 
+  const resetPieces = () => {
+    setRemovedItems([]);
+  };
   return (
     <CartContext.Provider
-      value={{ addItem, removeItem, items, increaseItem, decreaseItem }}
+      value={{
+        addItem,
+        removeItem,
+        items,
+        increaseItem,
+        decreaseItem,
+        increaseProductItem,
+        decreaseProductItem,
+        resetPieces,
+        productItems,
+      }}
     >
       {children}
     </CartContext.Provider>

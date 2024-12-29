@@ -5,6 +5,7 @@ import PieceContextMenu, { LayerOption } from "./PieceContextMenu";
 import BasisContextMenu from "./BasisContextMenu";
 import { useEffect, useState } from "react";
 import { useCart } from "../Cart/useCart";
+import { TemplateModel } from "../../DataService/Models/TemplateModel";
 export default function ContextContainer() {
   const { isOpened, menuPosition, activeBasis, activePiece } =
     useObjectContextMenu();
@@ -129,10 +130,32 @@ export default function ContextContainer() {
 
   const AddToCart = (quantity: number) => {
     if (activeBasis) {
-      addItem({ quantity: quantity, item: activeBasis.BasisPlane });
-      activeBasis.children.forEach((child) => {
-        addItem({ quantity: quantity, item: child.child.PiecePlane });
-      });
+      const template: TemplateModel = {
+        description: "",
+        name: "Collection",
+        id: activeBasis.id,
+        previewImage: "",
+        price:
+          activeBasis.children.reduce(
+            (prev, next) => prev + next.child.PiecePlane.price,
+            0
+          ) + activeBasis.BasisPlane.price,
+        tags: [],
+        data: undefined,
+        loadedData: {
+          basis: { ...activeBasis.BasisPlane },
+          children: activeBasis.children.map((item) => ({
+            data: { ...item.child.PiecePlane },
+            layer: item.layerIndex,
+            position: [
+              item.child.PiecePlane.position.x,
+              item.child.PiecePlane.position.y,
+              item.child.PiecePlane.position.z,
+            ],
+          })),
+        },
+      };
+      addItem({ quantity: quantity, item: template });
     }
   };
 

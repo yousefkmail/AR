@@ -62,7 +62,7 @@ export class ContentfulDataService implements IDataService {
       description: "",
       loadedData: {
         basis: {
-          price: 0,
+          price: data.fields.price,
           description: "",
           height: base.fields.height,
           name: base.fields.name,
@@ -86,12 +86,13 @@ export class ContentfulDataService implements IDataService {
             name: item.data.fields.name,
             previewImage: item.data.fields.texture?.fields.file?.url ?? "",
             width: item.data.fields.width,
+            price: item.data.fields.price,
           },
         })),
       } as TemplateDataModel,
       tags: data.fields.tags,
     };
-
+    console.log(model);
     return model;
   };
 

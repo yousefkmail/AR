@@ -19,7 +19,11 @@ function IconedNavlink({
 }: IconedNavLinkProps) {
   return (
     <NavLink
-      className={ClassnameMerge("start-creating", className?.toString() ?? "")}
+      className={ClassnameMerge(
+        "btn-sec-color",
+        "start-creating",
+        className?.toString() ?? ""
+      )}
       {...rest}
     >
       {icon}

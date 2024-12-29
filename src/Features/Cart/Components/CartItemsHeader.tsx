@@ -5,9 +5,10 @@ export default function CartItemsHeader() {
     <CartItemLayout
       className="cart-item-container"
       Price={"Price"}
-      ProductDetails={"Product details"}
+      ProductDetails={<div style={{ padding: "0 10px" }}>Product details</div>}
       Quantity={"Quantity"}
       TotalPrice={"Total price"}
+      Cancel={<div style={{ width: "33px", opacity: "0" }}></div>}
     ></CartItemLayout>
   );
 }

@@ -19,6 +19,7 @@ import { useObjectPreview } from "./Features/UIToCanvasDrag/Hooks/useObjectPrevi
 import { PiecePlaneViewModel } from "./Core/Viewmodels/PiecePlaneViewModel";
 import { useFullPieces } from "./Hooks/useFullPieces";
 import { CircularProgress } from "@mui/material";
+import Sidenav from "./Components/Sidenav/Sidenav";
 
 export const ObjectBuilder = () => {
   const ScreenshotterRef = useRef<ScreenShotHandlerRef>(null);
@@ -43,6 +44,7 @@ export const ObjectBuilder = () => {
 
   const onDrop = (_event: MouseEvent) => {
     if (DraggedItem && DraggedItem instanceof BasisPlaneViewModel) {
+      console.log(DraggedItem);
       if (previewRef.current) {
         DraggedItem.BasisPlane.position = previewRef.current.position;
       }
@@ -64,7 +66,7 @@ export const ObjectBuilder = () => {
   return (
     <div style={{ height: "100%", position: "relative" }}>
       <WindowsContainer />
-
+      <Sidenav />
       <Canvas
         gl={{ depth: true, preserveDrawingBuffer: true, alpha: true }}
         onDragEnter={handleDragEnter}
