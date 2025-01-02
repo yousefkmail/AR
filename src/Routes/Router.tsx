@@ -4,7 +4,8 @@ import BottomFooterLayour from "../Layout/BottomFooterLayour";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer/Footer";
 import Cart from "../Pages/Cart";
-import Home from "../Pages/Home";
+import Home from "../Pages/Home/Home";
+import Order from "../Pages/Order";
 
 export const AppRouter = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ export const AppRouter = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "/cart", element: <Cart /> },
+      { path: "/order", element: <Order /> },
     ],
   },
   {

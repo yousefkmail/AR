@@ -1,9 +1,9 @@
 import PageWidthLayout from "../Layout/PageWidthLayout";
-
-export default function Home() {
+import CheckoutForm from "../Features/Checkout/CheckoutForm";
+export default function Order() {
   return (
     <PageWidthLayout maxWidth={1600}>
-      <div>home</div>
+      <CheckoutForm />
     </PageWidthLayout>
   );
 }

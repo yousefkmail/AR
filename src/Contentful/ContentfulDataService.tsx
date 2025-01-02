@@ -1,7 +1,9 @@
 import { IDataService } from "../DataService/IDataService";
+import { AboutSection } from "../DataService/Models/AboutSectionModel";
 import { Basis } from "../DataService/Models/BasisModel";
 import { Piece } from "../DataService/Models/PieceModel";
 import { ProductItem } from "../DataService/Models/ProductItem";
+import { TeamMemberModel } from "../DataService/Models/TeamMemberModel";
 import {
   TemplateDataModel,
   TemplateModel,
@@ -14,10 +16,39 @@ import {
   GetBaseById,
   GetPieceById,
   GetPiecesByIds,
+  GetAboutSections,
+  GetTeamMembers,
 } from "./ContentfulClient";
 import { Layer } from "./Types/BasisType";
 import { TemplateData } from "./Types/TemplateType";
 export class ContentfulDataService implements IDataService {
+  GetTeamMembers: () => Promise<TeamMemberModel[]> = async () => {
+    const data = await GetTeamMembers();
+
+    return data.map((item) => {
+      return {
+        name: item.fields.name,
+        profilePicture: item.fields.profilePicture?.fields.file?.url ?? "",
+        role: item.fields.role,
+      };
+    });
+  };
+
+  GetAboutSections: () => Promise<AboutSection[]> = async () => {
+    const data = await GetAboutSections();
+    console.log(data);
+    return data.map((item) => {
+      return {
+        id: item.sys.id,
+        grayBackground: item.fields.grayBackground,
+        label: item.fields.label,
+        leftDirection: item.fields.leftDirection,
+        order: item.fields.order,
+        description: item.fields.description,
+        image: item.fields.previewImage?.fields.file?.url ?? "",
+      };
+    });
+  };
   GetPiecesById: (assetIds: string[]) => Promise<ProductItem[]> = async (
     ids: string[]
   ) => {

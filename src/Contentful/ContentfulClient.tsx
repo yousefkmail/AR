@@ -2,6 +2,8 @@ import { createClient } from "contentful";
 import { CollectionTemplate } from "./Types/TemplateType";
 import { BasisType } from "./Types/BasisType";
 import { PieceType } from "./Types/PieceeType";
+import { AboutSectionType } from "./Types/AboutSectionType";
+import { TeamMemberType } from "./Types/TeamMemberType";
 
 export const ContentfulCleint = createClient({
   accessToken: import.meta.env.VITE_CONTENTFUL_ACCESSTOKEN,
@@ -67,6 +69,24 @@ export const GetPiecesByIds = async (ids: string[]) => {
   const data = await ContentfulCleint.withoutUnresolvableLinks.getEntries({
     "sys.id[in]": ids,
   });
+
+  return data.items;
+};
+
+export const GetAboutSections = async () => {
+  const data =
+    await ContentfulCleint.withoutUnresolvableLinks.getEntries<AboutSectionType>(
+      { content_type: "aboutSection" }
+    );
+
+  return data.items;
+};
+
+export const GetTeamMembers = async () => {
+  const data =
+    await ContentfulCleint.withoutUnresolvableLinks.getEntries<TeamMemberType>({
+      content_type: "teamMember",
+    });
 
   return data.items;
 };

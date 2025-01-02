@@ -4,22 +4,27 @@
 
 
     --color-primary: white;
-    --color-secondary: #FFC145;
+    --color-secondary: #ffffff;
+    /* --color-secondary: #FFC145; */
     --text-primary: black;
     --text-secondary: rgb(0, 0, 0);
     /* Hover */
     --hover-primary: rgb(228, 227, 227);
-    --hover-secondary: #E5A935;
+    --hover-secondary: #cecccc;
+    /* --hover-secondary: #E5A935; */
     /* Active */
     --active-primary: rgb(196, 196, 196);
-    --active-secondary: #CC9128;
+    --active-secondary: #bdbdbd;
+    /* --active-secondary: #CC9128; */
 
     /*disabled */
     --disabled-primary: rgb(196, 196, 196);
-    --disabled-secondary: #FFE5A8;
+    --disabled-secondary: #969696;
+    /* --disabled-secondary: #FFE5A8; */
 
     --border-primary-color: rgba(128, 128, 128, 0.295);
-    --border-secondary-color: white;
+    --border-secondary-color: rgb(0, 0, 0);
+    /* --border-secondary-color: white; */
     --footer-color: black;
     --footer-text: white;
     --default-border: 1px solid var(--border-primary-color);
@@ -159,7 +164,7 @@ body {
 .start-creating {
     padding: var(--space-sm);
     border-radius: 5px;
-    border: var(--default-border);
+    border: var(--secondary-border);
     text-decoration: none;
     display: inline-block;
 }
