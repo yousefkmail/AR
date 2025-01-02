@@ -45,7 +45,7 @@ export default function Home() {
 
       {!isLoading && !membersLoading ? (
         <PageWidthLayout maxWidth={1600}>
-          <div style={{ margin: "100px 0" }}>
+          <div style={{ margin: "100px 20px" }}>
             <h1 style={{ textAlign: "center", marginBottom: "60px" }}>
               Our Team
             </h1>
@@ -54,6 +54,7 @@ export default function Home() {
                 display: "flex",
                 justifyContent: "center",
                 gap: "20px",
+                flexWrap: "wrap",
               }}
             >
               {members?.map((member) => (
