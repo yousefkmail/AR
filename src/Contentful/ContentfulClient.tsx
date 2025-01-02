@@ -4,6 +4,7 @@ import { BasisType } from "./Types/BasisType";
 import { PieceType } from "./Types/PieceeType";
 import { AboutSectionType } from "./Types/AboutSectionType";
 import { TeamMemberType } from "./Types/TeamMemberType";
+import { GlobalSettingsType } from "./Types/GlobalSettingsType";
 
 export const ContentfulCleint = createClient({
   accessToken: import.meta.env.VITE_CONTENTFUL_ACCESSTOKEN,
@@ -89,4 +90,13 @@ export const GetTeamMembers = async () => {
     });
 
   return data.items;
+};
+
+export const GetGlobalSettings = async () => {
+  const data =
+    await ContentfulCleint.withoutUnresolvableLinks.getEntries<GlobalSettingsType>(
+      { limit: 1, content_type: "globalSettings" }
+    );
+
+  return data.items[0];
 };

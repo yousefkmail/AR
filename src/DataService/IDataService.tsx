@@ -1,5 +1,6 @@
 import { AboutSection } from "./Models/AboutSectionModel";
 import { Basis } from "./Models/BasisModel";
+import { GlobalSettings } from "./Models/GlobalSettings";
 import { Piece } from "./Models/PieceModel";
 import { ProductItem } from "./Models/ProductItem";
 import { TeamMemberModel } from "./Models/TeamMemberModel";
@@ -20,4 +21,6 @@ export interface IDataService {
   GetAboutSections: () => Promise<AboutSection[]>;
 
   GetTeamMembers: () => Promise<TeamMemberModel[]>;
+
+  GetGlobalSettings: () => Promise<GlobalSettings>;
 }

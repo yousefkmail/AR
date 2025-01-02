@@ -1,6 +1,7 @@
 import { IDataService } from "../DataService/IDataService";
 import { AboutSection } from "../DataService/Models/AboutSectionModel";
 import { Basis } from "../DataService/Models/BasisModel";
+import { GlobalSettings } from "../DataService/Models/GlobalSettings";
 import { Piece } from "../DataService/Models/PieceModel";
 import { ProductItem } from "../DataService/Models/ProductItem";
 import { TeamMemberModel } from "../DataService/Models/TeamMemberModel";
@@ -18,10 +19,19 @@ import {
   GetPiecesByIds,
   GetAboutSections,
   GetTeamMembers,
+  GetGlobalSettings,
 } from "./ContentfulClient";
 import { Layer } from "./Types/BasisType";
 import { TemplateData } from "./Types/TemplateType";
 export class ContentfulDataService implements IDataService {
+  GetGlobalSettings: () => Promise<GlobalSettings> = async () => {
+    const data = await GetGlobalSettings();
+    return {
+      logo: data.fields.logo?.fields.file?.url ?? "",
+      siteName: data.fields.siteName,
+      preview: data.fields.preview?.fields.file?.url ?? "",
+    };
+  };
   GetTeamMembers: () => Promise<TeamMemberModel[]> = async () => {
     const data = await GetTeamMembers();
 

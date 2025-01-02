@@ -272,14 +272,13 @@ body {
     padding: var(--space-sm);
     border-top: var(--default-border);
     gap: var(--space-sm);
-    /* background-color: var(--color-secondary); */
 }
 
 .footer_bottom {
     display: flex;
     justify-content: center;
     height: 50px;
-    border-top: var(--secondary-border);
+    border-top: var(--default-border);
 }
 
 .footer-link {
