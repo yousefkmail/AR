@@ -38,6 +38,7 @@
     --breakpoint-xs: 480px;
     /* Medium devices (tablets) */
     --breakpoint-sm: 768px;
+
     /* Larger tablets and small desktops */
     --breakpoint-md: 1024px;
     /* Desktops and larger screens */
@@ -390,3 +391,34 @@ body {
 /* .cart-item-container:not(:last-child) {
     border-bottom: var(--default-border);
 } */
+
+
+.about-section-container {
+    display: flex;
+    transition: all 0.5s ease-out;
+    gap: var(--space-sm);
+    margin-bottom: 20px;
+    margin: auto;
+    max-width: 1600px;
+    justify-content: space-around;
+    padding: 48px 0;
+    align-items: center;
+}
+
+.flex-row-reverse {
+    flex-direction: row-reverse;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    .about-section-container {
+        flex-direction: column;
+    }
+}

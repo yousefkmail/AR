@@ -28,17 +28,15 @@ export default function HomeAboutSection({
         ref(reff);
         elementRef.current = reff;
       }}
+      className={
+        "about-section-container " +
+        (direction === "left" ? "flex-row" : "flex-row-reverse")
+      }
       style={{
-        padding: "40px 0",
-        display: "flex",
-        justifyContent: "space-around",
-        flexDirection: direction === "left" ? "row" : "row-reverse",
         backgroundColor: background === "primary" ? "#fff" : "#e9e9e9",
-        maxWidth: "1600px",
-        margin: "auto",
-        marginBottom: "20px",
-        transition: "all 0.5s ease-out",
         opacity: inView ? 1 : 0,
+        position: "relative",
+        overflow: "hidden",
       }}
     >
       <div
