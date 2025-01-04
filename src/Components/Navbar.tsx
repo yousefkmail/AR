@@ -1,17 +1,28 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { faPlus, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faCaretRight,
+  faPlus,
+  faShoppingCart,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import IconedNavlink from "./Button/IconedNavlink";
 import FontawesomeIconButton from "./Button/FontawesomeIconButton";
 import PageWidthLayout from "../Layout/PageWidthLayout";
 import { useGlobalSettings } from "../Hooks/useGlobalSettings";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function () {
   const navigate = useNavigate();
   const { data, isLoading } = useGlobalSettings();
+
+  const [isMobileNavOpened, setIsMobileNavOpened] = useState<boolean>(false);
+
   return (
     !isLoading &&
     data && (
-      <nav className="header">
+      <nav className="header" style={{ overflow: "" }}>
         <PageWidthLayout maxWidth={1600}>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <div
@@ -23,28 +34,19 @@ export default function () {
                 flexGrow: "1",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <NavLink
-                  style={{
-                    backgroundColor: "transparent",
-                    marginRight: "20px",
-                  }}
-                  to={"/"}
-                >
-                  <img
-                    style={{ width: "150px", objectFit: "contain" }}
-                    src={data?.logo}
-                  />
-                </NavLink>
-              </div>
-
-              <div
+              <NavLink
                 style={{
-                  boxSizing: "border-box",
-                  display: "flex",
-                  alignItems: "center",
+                  backgroundColor: "transparent",
                 }}
+                to={"/"}
               >
+                <img
+                  style={{ width: "150px", objectFit: "contain" }}
+                  src={data?.logo}
+                />
+              </NavLink>
+
+              <div className="header__right">
                 <div style={{ display: "flex", marginRight: "45px" }}>
                   <FontawesomeIconButton
                     size="xl"
@@ -58,16 +60,120 @@ export default function () {
                     icon={faShoppingCart}
                   ></FontawesomeIconButton>
                 </div>
-
                 <IconedNavlink
                   content="Start creating"
                   to={"/3D_builder"}
                   icon={<IconedNavlink.FontawesomeNavlinkIcon icon={faPlus} />}
                 />
               </div>
+              <div className="header__hamburger">
+                <FontawesomeIconButton
+                  onClick={() => setIsMobileNavOpened(!isMobileNavOpened)}
+                  isActive={false}
+                  icon={faBars}
+                  size="2x"
+                />
+              </div>
             </div>
           </div>
         </PageWidthLayout>
+        <div
+          onScroll={(e) => e.stopPropagation()}
+          style={{
+            position: "fixed",
+            zIndex: "1000",
+            top: 0,
+            right: 0,
+            width: 0,
+            height: 0,
+          }}
+        >
+          {isMobileNavOpened && (
+            <div
+              style={{
+                width: "100vw",
+                height: "100vh",
+                position: "fixed",
+                top: 0,
+                right: 0,
+                backgroundColor: "rgba(100, 100, 100, 0.27)",
+              }}
+            ></div>
+          )}
+          <div
+            className={
+              "mobile-nav " + (isMobileNavOpened ? "" : "mobile-nav-closed")
+            }
+          >
+            <div style={{ marginBottom: "20px" }}>
+              <FontawesomeIconButton
+                icon={faXmark}
+                isActive={false}
+                size="2x"
+                onClick={() => setIsMobileNavOpened(false)}
+              ></FontawesomeIconButton>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <div
+                style={{
+                  padding: "8px 0",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <NavLink
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                  }}
+                  to={"/"}
+                >
+                  Home
+                </NavLink>
+                <FontAwesomeIcon icon={faCaretRight} />
+              </div>
+              <div
+                style={{
+                  padding: "8px 0",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <NavLink
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                  }}
+                  to={"/3D_builder"}
+                >
+                  3D builder
+                </NavLink>
+                <FontAwesomeIcon icon={faCaretRight} />
+              </div>
+              <div
+                style={{
+                  padding: "8px 0",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <NavLink
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                  }}
+                  to={"/cart"}
+                >
+                  cart
+                </NavLink>
+                <FontAwesomeIcon icon={faCaretRight} />
+              </div>
+            </div>
+          </div>
+        </div>
       </nav>
     )
   );

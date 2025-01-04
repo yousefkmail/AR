@@ -159,6 +159,28 @@ body {
 
 .header {
     border-bottom: var(--default-border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--color-primary);
+}
+
+.mobile-nav {
+
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    background-color: white;
+    transition: all 0.5s ease-out;
+    z-index: 100;
+    min-width: 250px;
+    padding: 16px;
+}
+
+.mobile-nav-closed {
+    transform: translate(100%);
 }
 
 
@@ -417,8 +439,33 @@ body {
     flex-direction: column;
 }
 
+
+
+.header__right {
+
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+
+.header__hamburger {
+    display: none;
+
+}
+
+
+
 @media (max-width: 768px) {
     .about-section-container {
         flex-direction: column;
     }
+
+    .header__right {
+        display: none;
+    }
+
+    .header__hamburger {
+        display: block;
+    }
+
 }

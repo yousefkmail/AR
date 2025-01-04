@@ -20,6 +20,7 @@ export default function QuantityChange({
     <div>
       <FontawesomeIconButton
         className="btn-sec-color"
+        style={{ border: "var(--secondary-border", borderRadius: "3px" }}
         disabled={!canDecrease}
         icon={faMinus}
         isActive={false}
@@ -28,6 +29,7 @@ export default function QuantityChange({
       {children}
       <FontawesomeIconButton
         className="btn-sec-color"
+        style={{ border: "var(--secondary-border", borderRadius: "3px" }}
         disabled={!canIncrease}
         icon={faPlus}
         isActive={false}

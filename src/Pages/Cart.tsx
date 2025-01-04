@@ -51,7 +51,11 @@ export default function Cart() {
               <button
                 onClick={() => resetPieces()}
                 className="btn-sec-color"
-                style={{ padding: "10px", border: "none", borderRadius: "5px" }}
+                style={{
+                  padding: "10px",
+                  border: "var(--secondary-border)",
+                  borderRadius: "5px",
+                }}
               >
                 Reset pieces
               </button>
@@ -134,7 +138,7 @@ export default function Cart() {
               className="btn-sec-color"
               style={{
                 padding: "15px",
-                border: "none",
+                border: "var(--secondary-border)",
                 borderRadius: "5px",
                 marginLeft: "20px",
               }}

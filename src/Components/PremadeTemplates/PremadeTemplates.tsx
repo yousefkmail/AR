@@ -6,7 +6,6 @@ import { ChangeEvent } from "react";
 import { GetPageCount } from "../../Utils/PageUtils";
 import CenterLayout from "../../Layout/CenterLayout";
 import Template from "./Template";
-import PageWidthLayout from "../../Layout/PageWidthLayout";
 import { PaginationCustomStyle } from "../../CustomStyles/mui/PaginationCustomStyle";
 
 interface PremadeTemplatesProps {
@@ -31,9 +30,9 @@ export default function PremadeTemplates({
 
   return (
     <CenterLayout horizontal>
-      <PageWidthLayout maxWidth={1600}>
+      <div>
         <h2>Start from a template</h2>
-        <GridLayout cellMinWidth={cellMinWidth ?? 300}>
+        <GridLayout cellMinWidth={cellMinWidth ?? 250}>
           {templates ? (
             templates?.map((item) => (
               <Template
@@ -58,7 +57,7 @@ export default function PremadeTemplates({
             count={GetPageCount(pageSize, count ?? 0)}
           />
         </CenterLayout>
-      </PageWidthLayout>
+      </div>
     </CenterLayout>
   );
 }
