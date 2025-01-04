@@ -114,63 +114,48 @@ export default function () {
               ></FontawesomeIconButton>
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <div
+              <NavLink
                 style={{
-                  padding: "8px 0",
+                  textDecoration: "none",
+                  color: "black",
                   display: "flex",
+                  padding: "8px 0",
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
+                to={"/"}
               >
-                <NavLink
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  to={"/"}
-                >
-                  Home
-                </NavLink>
+                <p style={{ margin: "0" }}>Home</p>
                 <FontAwesomeIcon icon={faCaretRight} />
-              </div>
-              <div
+              </NavLink>
+              <NavLink
                 style={{
-                  padding: "8px 0",
+                  textDecoration: "none",
+                  color: "black",
                   display: "flex",
+                  padding: "8px 0",
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
+                to={"/3D_builder"}
               >
-                <NavLink
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  to={"/3D_builder"}
-                >
-                  3D builder
-                </NavLink>
+                <p style={{ margin: "0" }}>3D builder</p>
                 <FontAwesomeIcon icon={faCaretRight} />
-              </div>
-              <div
+              </NavLink>
+              <NavLink
                 style={{
-                  padding: "8px 0",
+                  textDecoration: "none",
+                  color: "black",
                   display: "flex",
+                  padding: "8px 0",
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
+                to={"/cart"}
               >
-                <NavLink
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  to={"/cart"}
-                >
-                  cart
-                </NavLink>
+                <p style={{ margin: "0" }}>cart</p>
                 <FontAwesomeIcon icon={faCaretRight} />
-              </div>
+              </NavLink>
             </div>
           </div>
         </div>
