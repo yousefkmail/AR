@@ -59,6 +59,7 @@ export default function BasisContextMenu({
                 padding: "0 0 0 15px",
                 borderRadius: "7px",
                 overflow: "hidden",
+                pointerEvents: "all",
               }}
             >
               <Slider
@@ -104,6 +105,7 @@ export default function BasisContextMenu({
             display: "flex",
             padding: "0 7px",
             borderRadius: "7px",
+            pointerEvents: "all",
           }}
         >
           <button
