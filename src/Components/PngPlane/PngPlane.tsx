@@ -80,13 +80,11 @@ export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
           args={[(props?.width ?? 0) / 50, (props?.height ?? 0) / 50]}
           userData={{ id: id }}
         >
-          {/* Apply the texture to the plane */}
           <meshBasicMaterial
             transparent={true}
             side={2}
             map={texture}
-            // depthWrite={false}
-            depthTest={true} // Ensures proper depth testing
+            depthTest={true}
             alphaTest={0.5}
             userData={{ id: id }}
           />

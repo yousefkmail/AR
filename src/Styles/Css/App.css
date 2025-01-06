@@ -423,7 +423,6 @@ body {
     margin: auto;
     max-width: 1600px;
     justify-content: space-around;
-    padding: 48px 0;
     align-items: center;
 }
 
@@ -450,6 +449,15 @@ body {
 
 .header__hamburger {
     display: none;
+
+}
+
+.p-sm {
+    padding: var(--space-sm);
+}
+
+.pt-sm {
+    padding-top: var(--space-sm);
 
 }
 

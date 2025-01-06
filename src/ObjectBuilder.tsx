@@ -74,12 +74,12 @@ export const ObjectBuilder = () => {
       >
         <ambientLight intensity={0.5} />
         <directionalLight intensity={0.2} position={[5, 5, 5]} />
-        <PerspectiveCamera position={[0, 1, 2]} makeDefault />
+        <PerspectiveCamera position={[1, 1.5, 2]} makeDefault />
 
-        <OrbitControls position={[0, 1, 5]} enableRotate={false} />
+        <OrbitControls target={[1, 0.5, -2]} enableRotate={false} />
 
         <DragContextProvider>
-          <CanvasContainer />
+          <CanvasContainer key={0} />
         </DragContextProvider>
         <ScreenShotHandler ref={ScreenshotterRef} />
       </Canvas>

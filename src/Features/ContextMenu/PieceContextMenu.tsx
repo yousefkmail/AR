@@ -79,6 +79,7 @@ export default function PieceContextMenu({
                 padding: "0 0 0 15px",
                 borderRadius: "7px",
                 overflow: "hidden",
+                pointerEvents: "all",
               }}
             >
               <Slider
@@ -124,6 +125,7 @@ export default function PieceContextMenu({
             display: "flex",
             padding: "0 7px",
             borderRadius: "7px",
+            pointerEvents: "all",
           }}
         >
           <span style={{ padding: "10px", width: "130px" }}>

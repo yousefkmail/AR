@@ -32,7 +32,7 @@ export default function DraggableBehaviour() {
       const offsetX =
         event.clientX - gl.domElement.getBoundingClientRect().left;
       const offsetY = event.clientY - gl.domElement.getBoundingClientRect().top;
-      setMenuPosition({ x: offsetX - 80, y: offsetY - 80 });
+      setMenuPosition({ x: offsetX, y: offsetY - 80 });
       const piece = FindPieceWithId(DraggedRef.current?.userData.id) ?? null;
       setActivePiece(piece);
 

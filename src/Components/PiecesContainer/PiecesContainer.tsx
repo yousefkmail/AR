@@ -9,6 +9,8 @@ import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
 import { BasisPlane } from "../../Core/BasisPlane";
 import { PiecePlaneViewModel } from "../../Core/Viewmodels/PiecePlaneViewModel";
 import { PiecePlane } from "../../Core/PiecePlane";
+import { Vector3 } from "three";
+import { useFullPieces } from "../../Hooks/useFullPieces";
 
 export const PiecesContainer = () => {
   const {
@@ -20,6 +22,7 @@ export const PiecesContainer = () => {
     SetPiecesCategoryAsActivePlanes,
   } = usePlanesQuery();
 
+  const { DispatchCreatedPieces, DispatchCreatedBasis } = useFullPieces();
   const handleChange = (option: OptionType | null) => {
     if (option) {
       SetPiecesCategoryAsActivePlanes(option.value);
@@ -62,6 +65,11 @@ export const PiecesContainer = () => {
                     )
                   );
                 }}
+                onClick={() => {
+                  const plane = new BasisPlaneViewModel(new BasisPlane(item));
+                  plane.BasisPlane.position = new Vector3(1, 1, 1);
+                  DispatchCreatedBasis({ type: "add", payload: plane });
+                }}
                 key={item.id}
                 {...item}
               />
@@ -75,6 +83,13 @@ export const PiecesContainer = () => {
                   img.src = "";
                   event.dataTransfer.setDragImage(img, 0, 0);
                   setDraggedItem(new PiecePlaneViewModel(new PiecePlane(item)));
+                }}
+                onClick={() => {
+                  const plane = new PiecePlaneViewModel(new PiecePlane(item));
+
+                  plane.PiecePlane.position = new Vector3(1, 1, 1);
+
+                  DispatchCreatedPieces({ type: "add", payload: plane });
                 }}
                 key={item.id}
                 {...item}

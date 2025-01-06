@@ -16,13 +16,16 @@ export function CanvasContainer() {
     ContainerRef.current = ref.current;
   }, []);
 
+  useEffect(() => {
+    console.log("refreshed");
+  });
   return (
     <>
       <Suspense>
         <Environment />
       </Suspense>
-
       <DraggableBehaviour />
+
       <ScenePiecesContainer ref={ref} />
     </>
   );

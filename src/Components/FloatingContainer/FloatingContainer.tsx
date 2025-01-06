@@ -16,6 +16,7 @@ export default function FloatingContainer({
         borderRadius: "10px",
         left: posX,
         top: posY,
+        pointerEvents: "none",
       }}
     >
       {children}

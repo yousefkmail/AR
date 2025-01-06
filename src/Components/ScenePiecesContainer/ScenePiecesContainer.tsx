@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, Suspense, useImperativeHandle, useRef } from "react";
 import { useFullPieces } from "../../Hooks/useFullPieces";
 import { PngPlaneRef } from "../PngPlane/PngPlane";
 import { Group } from "three";
@@ -28,23 +28,25 @@ export const ScenePiecesContainer = forwardRef<
 
   const { createdBasis, createdPieces } = useFullPieces();
   return (
-    <group ref={groupRef}>
-      {createdBasis.map((item, index) => {
-        return (
-          <item.Render
-            key={item.id}
-            ref={(item) => (basisRefs.current[index] = item!)}
-          ></item.Render>
-        );
-      })}
+    <Suspense>
+      <group ref={groupRef}>
+        {createdBasis.map((item, index) => {
+          return (
+            <item.Render
+              key={item.id}
+              ref={(item) => (basisRefs.current[index] = item!)}
+            ></item.Render>
+          );
+        })}
 
-      {createdPieces.map((piece, index) => (
-        <piece.Render
-          key={piece.id}
-          ref={(item) => (piecesRefs.current[index] = item!)}
-        ></piece.Render>
-      ))}
-      <PreviewHandler></PreviewHandler>
-    </group>
+        {createdPieces.map((piece, index) => (
+          <piece.Render
+            key={piece.id}
+            ref={(item) => (piecesRefs.current[index] = item!)}
+          ></piece.Render>
+        ))}
+        <PreviewHandler></PreviewHandler>
+      </group>
+    </Suspense>
   );
 });
