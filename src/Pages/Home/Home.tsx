@@ -4,7 +4,6 @@ import HomeAboutSection from "./HomeAboutSection";
 import HomePersonProfile from "./HomePersonProfile";
 import { dataService } from "../../Services/Services";
 import { AboutSection } from "../../DataService/Models/AboutSectionModel";
-import Skeleton from "react-loading-skeleton";
 
 export default function Home() {
   const { data, isLoading } = useQuery({
@@ -41,14 +40,7 @@ export default function Home() {
             />
           ))
       ) : (
-        <div style={{ height: "600px" }}>
-          <Skeleton width={275} height={300}></Skeleton>
-          {Array(5)
-            .fill(0)
-            .map(() => (
-              <Skeleton width={"15px"} height={"100%"}></Skeleton>
-            ))}
-        </div>
+        <div style={{ height: "600px" }}></div>
       )}
 
       {!isLoading && !membersLoading ? (
