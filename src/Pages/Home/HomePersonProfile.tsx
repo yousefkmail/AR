@@ -10,19 +10,8 @@ export default function HomePersonProfile({
   role,
 }: HomePersonProfileProps) {
   return (
-    <div>
-      <div>
-        <img
-          style={{
-            width: "200px",
-            aspectRatio: "1/1",
-            borderRadius: "50%",
-            objectFit: "cover",
-          }}
-          src={img}
-          alt=""
-        />
-      </div>
+    <div className="m-sm">
+      <img className="home_team-member_img" src={img} alt="Image" />
       <div>
         <h2>{name}</h2>
         <p>{role}</p>

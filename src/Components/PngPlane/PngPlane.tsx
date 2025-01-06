@@ -44,6 +44,11 @@ export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
 
     const [hover, setHovered] = useState<boolean>(false);
 
+    const handlePointerEnter = (e: ThreeEvent<PointerEvent>) => {
+      e.stopPropagation();
+      setHovered(true);
+    };
+
     return (
       <group
         scale={[
@@ -64,9 +69,7 @@ export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
           MathUtils.degToRad(props?.rotation?.z ?? 0),
         ]}
         userData={{ id: id }}
-        onPointerEnter={() => {
-          setHovered(true);
-        }}
+        onPointerEnter={handlePointerEnter}
         onPointerLeave={() => {
           setHovered(false);
         }}

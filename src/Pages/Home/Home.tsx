@@ -45,18 +45,9 @@ export default function Home() {
 
       {!isLoading && !membersLoading ? (
         <PageWidthLayout maxWidth={1600}>
-          <div style={{ margin: "100px 20px" }}>
-            <h1 style={{ textAlign: "center", marginBottom: "60px" }}>
-              Our Team
-            </h1>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: "20px",
-                flexWrap: "wrap",
-              }}
-            >
+          <div className="mx-sm my-xl">
+            <h1 className="txt-center mb-lg">Our Team</h1>
+            <div className="flex-center-wrap">
               {members?.map((member) => (
                 <HomePersonProfile
                   img={member.profilePicture}
