@@ -46,7 +46,6 @@ export class ContentfulDataService implements IDataService {
 
   GetAboutSections: () => Promise<AboutSection[]> = async () => {
     const data = await GetAboutSections();
-    console.log(data);
     return data.map((item) => {
       return {
         id: item.sys.id,

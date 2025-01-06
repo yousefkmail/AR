@@ -53,7 +53,6 @@ export const PiecesContainer = () => {
           ? basis?.map(({ ...item }) => (
               <DraggableBasis
                 onDragStart={(event: DragEvent) => {
-                  console.log("dragging");
                   const img = new Image();
                   img.src = "";
                   event.dataTransfer.setDragImage(img, 0, 0);
@@ -77,8 +76,6 @@ export const PiecesContainer = () => {
           : activePieces?.map((item) => (
               <DraggableBasis
                 onDragStart={(event: DragEvent) => {
-                  console.log("dragging");
-
                   const img = new Image();
                   img.src = "";
                   event.dataTransfer.setDragImage(img, 0, 0);
