@@ -63,7 +63,7 @@ export const ObjectBuilder = () => {
   const { progress } = useProgress();
 
   return (
-    <div style={{ height: "100%", position: "relative" }}>
+    <div style={{ height: "100%", position: "relative", overflow: "hidden" }}>
       <WindowsContainer />
       <Sidenav />
       <Canvas
