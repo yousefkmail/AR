@@ -10,6 +10,8 @@ export default function CenterLayout({
   horizontal,
   vertical,
   className,
+  style,
+  ...rest
 }: CenterLayoutProps) {
   return (
     <div
@@ -18,7 +20,9 @@ export default function CenterLayout({
         display: "flex",
         justifyContent: horizontal ? "center" : "flex-start",
         alignItems: vertical ? "center" : "flex-start",
+        ...style,
       }}
+      {...rest}
     >
       {children}
     </div>

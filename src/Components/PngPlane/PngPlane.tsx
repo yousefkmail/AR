@@ -32,10 +32,11 @@ export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
     const { DraggedRef } = useContext(DragContext);
     const { movementMode } = useSceneSettings();
     const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
-      event.stopPropagation();
       if (event.button !== 0) return;
       if (movementMode === MovementMode.Child) event.stopPropagation();
-      DraggedRef.current = groupref.current;
+      {
+        DraggedRef.current = groupref.current;
+      }
     };
 
     useImperativeHandle(ref, () => ({

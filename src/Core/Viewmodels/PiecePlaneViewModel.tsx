@@ -13,7 +13,7 @@ export class PiecePlaneViewModel implements IRenderable {
   parent: BasisPlaneViewModel | null = null;
   isFlipped: boolean = false;
   constructor(BasisPlane: PiecePlane, id?: string) {
-    this.PiecePlane = BasisPlane;
+    this.PiecePlane = { ...BasisPlane };
     this.id = id || uuidv4();
   }
 

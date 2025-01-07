@@ -106,11 +106,14 @@ export const PiecesContextProvider = ({
       basis.addChild(piece, 1, parent?.worldToLocal(NDCPosition).x);
     }
 
+    const newBases = new BasisPlaneViewModel(basis.BasisPlane, basis.id);
+    newBases.children = basis.children;
+
     DispatchCreatedBasis({
       type: "set",
       payload: createdBasis.map((item) => {
         if (item.id === basis.id) {
-          return basis;
+          return newBases;
         } else return item;
       }),
     });

@@ -30,7 +30,11 @@ export class BasisPlaneViewModel implements IRenderable {
       child.setParent(this);
       child.PiecePlane.position = new Vector3(pos, 0, 0);
       child.PiecePlane.rotation = new Vector3(-90, 0, 0);
-      this.children.push(new LayeredChild(child, layer));
+
+      const newChild = new PiecePlaneViewModel(child.PiecePlane, child.id);
+      newChild.isFlipped = child.isFlipped;
+
+      this.children.push(new LayeredChild(newChild, layer));
     }
   }
 

@@ -1,12 +1,8 @@
 import { Resizable, Size } from "re-resizable";
 import Draggable, { ControlPosition } from "react-draggable";
 import { ResizableProps } from "re-resizable";
-import { faGripLines } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CenterLayout from "../../Layout/CenterLayout";
-import Spacer from "../../Layout/Spacer";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { MouseEvent as ME, useState } from "react";
 import FontawesomeIconButton from "../Button/FontawesomeIconButton";
 interface WindowProps extends Partial<ResizableProps> {
   defaultPosition?: ControlPosition;
@@ -37,7 +33,8 @@ export const Window = (props: WindowProps) => {
     height: defaultSize?.height,
   });
 
-  const Minimize = () => {
+  const Minimize = (e: ME) => {
+    e.stopPropagation();
     setIsMinimized(!isMinimized);
   };
 
@@ -80,23 +77,17 @@ export const Window = (props: WindowProps) => {
         size={isMinimized ? { width: 280, height: 40 } : size}
         style={{ ...style, display: isShown ? "" : "none" }}
       >
-        <CenterLayout className="handle" horizontal>
-          <div style={{ position: "absolute", top: 0, left: 8 }}>
+        <div style={{ display: "flex" }}>
+          <div>
             <FontawesomeIconButton
-              onPointerDown={(e) => e.stopPropagation()}
               onClick={Minimize}
               icon={faMinus}
               isActive={false}
             ></FontawesomeIconButton>
           </div>
-          <Spacer margin={8}>
-            <FontAwesomeIcon
-              size="xl"
-              color="var(--text-primary)"
-              icon={faGripLines}
-            />
-          </Spacer>
-        </CenterLayout>
+          <div style={{ flexGrow: "1" }} className="handle"></div>
+        </div>
+
         <div style={{ flexGrow: 1, overflow: "hidden" }}>
           {
             <div style={{ width: "100%", height: "100%", overflow: "auto" }}>
