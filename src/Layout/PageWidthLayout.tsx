@@ -13,7 +13,9 @@ export default function PageWidthLayout(props: PageWidthLayoutProps) {
         margin: "auto",
         padding: "0 16px",
         boxSizing: "border-box",
+        ...props.style,
       }}
+      className={props.className}
     >
       {props.children}
     </div>

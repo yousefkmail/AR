@@ -448,8 +448,6 @@ body {
     height: 100%;
     object-fit: contain;
     aspect-ratio: 5/4;
-
-
 }
 
 .flex-row-reverse {
@@ -558,6 +556,12 @@ body {
     background-color: var(--color-primary);
 }
 
+
+.mobile-cart {
+    display: none;
+}
+
+
 @media (max-width: 768px) {
     .about-section-container {
         flex-direction: column;
@@ -568,6 +572,14 @@ body {
     }
 
     .header__hamburger {
+        display: block;
+    }
+
+    .desktop-cart {
+        display: none;
+    }
+
+    .mobile-cart {
         display: block;
     }
 

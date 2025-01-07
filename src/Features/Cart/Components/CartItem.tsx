@@ -4,7 +4,7 @@ import QuantityChange from "./QuantityChange";
 import FontawesomeIconButton from "../../../Components/Button/FontawesomeIconButton";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-interface CartItemProps extends HTMLAttributes<HTMLDivElement> {
+export interface CartItemProps extends HTMLAttributes<HTMLDivElement> {
   quantity: number;
   id: string;
   name: string;

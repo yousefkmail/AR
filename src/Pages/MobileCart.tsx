@@ -1,9 +1,8 @@
-import CartItem from "../Features/Cart/Components/CartItem";
-import CartItemsHeader from "../Features/Cart/Components/CartItemsHeader";
 import { useCart } from "../Features/Cart/useCart";
 import PageWidthLayout from "../Layout/PageWidthLayout";
+import CartItemMobile from "../Features/Cart/Components/CartItemMobile";
 
-export default function Cart() {
+export default function MobileCart() {
   const {
     items,
     productItems,
@@ -14,17 +13,16 @@ export default function Cart() {
     decreaseProductItem,
     resetPieces,
   } = useCart();
+
   return (
-    <PageWidthLayout className="desktop-cart" maxWidth={1600}>
+    <PageWidthLayout className="mobile-cart" maxWidth={1600}>
       {items.length > 0 ? (
         <>
           <h1 style={{ textAlign: "center" }}>Your Cart</h1>
-
           <h2>Collections</h2>
           <div className="cart-items">
-            <CartItemsHeader />
             {items.map((item) => (
-              <CartItem
+              <CartItemMobile
                 onIncrease={() => increaseItem(item.item)}
                 onDecrease={() => decreaseItem(item.item)}
                 onRemove={() => removeItem(item.item)}
@@ -35,7 +33,7 @@ export default function Cart() {
                   (item.item.price * item.quantity).toFixed(2)
                 )}
                 key={item.item.id}
-              ></CartItem>
+              ></CartItemMobile>
             ))}
           </div>
 
@@ -62,10 +60,9 @@ export default function Cart() {
             </div>
 
             <div className="cart-items">
-              <CartItemsHeader />
               {productItems?.map((item) => {
                 return (
-                  <CartItem
+                  <CartItemMobile
                     onIncrease={() => increaseProductItem(item.item.id)}
                     onDecrease={() => decreaseProductItem(item.item.id)}
                     className="cart-item-container"
@@ -75,7 +72,7 @@ export default function Cart() {
                       (item.item.price * item.quantity).toFixed(2)
                     )}
                     key={item.item.id}
-                  ></CartItem>
+                  ></CartItemMobile>
                 );
               })}
             </div>
