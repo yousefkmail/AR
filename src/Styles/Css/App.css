@@ -408,6 +408,12 @@ body {
 
 .cart-items {
     border: var(--default-border);
+    padding: 20px;
+}
+
+
+.cart-item-container-mobile:not(:last-child) {
+    border-bottom: var(--default-border);
 }
 
 /* .cart-item-container:not(:last-child) {
@@ -559,6 +565,7 @@ body {
 
 .mobile-cart {
     display: none;
+    margin-bottom: 30px;
 }
 
 

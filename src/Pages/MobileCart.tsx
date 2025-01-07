@@ -26,7 +26,7 @@ export default function MobileCart() {
                 onIncrease={() => increaseItem(item.item)}
                 onDecrease={() => decreaseItem(item.item)}
                 onRemove={() => removeItem(item.item)}
-                className="cart-item-container"
+                className="cart-item-container cart-item-container-mobile"
                 quantity={item.quantity}
                 {...item.item}
                 totalPrice={parseFloat(
@@ -65,7 +65,7 @@ export default function MobileCart() {
                   <CartItemMobile
                     onIncrease={() => increaseProductItem(item.item.id)}
                     onDecrease={() => decreaseProductItem(item.item.id)}
-                    className="cart-item-container"
+                    className="cart-item-container cart-item-container-mobile"
                     quantity={item.quantity}
                     {...item.item}
                     totalPrice={parseFloat(
@@ -77,7 +77,14 @@ export default function MobileCart() {
               })}
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "flex-end" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              flexWrap: "wrap",
+              gap: "20px",
+            }}
+          >
             <div
               style={{ marginTop: "30px", flexGrow: "1", maxWidth: "500px" }}
             >
@@ -137,7 +144,6 @@ export default function MobileCart() {
                 padding: "15px",
                 border: "var(--secondary-border)",
                 borderRadius: "5px",
-                marginLeft: "20px",
               }}
             >
               CHECKOUT
