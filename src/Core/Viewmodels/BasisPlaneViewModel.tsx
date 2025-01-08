@@ -33,7 +33,7 @@ export class BasisPlaneViewModel implements IRenderable {
 
       const newChild = new PiecePlaneViewModel(child.PiecePlane, child.id);
       newChild.isFlipped = child.isFlipped;
-
+      newChild.parent = child.parent;
       this.children.push(new LayeredChild(newChild, layer));
     }
   }

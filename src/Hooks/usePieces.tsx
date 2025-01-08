@@ -34,6 +34,7 @@ export const usePieces = () => {
         return state.map((item) => {
           if (item.id === action.payload.piece.id) {
             item.PiecePlane.position = action.payload.position;
+
             return item;
           } else return item;
         });

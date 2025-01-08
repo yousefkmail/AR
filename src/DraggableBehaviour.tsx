@@ -146,6 +146,7 @@ export default function DraggableBehaviour() {
           });
 
         const piece = FindPieceWithId(DraggedRef.current.userData.id);
+
         if (piece) {
           DispatchCreatedPieces({
             type: "move",

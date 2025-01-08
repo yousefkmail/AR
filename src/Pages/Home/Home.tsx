@@ -56,8 +56,10 @@ export default function Home() {
             <div className="flex-center-wrap">
               {Array(2)
                 .fill(0)
-                .map(() => (
-                  <HomePersonProfileSkeleton></HomePersonProfileSkeleton>
+                .map((_item, index) => (
+                  <HomePersonProfileSkeleton
+                    key={index}
+                  ></HomePersonProfileSkeleton>
                 ))}
             </div>
           </div>

@@ -10,8 +10,8 @@ export default function HomeAboutSkeleton({
     <div>
       {Array(sectionsCount)
         .fill(0)
-        .map(() => (
-          <HomeAboutSectionSkeleton></HomeAboutSectionSkeleton>
+        .map((_item, index) => (
+          <HomeAboutSectionSkeleton key={index}></HomeAboutSectionSkeleton>
         ))}
     </div>
   );
