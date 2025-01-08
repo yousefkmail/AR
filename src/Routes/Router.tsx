@@ -1,47 +1,59 @@
-import { createBrowserRouter, Outlet } from "react-router-dom";
-import Builder from "../Pages/Builder";
-import BottomFooterLayour from "../Layout/BottomFooterLayour";
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer/Footer";
-import Cart from "../Pages/Cart";
-import Home from "../Pages/Home/Home";
-import Order from "../Pages/Order";
-import MobileCart from "../Pages/MobileCart";
+import { createBrowserRouter } from "react-router-dom";
+
+import MainLayout from "../Layout/MainLayout";
+import { lazy, Suspense } from "react";
+
+const Home = lazy(() => import("../Pages/Home/Home"));
+const Cart = lazy(() => import("../Pages/Cart"));
+const Order = lazy(() => import("../Pages/Order"));
+const Builder = lazy(() => import("../Pages/Builder"));
 
 export const AppRouter = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <BottomFooterLayour
-        Page={
-          <div>
-            <Navbar />
-            <Outlet />
-          </div>
-        }
-        Footer={<Footer />}
-      ></BottomFooterLayour>
-    ),
+    element: <MainLayout />,
     children: [
-      { index: true, element: <Home /> },
       {
-        path: "/cart",
+        index: true,
         element: (
-          <>
-            <Cart />
-            <MobileCart />
-          </>
+          <Suspense fallback={<div></div>}>
+            <Home />
+          </Suspense>
         ),
       },
-      { path: "/order", element: <Order /> },
+
+      {
+        path: "cart",
+        element: (
+          <Suspense fallback={<div></div>}>
+            <Cart />
+          </Suspense>
+        ),
+      },
+      {
+        path: "order",
+        element: (
+          <Suspense fallback={<div></div>}>
+            <Order />
+          </Suspense>
+        ),
+      },
     ],
   },
   {
     path: "3d_builder",
-    element: <Builder />,
+    element: (
+      <Suspense fallback={<div></div>}>
+        <Builder />,
+      </Suspense>
+    ),
   },
   {
     path: "*",
-    element: <div>not found</div>,
+    element: (
+      <Suspense fallback={<div></div>}>
+        <div>not found</div>
+      </Suspense>
+    ),
   },
 ]);

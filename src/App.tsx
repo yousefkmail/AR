@@ -1,21 +1,22 @@
 import { RouterProvider } from "react-router-dom";
+
+// Global Styles
 import "./Styles/Css/App.css";
 import "./Styles/Scss/index.scss";
+
+// App Routes
 import { AppRouter } from "./Routes/Router";
+
+// Global Services
 import NotificationList from "./Features/NotificationService/Notification";
-import { useGlobalSettings } from "./Hooks/useGlobalSettings";
-import { Helmet } from "react-helmet";
+
+// App Metadata
+import SiteMetadata from "./SiteMetadata";
 
 function App() {
-  const { data } = useGlobalSettings();
-
   return (
-    <div style={{ height: "100vh" }}>
-      <Helmet>
-        <meta charSet="utf-8" />
-        {<title>{data?.siteName ?? "Wigitsco"}</title>}
-        <link rel="icon" href={data?.preview} />
-      </Helmet>
+    <div className="app-root">
+      <SiteMetadata />
       <RouterProvider router={AppRouter}></RouterProvider>
       <NotificationList />
     </div>
