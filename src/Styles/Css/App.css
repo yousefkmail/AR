@@ -580,6 +580,12 @@ body {
     display: none;
 }
 
+.home-memebers-skeleton-header {
+    display: grid;
+    place-items: center;
+    margin-bottom: 70px;
+}
+
 @media (max-width: 768px) {
     .about-section-container {
         flex-direction: column;

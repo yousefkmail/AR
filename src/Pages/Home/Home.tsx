@@ -49,13 +49,7 @@ export default function Home() {
       {isLoading || membersLoading ? (
         <PageWidthLayout maxWidth={1600}>
           <div className="mx-sm my-xl">
-            <div
-              style={{
-                display: "grid",
-                placeItems: "center",
-                marginBottom: "70px",
-              }}
-            >
+            <div className="home-memebers-skeleton-header">
               <Skeleton width={150} height={30} />
             </div>
 
