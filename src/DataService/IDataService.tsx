@@ -4,7 +4,7 @@ import { GlobalSettings } from "./Models/GlobalSettings";
 import { Piece } from "./Models/PieceModel";
 import { ProductItem } from "./Models/ProductItem";
 import { TeamMemberModel } from "./Models/TeamMemberModel";
-import { TemplateModel } from "./Models/TemplateModel";
+import { TemplateModel, UnresolvedTemplateModel } from "./Models/TemplateModel";
 
 export interface IDataService {
   GetAllBasis: () => Promise<Basis[]>;
@@ -12,7 +12,7 @@ export interface IDataService {
   GetAllTemplates: (
     page: number,
     pageSize: number
-  ) => Promise<[TemplateModel[], number]>;
+  ) => Promise<[UnresolvedTemplateModel[], number]>;
 
   GetTemplateById: (assetId: string) => Promise<TemplateModel>;
 

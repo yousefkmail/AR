@@ -31,7 +31,7 @@ export default function CartItem({
   return (
     <CartItemLayout
       className={className}
-      Price={<div style={{ fontWeight: "bold" }}>{price}$</div>}
+      Price={<div style={{ fontWeight: "bold" }}>${price}</div>}
       ProductDetails={
         <div style={{ display: "flex", flexWrap: "wrap", padding: "0 10px" }}>
           {previewImage && (
@@ -75,7 +75,7 @@ export default function CartItem({
           </span>
         </QuantityChange>
       }
-      TotalPrice={<div style={{ fontWeight: "bold" }}>{totalPrice}$</div>}
+      TotalPrice={<div style={{ fontWeight: "bold" }}>${totalPrice}</div>}
       key={id}
       Cancel={
         <FontawesomeIconButton

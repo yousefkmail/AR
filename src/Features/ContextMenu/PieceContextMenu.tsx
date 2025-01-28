@@ -8,6 +8,7 @@ import {
   faTrash,
   faPaperclip,
   faRepeat,
+  faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 
 export interface LayerOption {
@@ -27,6 +28,7 @@ interface ObjectContextMenuProps {
   OnFlip: () => void;
   Flipable: boolean;
   layersOptions: LayerOption[];
+  OnAddToCartPressed: () => void;
 }
 export default function PieceContextMenu({
   posX,
@@ -40,9 +42,10 @@ export default function PieceContextMenu({
   Flipable,
   RotationValue,
   layersOptions,
+  OnAddToCartPressed,
 }: Partial<ObjectContextMenuProps>) {
   const LayerChanged = (data: SingleValue<LayerOption>) => {
-    if (data?.value) OnLayerChanged?.(data.value);
+    if (data) OnLayerChanged?.(data.value);
   };
 
   const RotationChanged = (_event: Event, value: number | number[]) => {
@@ -190,6 +193,19 @@ export default function PieceContextMenu({
               />
             </div>
             Flip
+          </button>
+          <button
+            className={"contextmenu-button"}
+            onClick={() => OnAddToCartPressed?.()}
+          >
+            <div style={{ marginBottom: "5px" }}>
+              <FontAwesomeIcon
+                style={{ marginBottom: "3px" }}
+                size="xl"
+                icon={faCartShopping}
+              />
+            </div>
+            Cart
           </button>
         </div>
       </div>

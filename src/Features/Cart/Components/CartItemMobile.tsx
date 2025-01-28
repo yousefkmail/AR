@@ -48,7 +48,7 @@ export default function CartItemMobile({
       </div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <p>Price:</p>
-        <p style={{ padding: "7px" }}>{price}$</p>
+        <p style={{ padding: "7px" }}>{price / 100}$</p>
       </div>
 
       <div style={{ display: "flex", justifyContent: "space-between" }}>

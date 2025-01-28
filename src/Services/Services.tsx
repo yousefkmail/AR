@@ -1,4 +1,4 @@
-import { ContentfulDataService } from "../Contentful/ContentfulDataService";
 import { IDataService } from "../DataService/IDataService";
+import { BackendDataService } from "../Server/ServerDataService";
 
-export const dataService: IDataService = new ContentfulDataService();
+export const backendDataService: IDataService = new BackendDataService();

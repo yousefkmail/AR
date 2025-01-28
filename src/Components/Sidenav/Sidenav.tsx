@@ -5,32 +5,31 @@ import { faCartShopping, faHome } from "@fortawesome/free-solid-svg-icons";
 export default function Sidenav() {
   const navigate = useNavigate();
   return (
-    <div>
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          zIndex: 1000,
-          top: "30%",
-          transform: "translate(0,-50%)",
-          backgroundColor: "white",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <FontawesomeIconButton
-          size="xl"
-          onClick={() => navigate("/")}
-          icon={faHome}
-          isActive={false}
-        ></FontawesomeIconButton>
-        <FontawesomeIconButton
-          size="xl"
-          onClick={() => navigate("/cart")}
-          icon={faCartShopping}
-          isActive={false}
-        ></FontawesomeIconButton>
-      </div>
+    <div
+      style={{
+        position: "absolute",
+        zIndex: 1000,
+        top: "10px",
+        left: "50%",
+        transform: "translate(-50%,0)",
+        backgroundColor: "white",
+        display: "flex",
+        padding: "7px",
+        borderRadius: "7px",
+      }}
+    >
+      <FontawesomeIconButton
+        size="xl"
+        onClick={() => navigate("/")}
+        icon={faHome}
+        isActive={false}
+      ></FontawesomeIconButton>
+      <FontawesomeIconButton
+        size="xl"
+        onClick={() => navigate("/cart")}
+        icon={faCartShopping}
+        isActive={false}
+      ></FontawesomeIconButton>
     </div>
   );
 }

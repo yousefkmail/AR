@@ -1,6 +1,15 @@
-import { TemplateModel } from "../DataService/Models/TemplateModel";
+import {
+  TemplateModel,
+  UnresolvedTemplateModel,
+} from "../DataService/Models/TemplateModel";
+
+export enum TemplateState {
+  NotLoaded,
+  Loading,
+  Loaded,
+}
 
 export interface LoadableTemplate {
-  template: TemplateModel;
-  isLoading: boolean;
+  template: UnresolvedTemplateModel | TemplateModel;
+  state: TemplateState;
 }

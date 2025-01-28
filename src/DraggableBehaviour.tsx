@@ -1,28 +1,30 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { useDragPiece } from "./Hooks/useDragPiece";
 import { useMousePosition } from "./Hooks/useMousePositiion";
 import { useFullPieces } from "./Hooks/useFullPieces";
 import { NDCToObjectWorld, SetObjectLayerTraverse } from "./Utils/ThreeUtils";
 import { useObjectContextMenu } from "./Features/ContextMenu/useObjectContextMenu";
+import { PieceChild } from "./DataService/Models/TemplateModel";
+import { GetPieceLeft, GetPieceRight } from "./Utils/WigitsUtils/PieceUtils";
 
 export default function DraggableBehaviour() {
   const raycaster = useRef(new THREE.Raycaster());
   const { mousePos } = useMousePosition();
-  const { DraggedRef, HoveredObject, HandleDroppedPlane } = useDragPiece();
   const {
     FindSceneObjectWithId,
     FindPieceWithId,
-    FindBaseWithId,
-    DispatchCreatedBasis,
+    FindTemplateWithId,
     DispatchCreatedPieces,
-    createdBasis,
+    createdTemplates,
+    DispatchCreatedTemplates,
     createdPieces,
+    FindParent,
   } = useFullPieces();
   const { gl } = useThree();
-  const { open, setMenuPosition, close, setActivePiece, setActiveBasis } =
+  const { open, setMenuPosition, close, setActivePiece, setActiveTemplate } =
     useObjectContextMenu();
+
   const HandleDrop = (event: MouseEvent) => {
     if (DraggedRef.current && HoveredObject.current) {
       HandleDroppedPlane(DraggedRef.current, HoveredObject.current);
@@ -36,9 +38,10 @@ export default function DraggableBehaviour() {
       const piece = FindPieceWithId(DraggedRef.current?.userData.id) ?? null;
       setActivePiece(piece);
 
-      setActiveBasis(FindBaseWithId(DraggedRef.current?.userData.id) ?? null);
+      setActiveTemplate(
+        FindTemplateWithId(DraggedRef.current?.userData.id) ?? null
+      );
     }
-
     DraggedRef.current = null;
   };
 
@@ -55,7 +58,7 @@ export default function DraggableBehaviour() {
       gl.domElement.removeEventListener("drop", HandleDrop);
       gl.domElement.removeEventListener("pointerdown", HandlePointerDown);
     };
-  }, [createdBasis, createdPieces, FindPieceWithId, FindBaseWithId]);
+  }, [createdTemplates, createdPieces, FindPieceWithId, FindTemplateWithId]);
 
   useFrame(({ camera, scene }) => {
     //return early if nothing dragged to be handled.
@@ -63,60 +66,67 @@ export default function DraggableBehaviour() {
 
     const draggedPieceData = FindPieceWithId(DraggedRef.current.userData.id);
 
-    if (draggedPieceData && draggedPieceData?.parent) {
-      const parent = FindSceneObjectWithId(draggedPieceData.parent.id);
+    if (draggedPieceData && "layer" in draggedPieceData) {
+      const piece = draggedPieceData as PieceChild;
+      const parentTemplate = FindParent(piece);
+      if (!parentTemplate) return;
+
+      const parent = FindSceneObjectWithId(parentTemplate.id);
       if (!parent) return;
+
       const position = NDCToObjectWorld(mousePos, parent, camera);
+      console.log(position);
       let xPos = parent?.worldToLocal(position).x;
+
       const rightOffset =
-        (draggedPieceData.parent.BasisPlane.width / 2 -
-          draggedPieceData.baseRight()) /
+        (parentTemplate.templateModel.base.width / 2 -
+          GetPieceRight(draggedPieceData.piece)) /
         50;
 
       const leftOffset =
         -(
-          draggedPieceData.parent.BasisPlane.width / 2 -
-          draggedPieceData.baseLeft()
+          parentTemplate.templateModel.base.width / 2 -
+          GetPieceLeft(draggedPieceData.piece)
         ) / 50;
 
-      const basis = FindBaseWithId(draggedPieceData.parent.id);
-
-      if (!basis) return;
-
-      let [leftChild, rightChild] = basis.getNeighbours(draggedPieceData);
-
-      if (draggedPieceData.PiecePlane.position.x - xPos > 0) {
-        if (leftChild) {
-          const minPosX = leftChild.rightPosition();
-          xPos = THREE.MathUtils.clamp(
-            xPos,
-            minPosX + draggedPieceData.PiecePlane.width / 100,
-            Infinity
-          );
-        }
-      } else {
-        if (rightChild) {
-          const maxPosX = rightChild.leftPosition();
-
-          xPos = THREE.MathUtils.clamp(
-            xPos,
-            -Infinity,
-            maxPosX - draggedPieceData.PiecePlane.width / 100
-          );
-        }
-      }
-
-      DispatchCreatedBasis({
+      DispatchCreatedTemplates({
         type: "move_child",
         payload: {
-          piece: draggedPieceData,
-          position: new THREE.Vector3(
+          piece: piece,
+          position: [
             THREE.MathUtils.clamp(xPos, leftOffset, rightOffset),
-            draggedPieceData.PiecePlane.position.y,
-            0
-          ),
+            piece.position[1],
+            0,
+          ],
         },
       });
+
+      // const basis = FindBaseWithId(draggedPieceData.parent.id);
+
+      // if (!basis) return;
+
+      // let [leftChild, rightChild] = basis.getNeighbours(draggedPieceData);
+
+      // if (draggedPieceData.PiecePlane.position.x - xPos > 0) {
+      //   if (leftChild) {
+      //     const minPosX = leftChild.rightPosition();
+      //     xPos = THREE.MathUtils.clamp(
+      //       xPos,
+      //       minPosX + draggedPieceData.PiecePlane.width / 100,
+      //       Infinity
+      //     );
+      //   }
+      // } else {
+      //   if (rightChild) {
+      //     const maxPosX = rightChild.leftPosition();
+
+      //     xPos = THREE.MathUtils.clamp(
+      //       xPos,
+      //       -Infinity,
+      //       maxPosX - draggedPieceData.PiecePlane.width / 100
+      //     );
+      //   }
+      // }
     } else {
       raycaster.current.setFromCamera(mousePos, camera);
       SetObjectLayerTraverse(DraggedRef.current, 1);
@@ -131,32 +141,32 @@ export default function DraggableBehaviour() {
 
         HoveredObject.current = intersects[0].object;
         SetObjectLayerTraverse(DraggedRef.current, 0);
-        const basis = FindBaseWithId(DraggedRef.current.userData.id);
-        if (basis)
-          DispatchCreatedBasis({
+        const basis = FindTemplateWithId(DraggedRef.current.userData.id);
+        if (basis) {
+          DispatchCreatedTemplates({
             type: "move",
             payload: {
               basis,
-              position: new THREE.Vector3(
+              position: [
                 intersectionPoint.x,
                 intersectionPoint.y + 0.01,
-                intersectionPoint.z
-              ),
+                intersectionPoint.z,
+              ],
             },
           });
-
+        }
         const piece = FindPieceWithId(DraggedRef.current.userData.id);
 
-        if (piece) {
+        if (piece && "rotation" in piece) {
           DispatchCreatedPieces({
             type: "move",
             payload: {
               piece,
-              position: new THREE.Vector3(
+              position: [
                 intersectionPoint.x,
                 intersectionPoint.y + 0.01,
-                intersectionPoint.z
-              ),
+                intersectionPoint.z,
+              ],
             },
           });
         }

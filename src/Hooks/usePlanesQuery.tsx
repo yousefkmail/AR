@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { dataService } from "../Services/Services";
+import { backendDataService } from "../Services/Services";
 import { Piece } from "../DataService/Models/PieceModel";
 export interface OptionType {
   value: string;
@@ -20,14 +20,14 @@ export const usePlanesQuery = () => {
   const { data: pieces } = useQuery({
     queryKey: ["pieces"],
     queryFn: async () => {
-      return await dataService.GetAllPieces();
+      return await backendDataService.GetAllPieces();
     },
   });
 
   const { data: basis } = useQuery({
     queryKey: ["basis"],
     queryFn: async () => {
-      return await dataService.GetAllBasis();
+      return await backendDataService.GetAllBasis();
     },
     cacheTime: Infinity,
     staleTime: Infinity,

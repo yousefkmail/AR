@@ -7,14 +7,15 @@ import { DragEvent, useContext, useState } from "react";
 import { useNotification } from "../../Features/NotificationService/NotificationContext";
 import IconButton from "../Button/IconButton";
 import DraggableItem from "../DragableItem";
-import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
-import { BasisPlane } from "../../Core/BasisPlane";
 import { DraggedPieceContext } from "../../Context/DraggedPieceContext";
-import { PiecePlaneViewModel } from "../../Core/Viewmodels/PiecePlaneViewModel";
-import { PiecePlane } from "../../Core/PiecePlane";
 import { CircularProgress } from "@mui/material";
-import { LoadableTemplate } from "../../Interfaces/LoadableTemplate";
-
+import {
+  LoadableTemplate,
+  TemplateState,
+} from "../../Interfaces/LoadableTemplate";
+import { TemplateModel } from "../../DataService/Models/TemplateModel";
+import { TemplateObject } from "../../Core/Template";
+import { v4 as uuidv4 } from "uuid";
 interface TemplateProps {
   item: LoadableTemplate;
   OnLoadPresed: () => void;
@@ -25,7 +26,7 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
   const { addNotification } = useNotification();
   const { setDraggedItem } = useContext(DraggedPieceContext);
   const handleDragStart = () => {
-    if (!item.template.loadedData) {
+    if (!(item.state === TemplateState.Loaded)) {
       addNotification(
         `you need to load template ${item.template.name} before dragging it.`,
         "warning"
@@ -34,18 +35,15 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
       return;
     }
 
-    const TemplateViewModel = new BasisPlaneViewModel(
-      new BasisPlane(item.template.loadedData.basis)
-    );
+    const template: TemplateObject = {
+      id: uuidv4(),
+      templateModel: { ...(item.template as TemplateModel) },
+      position: [1, 1, 1],
+      rotation: [90, 0, 0],
+      scale: [1, 1, 1],
+    };
 
-    for (const child of item.template.loadedData.children) {
-      TemplateViewModel.addChild(
-        new PiecePlaneViewModel(new PiecePlane({ ...child.data })),
-        child.layer,
-        child.position[0]
-      );
-    }
-    setDraggedItem(TemplateViewModel);
+    setDraggedItem(template);
   };
   return (
     <DraggableItem
@@ -69,7 +67,7 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
 
         <Spacer padding={4}>
           <div style={{ fontWeight: "bolder", fontSize: "1.25rem" }}>
-            {item.template.price}$
+            {item.template.price / 100}$
           </div>
         </Spacer>
 
@@ -115,13 +113,13 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
               backgroundColor: "black",
               color: "white",
             }}
-            disabled={item.template.loadedData !== undefined}
+            disabled={item.state !== TemplateState.NotLoaded}
             onClick={() => OnLoadPresed?.()}
             isActive={false}
           >
-            {item.template.loadedData ? (
+            {item.state === TemplateState.Loaded ? (
               "Loaded"
-            ) : item.isLoading ? (
+            ) : item.state === TemplateState.Loading ? (
               <CircularProgress
                 size={"10px"}
                 sx={{ color: "white" }}

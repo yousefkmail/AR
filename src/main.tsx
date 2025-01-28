@@ -12,7 +12,7 @@ import { ContextMenuProvider } from "./Features/ContextMenu/ContextMenuProvider.
 import { EnvironmentContextProvider } from "./Context/EnvironmentContext.tsx";
 import { NotificationProvider } from "./Features/NotificationService/NotificationContext.tsx";
 import { ObjectPreviewContextProvider } from "./Features/UIToCanvasDrag/ObjectPreview.tsx";
-import { CartContextProvider } from "./Features/Cart/CartContext.tsx";
+import { CartContextProvider } from "./Features/Cart/CartContextProvider.tsx";
 
 export const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(

@@ -1,8 +1,9 @@
 import { Plane } from "./PlaneModel";
 
-export class Piece extends Plane {
-  baseWidth: number = 0;
-  baseOffset: number = 0;
-  category: string = "";
-  isFlipable: boolean = false;
+export interface Piece extends Plane {
+  baseWidth: number;
+  baseOffset: number;
+  category: string;
+  isFlipable: boolean;
+  isFlipped: boolean;
 }

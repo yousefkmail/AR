@@ -1,12 +1,9 @@
-import { BasisPlane } from "./BasisPlane";
+import { TemplateModel } from "../DataService/Models/TemplateModel";
 
-export class Template {
-  preview: string = "";
-  price: number = 0;
-  name: string = "";
-  tags: string[] = [];
-  data: BasisPlane;
-  constructor(data: BasisPlane) {
-    this.data = data;
-  }
+export interface TemplateObject {
+  templateModel: TemplateModel;
+  id: string;
+  position: [number, number, number];
+  rotation: [number, number, number];
+  scale: [number, number, number];
 }

@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { BasisPlane } from "../BasisPlane";
+import { BasisObject } from "../BasisPlane";
 import { PngPlane, PngPlaneRef } from "../../Components/PngPlane/PngPlane";
 import { Vector3 } from "three";
 import { PiecePlaneViewModel } from "./PiecePlaneViewModel";
@@ -16,11 +16,11 @@ export class LayeredChild {
 }
 
 export class BasisPlaneViewModel implements IRenderable {
-  public BasisPlane: BasisPlane;
+  public BasisPlane: BasisObject;
   public id: string;
   children: LayeredChild[] = [];
 
-  constructor(BasisPlane: BasisPlane, id?: string) {
+  constructor(BasisPlane: BasisObject, id?: string) {
     this.id = id || uuidv4();
     this.BasisPlane = BasisPlane;
   }
@@ -134,14 +134,14 @@ export class BasisPlaneViewModel implements IRenderable {
     return (
       <PngPlane
         ref={ref}
-        {...this.BasisPlane}
+        {...this.BasisPlane.basis}
         rotation={new Vector3(90, 0, 0)}
         id={this.id}
       >
         {this.children.map((child, index) => (
           <PngPlane
             key={child.child.id}
-            {...child.child.PiecePlane}
+            {...child.child.PiecePlane.piece}
             id={child.child.id}
             scale={
               child.child.isFlipped

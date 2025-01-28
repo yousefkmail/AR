@@ -1,10 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { dataService } from "../Services/Services";
+import { backendDataService } from "../Services/Services";
 import { useState } from "react";
 
 import { queryClient } from "../main";
 import { useNotification } from "../Features/NotificationService/NotificationContext";
-import { LoadableTemplate } from "../Interfaces/LoadableTemplate";
+import {
+  LoadableTemplate,
+  TemplateState,
+} from "../Interfaces/LoadableTemplate";
 
 export const useTemplatesQuery = () => {
   const { addNotification } = useNotification();
@@ -14,14 +17,17 @@ export const useTemplatesQuery = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["templates", page],
     queryFn: async () => {
-      const [templates, count] = await dataService.GetAllTemplates(
+      const [templates, count] = await backendDataService.GetAllTemplates(
         page,
         pageSize
       );
 
       return {
         templates: templates.map((item) => {
-          const itemm: LoadableTemplate = { isLoading: false, template: item };
+          const itemm: LoadableTemplate = {
+            template: item,
+            state: TemplateState.NotLoaded,
+          };
           return itemm;
         }),
         count,
@@ -37,17 +43,21 @@ export const useTemplatesQuery = () => {
         if (!oldData) return;
         return {
           ...oldData,
-          templates: oldData.templates.map((template: LoadableTemplate) => {
-            if (template.template.id === id) {
-              const templatee = { ...template };
-              templatee.isLoading = true;
-              return templatee;
-            } else return template;
-          }),
+          templates: oldData.templates.map(
+            (Loadabletemplate: LoadableTemplate) => {
+              if (Loadabletemplate.template.id === id) {
+                const templatee: LoadableTemplate = {
+                  template: Loadabletemplate.template,
+                  state: TemplateState.Loading,
+                };
+                return templatee;
+              } else return Loadabletemplate;
+            }
+          ),
         };
       });
 
-      const fullTemplate = await dataService.GetTemplateById(id);
+      const fullTemplate = await backendDataService.GetTemplateById(id);
 
       return fullTemplate;
     },
@@ -61,10 +71,11 @@ export const useTemplatesQuery = () => {
         );
         return {
           ...oldData,
-          templates: oldData.templates.map((template: LoadableTemplate) =>
-            template.template.id === fullTemplate.id
-              ? { template: fullTemplate, isLoading: false }
-              : template
+          templates: oldData.templates.map(
+            (Loadabletemplate: LoadableTemplate) =>
+              Loadabletemplate.template.id === fullTemplate.id
+                ? { template: fullTemplate, state: TemplateState.Loaded }
+                : Loadabletemplate
           ),
         };
       });

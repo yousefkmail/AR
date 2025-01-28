@@ -1,16 +1,15 @@
-import { Vector3 } from "three";
-import { PiecePlaneViewModel } from "../Core/Viewmodels/PiecePlaneViewModel";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
+import { PieceObject } from "../Core/PiecePlane";
 
 export type CreatedPiecesAction =
-  | { type: "add"; payload: PiecePlaneViewModel }
-  | { type: "delete"; payload: PiecePlaneViewModel }
-  | { type: "set"; payload: PiecePlaneViewModel[] }
+  | { type: "add"; payload: PieceObject }
+  | { type: "delete"; payload: PieceObject }
+  | { type: "set"; payload: PieceObject[] }
   | {
       type: "move";
-      payload: { piece: PiecePlaneViewModel; position: Vector3 };
+      payload: { piece: PieceObject; position: [number, number, number] };
     }
-  | { type: "flip"; payload: { piece: PiecePlaneViewModel } };
+  | { type: "flip"; payload: { piece: PieceObject } };
 
 export const usePieces = () => {
   const [createdPieces, DispatchCreatedPieces] = useReducer(
@@ -19,7 +18,7 @@ export const usePieces = () => {
   );
 
   function CreatedPieceReducer(
-    state: PiecePlaneViewModel[],
+    state: PieceObject[],
     action: CreatedPiecesAction
   ) {
     switch (action.type) {
@@ -33,8 +32,7 @@ export const usePieces = () => {
       case "move": {
         return state.map((item) => {
           if (item.id === action.payload.piece.id) {
-            item.PiecePlane.position = action.payload.position;
-
+            item.position = action.payload.position;
             return item;
           } else return item;
         });
@@ -42,13 +40,10 @@ export const usePieces = () => {
 
       case "flip": {
         return state.map((item) => {
-          if (
-            item.id === action.payload.piece.id &&
-            item.PiecePlane.isFlipable
-          ) {
-            const newItem = new PiecePlaneViewModel(item.PiecePlane);
-            newItem.isFlipped = !item.isFlipped;
-            newItem.parent = item.parent;
+          if (item.id === action.payload.piece.id && item.piece.isFlipable) {
+            const newItem: PieceObject = { ...item };
+            newItem.piece = { ...item.piece };
+            newItem.piece.isFlipped = !newItem.piece.isFlipped;
             return newItem;
           } else return item;
         });

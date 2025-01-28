@@ -10,7 +10,6 @@ export default function PreviewHandler() {
   const { preview, previewRef: previewReference } = useObjectPreview();
   const raycaster = useRef(new THREE.Raycaster());
   const { mousePos } = useMousePosition();
-
   const previewRef = useRef<PngPlaneRef | null>(null);
   useFrame(({ camera, scene }) => {
     if (!previewRef.current) return;
@@ -37,5 +36,5 @@ export default function PreviewHandler() {
       previewReference.current = previewRef.current.container;
   }, [preview]);
 
-  return preview && <preview.Render ref={previewRef}></preview.Render>;
+  return null;
 }

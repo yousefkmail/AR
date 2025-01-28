@@ -1,170 +1,168 @@
-import { MathUtils } from "three";
 import { useFullPieces } from "../../Hooks/useFullPieces";
 import { useObjectContextMenu } from "./useObjectContextMenu";
 import PieceContextMenu, { LayerOption } from "./PieceContextMenu";
 import BasisContextMenu from "./BasisContextMenu";
 import { useEffect, useState } from "react";
 import { useCart } from "../Cart/useCart";
+import { v4 as uuidv4 } from "uuid";
 import { TemplateModel } from "../../DataService/Models/TemplateModel";
-export default function ContextContainer() {
-  const { isOpened, menuPosition, activeBasis, activePiece } =
-    useObjectContextMenu();
-  const [rotation, setRotation] = useState<number>(0);
+import { TemplateObject } from "../../Core/Template";
+import { PieceObject } from "../../Core/PiecePlane";
+import CollectionAddToCartPopup from "./CollectionAddToCartPopup";
+import { Piece } from "../../DataService/Models/PieceModel";
 
+export default function ContextContainer() {
+  const { isOpened, menuPosition, close, activeObject } =
+    useObjectContextMenu();
+
+  const [rotation, setRotation] = useState<number>(0);
+  const [layerOptions, setLayerOptions] = useState<LayerOption[]>([]);
   const [layer, setLayer] = useState<LayerOption>({ label: "1", value: 1 });
 
-  const { close } = useObjectContextMenu();
+  const [addToCartOpened, setAddToCartOpened] = useState<boolean>(false);
   const {
-    FindSceneObjectWithId,
-    DispatchCreatedBasis,
     DispatchCreatedPieces,
     Deattach_Piece,
-    createdBasis,
-    FindBaseWithId,
+    DispatchCreatedTemplates,
+    FindParent,
   } = useFullPieces();
 
   const HandleRotationChanged = (rotation: number) => {
-    if (activeBasis) {
-      const Group = FindSceneObjectWithId(activeBasis.id);
-      Group?.rotation.set(Group.rotation.x, 0, MathUtils.degToRad(rotation));
-      setRotation(rotation);
-    }
-    if (activePiece && !activePiece.parent) {
-      const Group = FindSceneObjectWithId(activePiece.id);
-      Group?.rotation.set(0, MathUtils.degToRad(rotation), 0);
+    if (activeObject) {
+      if ("templateModel" in activeObject)
+        DispatchCreatedTemplates({
+          type: "rotate",
+          payload: {
+            rotation: [activeObject.rotation[0], 0, rotation],
+            template: activeObject,
+          },
+        });
+
       setRotation(rotation);
     }
   };
 
   useEffect(() => {
-    if (activeBasis) {
-      const Group = FindSceneObjectWithId(activeBasis.id);
-      setRotation(MathUtils.radToDeg(Group?.rotation.x ?? 0));
-    }
-    if (activePiece) {
-      const Group1 = FindSceneObjectWithId(activePiece.id);
-      setRotation(MathUtils.radToDeg(Group1?.rotation.y ?? 0));
-    }
-  }, [activeBasis, activePiece]);
-
-  useEffect(() => {
-    if (!activePiece) return;
-    let layerIndex = 1;
-    createdBasis.forEach((basis) => {
-      basis.children.forEach((piece) => {
-        if (piece.child.id === activePiece.id) {
-          layerIndex = piece.layerIndex;
-        }
+    if (!activeObject) return;
+    if ("templateModel" in activeObject) {
+      setRotation(activeObject.rotation[2]);
+    } else if ("layer" in activeObject) {
+      const parentTemplate = FindParent(activeObject);
+      if (!parentTemplate) return;
+      setLayerOptions(
+        parentTemplate.templateModel.base.layers.map((item, index) => ({
+          label: item.name,
+          value: index,
+        }))
+      );
+      setLayer({
+        label:
+          parentTemplate.templateModel.base.layers[activeObject.layer].name,
+        value: parentTemplate.templateModel.base.layers.findIndex(
+          (item) =>
+            item.name ===
+            parentTemplate.templateModel.base.layers[activeObject.layer].name
+        ),
       });
-    });
-
-    if (activePiece.parent) {
-      const base = FindBaseWithId(activePiece.parent.id ?? "");
-
-      if (base) {
-        setLayerOptions(
-          base.BasisPlane.layers.map((layer, index) => ({
-            label: layer.name,
-            value: index + 1,
-          }))
-        );
-      }
-    } else {
-      setLayerOptions([]);
     }
-
-    setLayer({
-      label: layerIndex.toString(),
-      value: layerIndex,
-    });
-  }, [activePiece, createdBasis]);
+  }, [activeObject]);
 
   const HandleLayerChanged = (layer: number) => {
-    if (!activePiece) return;
-    DispatchCreatedBasis({
-      type: "changeLayer",
-      payload: { layer, piece: activePiece },
-    });
-
-    setLayer({
-      label: layer.toString(),
-      value: layer,
-    });
+    if (!activeObject) return;
+    if ("layer" in activeObject)
+      DispatchCreatedTemplates({
+        type: "changeLayer",
+        payload: { layer, piece: activeObject },
+      });
 
     close();
   };
 
   const DeleteActiveBasis = () => {
-    if (!activeBasis) return;
-    DispatchCreatedBasis({ type: "delete", payload: activeBasis });
-
+    if (!activeObject) return;
+    DispatchCreatedTemplates({
+      type: "delete",
+      payload: activeObject as TemplateObject,
+    });
     close();
   };
 
   const DeleteActivePiece = () => {
-    if (!activePiece) return;
-    DispatchCreatedPieces({ type: "delete", payload: activePiece });
-    DispatchCreatedBasis({
-      type: "delete_child",
-      payload: { piece: activePiece },
-    });
+    if (!activeObject) return;
+    if ("layer" in activeObject)
+      DispatchCreatedTemplates({
+        type: "delete_child",
+        payload: { piece: activeObject },
+      });
+    else
+      DispatchCreatedPieces({
+        type: "delete",
+        payload: activeObject as PieceObject,
+      });
+
     close();
   };
 
   const DeattachActiveObject = () => {
-    if (!activePiece) return;
-    Deattach_Piece(activePiece);
+    if (!activeObject) return;
+    if ("layer" in activeObject) Deattach_Piece(activeObject);
     close();
   };
 
   const FlipActivePiece = () => {
-    if (!activePiece) return;
-    DispatchCreatedPieces({ type: "flip", payload: { piece: activePiece } });
-
-    DispatchCreatedBasis({
-      type: "flip_child",
-      payload: { piece: activePiece },
-    });
+    if (!activeObject) return;
+    if ("layer" in activeObject) {
+      DispatchCreatedTemplates({
+        type: "flip_child",
+        payload: { piece: activeObject },
+      });
+    } else if ("piece" in activeObject) {
+      DispatchCreatedPieces({ type: "flip", payload: { piece: activeObject } });
+    }
   };
   const { addItem } = useCart();
 
-  const AddToCart = (quantity: number) => {
-    if (activeBasis) {
+  const AddToCart = (quantity: number, name: string) => {
+    console.log(typeof quantity);
+
+    if (activeObject && "templateModel" in activeObject) {
       const template: TemplateModel = {
-        description: "",
-        name: "Collection",
-        id: activeBasis.id,
-        previewImage: "",
-        price:
-          activeBasis.children.reduce(
-            (prev, next) => prev + next.child.PiecePlane.price,
-            0
-          ) + activeBasis.BasisPlane.price,
-        tags: [],
-        data: undefined,
-        loadedData: {
-          basis: { ...activeBasis.BasisPlane },
-          children: activeBasis.children.map((item) => ({
-            data: { ...item.child.PiecePlane },
-            layer: item.layerIndex,
-            position: [
-              item.child.PiecePlane.position.x,
-              item.child.PiecePlane.position.y,
-              item.child.PiecePlane.position.z,
-            ],
-          })),
-        },
+        ...activeObject.templateModel,
+
+        id: uuidv4(),
       };
+      template.name = name;
+      template.price =
+        template.base.price +
+        template.children.reduce((prev, next) => prev + next.piece.price, 0);
       addItem({ quantity: quantity, item: template });
     }
+    if (activeObject && "piece" in activeObject && !("layer" in activeObject)) {
+      const piece: Piece = { ...activeObject.piece };
+
+      addItem({ quantity: quantity, item: piece });
+    }
+    setAddToCartOpened(false);
   };
 
-  const [layerOptions, setLayerOptions] = useState<LayerOption[]>([]);
+  const OpenAddToCart = () => {
+    setAddToCartOpened(true);
+  };
 
   return (
-    <div className="contextMenu_container">
+    <div className="contextMenu_container" style={{ zIndex: 5200 }}>
       {isOpened &&
-        (activeBasis === null ? (
+        activeObject &&
+        ("templateModel" in activeObject ? (
+          <BasisContextMenu
+            OnRotationChangd={HandleRotationChanged}
+            OnDelete={DeleteActiveBasis}
+            RotationValue={rotation}
+            posX={menuPosition.x}
+            posY={menuPosition.y}
+            onAddToCartPressed={OpenAddToCart}
+          />
+        ) : (
           <PieceContextMenu
             OnRotationChangd={HandleRotationChanged}
             OnLayerChanged={HandleLayerChanged}
@@ -175,19 +173,41 @@ export default function ContextContainer() {
             posY={menuPosition.y}
             RotationValue={rotation}
             OnFlip={FlipActivePiece}
-            Flipable={activePiece?.PiecePlane.isFlipable}
+            Flipable={activeObject?.piece.isFlipable}
             layersOptions={layerOptions}
-          />
-        ) : (
-          <BasisContextMenu
-            OnRotationChangd={HandleRotationChanged}
-            OnDelete={DeleteActiveBasis}
-            RotationValue={rotation}
-            posX={menuPosition.x}
-            posY={menuPosition.y}
-            onAddToCartPressed={AddToCart}
+            OnAddToCartPressed={OpenAddToCart}
           />
         ))}
+      <div>
+        {addToCartOpened && (
+          <div
+            style={{
+              backgroundColor: "rgba(128,128,128,0.2)",
+              position: "fixed",
+              inset: "0",
+            }}
+          ></div>
+        )}
+
+        <CollectionAddToCartPopup
+          isShown={addToCartOpened}
+          name={(() => {
+            console.log(activeObject);
+            if (activeObject && "templateModel" in activeObject) {
+              return activeObject.templateModel.name;
+            }
+            if (activeObject && "piece" in activeObject) {
+              return activeObject.piece.name;
+            }
+            return "";
+          })()}
+          nameEditable={activeObject ? "templateModel" in activeObject : false}
+          onAddToCartPressed={(amount: number, name: string) => {
+            AddToCart(amount, name);
+          }}
+          onClose={() => setAddToCartOpened(false)}
+        />
+      </div>
     </div>
   );
 }

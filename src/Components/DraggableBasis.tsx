@@ -6,6 +6,7 @@ interface DraggablebasisProps extends HTMLAttributes<HTMLDivElement> {
   price: number;
   width: number;
   height: number;
+  stock: number;
 }
 
 export default function DraggableBasis({
@@ -14,13 +15,13 @@ export default function DraggableBasis({
   name,
   price,
   width,
+  stock,
   ...rest
 }: DraggablebasisProps) {
   return (
     <DraggableItem {...rest}>
       <div className="drag-image-inner">
         <img
-          // className="piece-card-image"
           draggable={false}
           style={{
             width: "100%",
@@ -39,33 +40,67 @@ export default function DraggableBasis({
           style={{
             display: "flex",
             flexDirection: "column",
-            // alignItems: "center",
+            paddingTop: "10px",
+            fontSize: "0.875em",
           }}
         >
           <div
             style={{
-              marginBottom: "7px",
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "7px 0",
             }}
           >
-            <span style={{ fontWeight: "bolder" }}>{name}</span>
+            <div style={{ fontWeight: "bolder" }}>name</div>
+            <div>
+              <span>{name}</span>
+            </div>
           </div>
-
-          <div style={{ fontWeight: "bolder", fontSize: "1.25rem" }}>
-            {price}$
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "7px 0",
+            }}
+          >
+            <div style={{ fontWeight: "bolder" }}>Price</div>
+            <div style={{ fontSize: "1em", fontWeight: "bolder" }}>
+              {price / 100}$
+            </div>
           </div>
-          <div>
-            <span> Size: </span>
-            <span> {width} </span>
-            <span> X </span>
-            <span> {height} </span>
-            <span
-              style={{
-                borderRadius: "3px",
-                marginLeft: "3px",
-              }}
-            >
-              cm
-            </span>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "7px 0",
+            }}
+          >
+            <div style={{ fontWeight: "bolder" }}>Size</div>
+            <div>
+              <div>
+                <span> {width} </span>
+                <span> X </span>
+                <span> {height} </span>
+                <span
+                  style={{
+                    borderRadius: "3px",
+                    marginLeft: "3px",
+                  }}
+                >
+                  cm
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "7px 0",
+            }}
+          >
+            <div style={{ fontWeight: "bolder" }}>Stock</div>
+            <div>{stock}</div>
           </div>
         </div>
       </div>

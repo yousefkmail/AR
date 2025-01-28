@@ -1,6 +1,7 @@
 import { ProductItem } from "./ProductItem";
 
-export class Plane extends ProductItem {
-  width: number = 0;
-  height: number = 0;
+export interface Plane extends ProductItem {
+  width: number;
+  height: number;
+  stock: number;
 }

@@ -6,6 +6,6 @@ interface Layer {
   width: number;
 }
 
-export class Basis extends Plane {
-  layers: Layer[] = [];
+export interface Basis extends Plane {
+  layers: Layer[];
 }

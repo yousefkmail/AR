@@ -1,7 +1,7 @@
-export class ProductItem {
-  price: number = 0;
-  id: string = "";
-  previewImage: string = "";
-  name: string = "";
-  description: string = "";
+export interface ProductItem {
+  price: number;
+  id: string;
+  previewImage: string;
+  name: string;
+  description: string;
 }

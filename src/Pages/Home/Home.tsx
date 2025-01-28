@@ -2,17 +2,31 @@ import { useQuery } from "@tanstack/react-query";
 import PageWidthLayout from "../../Layout/PageWidthLayout";
 import HomeAboutSection from "./HomeAboutSection";
 import HomePersonProfile from "./HomePersonProfile";
-import { dataService } from "../../Services/Services";
 import { AboutSection } from "../../DataService/Models/AboutSectionModel";
 import HomeAboutSkeleton from "./HomeAboutSkeleton";
 import HomePersonProfileSkeleton from "./HomePersonProfileSkeleton";
 import Skeleton from "react-loading-skeleton";
+import {
+  GetAboutSections,
+  GetTeamMembers,
+} from "../../Contentful/ContentfulClient";
 
 export default function Home() {
   const { data, isLoading } = useQuery({
     queryKey: ["aboutSections"],
     queryFn: async () => {
-      return await dataService.GetAboutSections();
+      const sections = await GetAboutSections();
+      return sections.map((item) => {
+        return {
+          description: item.fields.description,
+          grayBackground: item.fields.grayBackground,
+          id: item.fields.id,
+          image: item.fields.previewImage?.fields.file?.url ?? "",
+          label: item.fields.label,
+          leftDirection: item.fields.leftDirection,
+          order: item.fields.order,
+        };
+      });
     },
     staleTime: Infinity,
     cacheTime: Infinity,
@@ -21,7 +35,14 @@ export default function Home() {
   const { data: members, isLoading: membersLoading } = useQuery({
     queryKey: ["teamMembers"],
     queryFn: async () => {
-      return await dataService.GetTeamMembers();
+      const members = await GetTeamMembers();
+      return members.map((item) => {
+        return {
+          name: item.fields.name,
+          profilePicture: item.fields.profilePicture?.fields.file?.url ?? "",
+          role: item.fields.role,
+        };
+      });
     },
     staleTime: Infinity,
     cacheTime: Infinity,

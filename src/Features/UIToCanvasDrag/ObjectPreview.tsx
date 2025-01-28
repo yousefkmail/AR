@@ -6,12 +6,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { IRenderable } from "../../Interfaces/IRenderable";
 import { Object3D, Object3DEventMap } from "three";
 
 interface ObjectPreviewContextProps {
-  preview: IRenderable | null;
-  setPreview: Dispatch<SetStateAction<IRenderable | null>>;
+  preview: object | null;
+  setPreview: Dispatch<SetStateAction<object | null>>;
   previewRef: MutableRefObject<Object3D<Object3DEventMap> | null>;
 }
 
@@ -20,7 +19,7 @@ export const ObjectPreviewContext = createContext<ObjectPreviewContextProps>(
 );
 
 export const ObjectPreviewContextProvider = ({ children }: any) => {
-  const [preview, setPreview] = useState<IRenderable | null>(null);
+  const [preview, setPreview] = useState<object | null>(null);
   const previewRef = useRef<Object3D<Object3DEventMap>>(null);
   return (
     <ObjectPreviewContext.Provider value={{ preview, setPreview, previewRef }}>

@@ -4,8 +4,6 @@ interface DragableItemProps extends HTMLAttributes<HTMLDivElement> {
   OnDragStart?: () => void;
 }
 export default function DraggableItem({
-  OnDragStart,
-
   children,
   ...rest
 }: DragableItemProps) {

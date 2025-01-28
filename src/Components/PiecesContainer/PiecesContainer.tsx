@@ -5,13 +5,10 @@ import { PiecesSelectStyle } from "../../CustomStyles/react-select/PiecesSelectS
 import DraggableBasis from "../DraggableBasis";
 import { DragEvent, useContext } from "react";
 import { DraggedPieceContext } from "../../Context/DraggedPieceContext";
-import { BasisPlaneViewModel } from "../../Core/Viewmodels/BasisPlaneViewModel";
-import { BasisPlane } from "../../Core/BasisPlane";
-import { PiecePlaneViewModel } from "../../Core/Viewmodels/PiecePlaneViewModel";
-import { PiecePlane } from "../../Core/PiecePlane";
-import { Vector3 } from "three";
+import { PieceObject } from "../../Core/PiecePlane";
 import { useFullPieces } from "../../Hooks/useFullPieces";
-
+import { TemplateObject } from "../../Core/Template";
+import { v4 as uuidv4 } from "uuid";
 export const PiecesContainer = () => {
   const {
     activePieces,
@@ -22,7 +19,7 @@ export const PiecesContainer = () => {
     SetPiecesCategoryAsActivePlanes,
   } = usePlanesQuery();
 
-  const { DispatchCreatedPieces, DispatchCreatedBasis } = useFullPieces();
+  const { DispatchCreatedPieces, DispatchCreatedTemplates } = useFullPieces();
   const handleChange = (option: OptionType | null) => {
     if (option) {
       SetPiecesCategoryAsActivePlanes(option.value);
@@ -56,18 +53,46 @@ export const PiecesContainer = () => {
                   const img = new Image();
                   img.src = "";
                   event.dataTransfer.setDragImage(img, 0, 0);
-                  setDraggedItem(
-                    new BasisPlaneViewModel(
-                      new BasisPlane({
-                        ...item,
-                      })
-                    )
-                  );
+                  const newTemplate: TemplateObject = {
+                    id: uuidv4(),
+                    position: [1, 1, 1],
+                    rotation: [90, 0, 0],
+                    scale: [1, 1, 1],
+                    templateModel: {
+                      children: [],
+                      description: "",
+                      base: item,
+                      id: uuidv4(),
+                      name: "Tempolate",
+                      previewImage: "",
+                      price: 0,
+                      tags: [],
+                    },
+                  };
+
+                  setDraggedItem(newTemplate);
                 }}
                 onClick={() => {
-                  const plane = new BasisPlaneViewModel(new BasisPlane(item));
-                  plane.BasisPlane.position = new Vector3(1, 1, 1);
-                  DispatchCreatedBasis({ type: "add", payload: plane });
+                  const newTemplate: TemplateObject = {
+                    id: uuidv4(),
+                    position: [1, 1, 1],
+                    rotation: [90, 0, 0],
+                    scale: [1, 1, 1],
+                    templateModel: {
+                      children: [],
+                      description: "",
+                      base: item,
+                      id: uuidv4(),
+                      name: "Tempolate",
+                      previewImage: "",
+                      price: 0,
+                      tags: [],
+                    },
+                  };
+                  DispatchCreatedTemplates({
+                    type: "add",
+                    payload: newTemplate,
+                  });
                 }}
                 key={item.id}
                 {...item}
@@ -79,14 +104,27 @@ export const PiecesContainer = () => {
                   const img = new Image();
                   img.src = "";
                   event.dataTransfer.setDragImage(img, 0, 0);
-                  setDraggedItem(new PiecePlaneViewModel(new PiecePlane(item)));
+
+                  const newPiece: PieceObject = {
+                    id: uuidv4(),
+                    piece: item,
+                    position: [1, 1, 1],
+                    rotation: [0, 0, 0],
+                    scale: [1, 1, 1],
+                  };
+
+                  setDraggedItem(newPiece);
                 }}
                 onClick={() => {
-                  const plane = new PiecePlaneViewModel(new PiecePlane(item));
+                  const newPiece: PieceObject = {
+                    id: uuidv4(),
+                    piece: item,
+                    position: [1, 1, 1],
+                    rotation: [0, 0, 0],
+                    scale: [1, 1, 1],
+                  };
 
-                  plane.PiecePlane.position = new Vector3(1, 1, 1);
-
-                  DispatchCreatedPieces({ type: "add", payload: plane });
+                  DispatchCreatedPieces({ type: "add", payload: newPiece });
                 }}
                 key={item.id}
                 {...item}

@@ -31,7 +31,6 @@ export default function PremadeTemplates({
   return (
     <CenterLayout horizontal>
       <div>
-        <h2>Start from a template</h2>
         <GridLayout cellMinWidth={cellMinWidth ?? 250}>
           {templates ? (
             templates?.map((item) => (

@@ -32,11 +32,11 @@ export default function MobileCart() {
                 totalPrice={parseFloat(
                   (item.item.price * item.quantity).toFixed(2)
                 )}
+                price={parseFloat(item.item.price.toFixed(2))}
                 key={item.item.id}
               ></CartItemMobile>
             ))}
           </div>
-
           <div style={{ marginTop: "30px" }}>
             <div
               style={{
@@ -63,11 +63,11 @@ export default function MobileCart() {
               {productItems?.map((item) => {
                 return (
                   <CartItemMobile
-                    onIncrease={() => increaseProductItem(item.item.id)}
-                    onDecrease={() => decreaseProductItem(item.item.id)}
+                    onIncrease={() => increaseProductItem(item.item)}
+                    onDecrease={() => decreaseProductItem(item.item)}
                     className="cart-item-container cart-item-container-mobile"
-                    quantity={item.quantity}
                     {...item.item}
+                    quantity={item.quantity}
                     totalPrice={parseFloat(
                       (item.item.price * item.quantity).toFixed(2)
                     )}
@@ -128,10 +128,11 @@ export default function MobileCart() {
                       fontWeight: "bold",
                     }}
                   >
-                    {productItems?.reduce(
-                      (prev, next) => prev + next.quantity * next.item.price,
-                      0
-                    )}
+                    {productItems &&
+                      productItems.reduce(
+                        (prev, next) => prev + next.quantity * next.item.price,
+                        0
+                      ) / 100}
                     $
                   </span>
                 </div>

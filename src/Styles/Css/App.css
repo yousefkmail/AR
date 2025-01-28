@@ -26,7 +26,7 @@
     --border-secondary-color: rgb(0, 0, 0);
     /* --border-secondary-color: white; */
     --footer-color: black;
-    --footer-text: white;
+    --footer-text: black;
     --default-border: 1px solid var(--border-primary-color);
     --secondary-border: 1px solid var(--border-secondary-color);
 
@@ -289,7 +289,6 @@ body {
 }
 
 .footer {
-    background-color: var(--footer-color);
     color: var(--footer-text)
 }
 
@@ -305,7 +304,6 @@ body {
     display: flex;
     justify-content: center;
     height: 50px;
-    border-top: var(--default-border);
 }
 
 .footer-link {
@@ -584,6 +582,52 @@ body {
     display: grid;
     place-items: center;
     margin-bottom: 70px;
+}
+
+.PhoneInput {
+    display: flex;
+    flex-grow: 1;
+    margin: 10px;
+}
+
+.PhoneInputInput {
+    flex-grow: 1;
+    padding: 16.5px 14px;
+    border: var(--default-border);
+    border-radius: 4px;
+}
+
+.PhoneInputCountry {
+    margin-right: 10px;
+    border-radius: 4px;
+
+}
+
+.PhoneInputCountryIcon {
+    display: none;
+}
+
+.PhoneInputCountrySelect {
+    padding: 16.5px 14px;
+    border: var(--default-border);
+}
+
+.builder_windows-container {
+    height: calc(100vh - 40px);
+    transition: height ease-out 0.3s, width ease-out 0.3s;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 350px;
+    z-index: 2342;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.builder_windows-container-minimized {
+    height: 55px;
+    width: 200px;
 }
 
 @media (max-width: 768px) {
