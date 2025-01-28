@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import { PieceObject } from "../Core/PiecePlane";
 
 export type CreatedPiecesAction =

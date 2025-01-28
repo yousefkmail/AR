@@ -117,7 +117,7 @@ export const ScenePiecesContainer = forwardRef<
   };
 
   const handleChildPieceDrag = (
-    object: Object3D<Object3DEventMap>,
+    _object: Object3D<Object3DEventMap>,
     pieceChild: PieceChild,
     parent: Object3D<Object3DEventMap>,
     parentTemplate: TemplateObject

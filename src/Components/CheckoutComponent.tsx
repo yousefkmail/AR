@@ -49,7 +49,6 @@ const PaymentComponent = ({ paymentSession }: PaymentcomponentProps) => {
     createPaymentSession();
 
     const urlParams = new URLSearchParams(window.location.search);
-    const paymentStatus = urlParams.get("status");
     const paymentId = urlParams.get("cko-payment-id");
 
     if (paymentId) {

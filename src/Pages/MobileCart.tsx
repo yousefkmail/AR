@@ -1,11 +1,13 @@
 import { useCart } from "../Features/Cart/useCart";
 import PageWidthLayout from "../Layout/PageWidthLayout";
 import CartItemMobile from "../Features/Cart/Components/CartItemMobile";
+import { CalculatePrice, MinimumPriceUnitToUSD } from "../Utils/CurrencyUtils";
 
 export default function MobileCart() {
   const {
     items,
-    productItems,
+    piecesItems,
+    basesItems,
     increaseItem,
     decreaseItem,
     removeItem,
@@ -29,10 +31,8 @@ export default function MobileCart() {
                 className="cart-item-container cart-item-container-mobile"
                 quantity={item.quantity}
                 {...item.item}
-                totalPrice={parseFloat(
-                  (item.item.price * item.quantity).toFixed(2)
-                )}
-                price={parseFloat(item.item.price.toFixed(2))}
+                price={MinimumPriceUnitToUSD(item.item.price)}
+                totalPrice={CalculatePrice(item.quantity, item.item.price)}
                 key={item.item.id}
               ></CartItemMobile>
             ))}
@@ -60,17 +60,30 @@ export default function MobileCart() {
             </div>
 
             <div className="cart-items">
-              {productItems?.map((item) => {
+              {piecesItems?.map((item) => {
                 return (
                   <CartItemMobile
                     onIncrease={() => increaseProductItem(item.item)}
                     onDecrease={() => decreaseProductItem(item.item)}
-                    className="cart-item-container cart-item-container-mobile"
+                    className="cart-item-container"
                     {...item.item}
                     quantity={item.quantity}
-                    totalPrice={parseFloat(
-                      (item.item.price * item.quantity).toFixed(2)
-                    )}
+                    price={MinimumPriceUnitToUSD(item.item.price)}
+                    totalPrice={CalculatePrice(item.item.price, item.quantity)}
+                    key={item.item.id}
+                  ></CartItemMobile>
+                );
+              })}
+              {basesItems?.map((item) => {
+                return (
+                  <CartItemMobile
+                    onIncrease={() => increaseProductItem(item.item)}
+                    onDecrease={() => decreaseProductItem(item.item)}
+                    className="cart-item-container"
+                    {...item.item}
+                    quantity={item.quantity}
+                    price={MinimumPriceUnitToUSD(item.item.price)}
+                    totalPrice={CalculatePrice(item.item.price, item.quantity)}
                     key={item.item.id}
                   ></CartItemMobile>
                 );
@@ -106,34 +119,14 @@ export default function MobileCart() {
                       fontWeight: "bold",
                     }}
                   >
-                    {productItems?.reduce(
+                    {(piecesItems?.reduce(
                       (prev, next) => prev + next.quantity,
                       0
-                    )}
-                  </span>
-                </div>
-                <div
-                  style={{
-                    maxWidth: "800px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "20px",
-                  }}
-                >
-                  <span>Subtotal</span>
-                  <span
-                    style={{
-                      display: "inline-block",
-                      minWidth: "50px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {productItems &&
-                      productItems.reduce(
-                        (prev, next) => prev + next.quantity * next.item.price,
+                    ) ?? 0) +
+                      (basesItems?.reduce(
+                        (prev, next) => prev + next.quantity,
                         0
-                      ) / 100}
-                    $
+                      ) ?? 0)}
                   </span>
                 </div>
               </div>
