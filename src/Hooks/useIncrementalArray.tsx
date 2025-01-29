@@ -24,6 +24,15 @@ export function useIncrementalArray<T extends IncrementalArrayItem>(
   const [items, setItems] = useState<T[]>([]);
 
   const addItem = (newItem: T) => {
+    if (
+      incrementalArrayThreshouldBehaviour !==
+        IncrementalArrayThreshouldBehaviour.AllowNegative &&
+      newItem.quantity < 0
+    ) {
+      throw new Error(
+        "Cannot add item with negative quantity to a non negative incremental array."
+      );
+    }
     setItems((prevItems) => {
       const existingItem = prevItems.find((entry) => compareFn(entry, newItem));
       if (existingItem) {

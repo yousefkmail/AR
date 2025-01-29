@@ -26,7 +26,6 @@ export default function CollectionAddToCartPopup({
   const { register, handleSubmit, watch } = useForm<AddToCartFormProps>();
 
   const OnSubmit = ({ name, quantity }: AddToCartFormProps) => {
-    console.log(name, quantity);
     onAddToCartPressed?.(Number(quantity), name);
   };
 

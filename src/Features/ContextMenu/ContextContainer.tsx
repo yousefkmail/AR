@@ -123,8 +123,6 @@ export default function ContextContainer() {
   const { addItem } = useCart();
 
   const AddToCart = (quantity: number, name: string) => {
-    console.log(typeof quantity);
-
     if (activeObject && "templateModel" in activeObject) {
       const template: TemplateModel = {
         ...activeObject.templateModel,
@@ -192,7 +190,6 @@ export default function ContextContainer() {
         <CollectionAddToCartPopup
           isShown={addToCartOpened}
           name={(() => {
-            console.log(activeObject);
             if (activeObject && "templateModel" in activeObject) {
               return activeObject.templateModel.name;
             }
