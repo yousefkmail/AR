@@ -393,7 +393,7 @@ body {
     pointer-events: all;
     padding: 7px;
     background-color: transparent;
-    border: none,
+    border: none;
 }
 
 .contextmenu-button:hover {
