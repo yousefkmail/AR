@@ -35,7 +35,7 @@ export default function UserInfoFilling() {
   const onSubmit = async (orderInfo: OrderInfo) => {
     setIsLoading(true);
     const createdOrder = await fetch(
-      import.meta.env.VITE_FUNCTIION_CREATE_ORDER,
+      import.meta.env.VITE_FUNCTIION_CREATE_ORDER_URL,
       {
         method: "POST",
         body: JSON.stringify({
