@@ -75,7 +75,8 @@ export class BackendDataService implements IDataService {
       description: unresolvedTemplate.description,
       name: unresolvedTemplate.name,
       previewImage: unresolvedTemplate.previewImage,
-      tags: unresolvedTemplate.tags,
+      createdAt: unresolvedTemplate.createdAt,
+      updatedAt: unresolvedTemplate.updatedAt,
     };
 
     return resolvedTemplate;

@@ -21,21 +21,23 @@ export default function DraggableBasis({
   return (
     <DraggableItem {...rest}>
       <div className="drag-image-inner">
-        <img
-          draggable={false}
-          style={{
-            width: "100%",
-            height: "120px",
-            aspectRatio: "5/1",
-            objectFit: "contain",
-            backgroundColor: "#eee",
-            borderRadius: "10px",
+        <div style={{ width: "100%", height: "120px" }}>
+          <img
+            loading="lazy"
+            draggable={false}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              backgroundColor: "#eee",
+              borderRadius: "10px",
+              padding: "5px",
+            }}
+            src={previewImage}
+            alt=""
+          />
+        </div>
 
-            padding: "5px",
-          }}
-          src={previewImage}
-          alt=""
-        />
         <div
           style={{
             display: "flex",

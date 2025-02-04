@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CategoryTag from "../CategoryTag/CategoryTag";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as FaSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import Spacer from "../../Layout/Spacer";
@@ -71,11 +70,11 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
           </div>
         </Spacer>
 
-        <Spacer padding={4}>
+        {/* <Spacer padding={4}>
           {item?.template.tags?.map((item) => (
             <CategoryTag>{item}</CategoryTag>
           ))}
-        </Spacer>
+        </Spacer> */}
 
         <Spacer padding={4}>
           <div style={{ display: "flex" }}>

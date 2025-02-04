@@ -622,12 +622,13 @@ body {
     z-index: 2342;
     background-color: white;
     border-radius: 10px;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 .builder_windows-container-minimized {
     height: 55px;
     width: 200px;
+    overflow: hidden;
 }
 
 @media (max-width: 768px) {

@@ -1,4 +1,4 @@
-import {
+import React, {
   forwardRef,
   Suspense,
   useEffect,
@@ -6,7 +6,8 @@ import {
   useRef,
 } from "react";
 import { useFullPieces } from "../../Hooks/useFullPieces";
-import { PngPlane, PngPlaneRef } from "../PngPlane/PngPlane";
+import { PngPlaneRef } from "../PngPlane/PngPlane";
+const PngPlane = React.lazy(() => import("../PngPlane/PngPlane"));
 import {
   Group,
   MathUtils,
@@ -153,16 +154,14 @@ export const ScenePiecesContainer = forwardRef<
       const position = NDCToObjectWorld(mousePos, parent, camera);
       let xPos = parent?.worldToLocal(position).x;
 
+      let moveableAreaWidth =
+        parentTemplate.templateModel.base.layers[pieceChild.layer].width ?? 0;
+
       const rightOffset =
-        (parentTemplate.templateModel.base.width / 2 -
-          GetPieceRight(pieceChild.piece)) /
-        50;
+        (moveableAreaWidth / 2 - GetPieceRight(pieceChild.piece)) / 50;
 
       const leftOffset =
-        -(
-          parentTemplate.templateModel.base.width / 2 -
-          GetPieceLeft(pieceChild.piece)
-        ) / 50;
+        -(moveableAreaWidth / 2 - GetPieceLeft(pieceChild.piece)) / 50;
 
       DispatchCreatedTemplates({
         type: "move_child",
@@ -218,88 +217,94 @@ export const ScenePiecesContainer = forwardRef<
     <Suspense>
       <group ref={groupRef}>
         {createdPieces.map((pieceObject, index) => (
-          <PngPlane
-            key={pieceObject.id}
-            ref={(item) => (piecesRefs.current[index] = item!)}
-            onDrag={() =>
-              handlePieceDrag(piecesRefs.current[index], pieceObject)
-            }
-            onDrop={(event: MouseEvent) => {
-              handlePieceDropped(pieceObject, piecesRefs.current[index]);
-              setActiveObject(pieceObject);
-              PlaceMenuAtMouseposition(event);
-              openMenu();
-            }}
-            {...pieceObject.piece}
-            id={pieceObject.id}
-            position={ArrayToVector3(pieceObject.position)}
-            rotation={ArrayToVector3(pieceObject.rotation)}
-            scale={
-              pieceObject.piece.isFlipable && pieceObject.piece.isFlipped
-                ? new Vector3(-1, 1, 1)
-                : new Vector3(1, 1, 1)
-            }
-            applyOffset
-          />
+          <Suspense>
+            <PngPlane
+              key={pieceObject.id}
+              ref={(item) => (piecesRefs.current[index] = item!)}
+              onDrag={() =>
+                handlePieceDrag(piecesRefs.current[index], pieceObject)
+              }
+              onDrop={(event: MouseEvent) => {
+                handlePieceDropped(pieceObject, piecesRefs.current[index]);
+                setActiveObject(pieceObject);
+                PlaceMenuAtMouseposition(event);
+                openMenu();
+              }}
+              {...pieceObject.piece}
+              id={pieceObject.id}
+              position={ArrayToVector3(pieceObject.position)}
+              rotation={ArrayToVector3(pieceObject.rotation)}
+              scale={
+                pieceObject.piece.isFlipable && pieceObject.piece.isFlipped
+                  ? new Vector3(-1, 1, 1)
+                  : new Vector3(1, 1, 1)
+              }
+              applyOffset
+            />
+          </Suspense>
         ))}
         {createdTemplates.map((item, index) => (
-          <PngPlane
-            onDrag={() => {
-              handleTemplateDrag(templatesRef.current[index], item);
-            }}
-            onDrop={(event) => {
-              setActiveObject(item);
-              PlaceMenuAtMouseposition(event);
-              openMenu();
-            }}
-            key={item.id}
-            ref={(item) => (templatesRef.current[index] = item!)}
-            {...item.templateModel.base}
-            position={ArrayToVector3(item.position)}
-            rotation={ArrayToVector3(item.rotation)}
-            scale={ArrayToVector3(item.scale)}
-            id={item.id}
-          >
-            {item.templateModel.children.map((child, childIndex) => (
-              <PngPlane
-                onDrag={() =>
-                  handleChildPieceDrag(
-                    templatesRef.current[index].container.children[childIndex],
-                    child,
-                    templatesRef.current[index].container,
-                    item
-                  )
-                }
-                onDrop={(event) => {
-                  if (movementMode === MovementMode.Parent) {
-                    setActiveObject(item);
-                  } else setActiveObject(child);
-                  PlaceMenuAtMouseposition(event);
-                  openMenu();
-                }}
-                key={child.id}
-                {...child.piece}
-                id={child.id}
-                scale={
-                  child.piece.isFlipable && child.piece.isFlipped
-                    ? new Vector3(-1, 1, 1)
-                    : new Vector3(1, 1, 1)
-                }
-                applyOffset
-                rotation={new Vector3(-90, 0, 0)}
-                position={
-                  new Vector3(
-                    child.position[0],
-                    ((item.templateModel.base?.layers[child.layer]
-                      ?.positionOffset ?? 0) +
-                      childIndex * 0.01) /
-                      50,
-                    child.position[2]
-                  )
-                }
-              />
-            ))}
-          </PngPlane>
+          <Suspense>
+            <PngPlane
+              onDrag={() => {
+                handleTemplateDrag(templatesRef.current[index], item);
+              }}
+              onDrop={(event) => {
+                setActiveObject(item);
+                PlaceMenuAtMouseposition(event);
+                openMenu();
+              }}
+              key={item.id}
+              ref={(item) => (templatesRef.current[index] = item!)}
+              {...item.templateModel.base}
+              position={ArrayToVector3(item.position)}
+              rotation={ArrayToVector3(item.rotation)}
+              scale={ArrayToVector3(item.scale)}
+              id={item.id}
+            >
+              {item.templateModel.children.map((child, childIndex) => (
+                <PngPlane
+                  onDrag={() =>
+                    handleChildPieceDrag(
+                      templatesRef.current[index].container.children[
+                        childIndex
+                      ],
+                      child,
+                      templatesRef.current[index].container,
+                      item
+                    )
+                  }
+                  onDrop={(event) => {
+                    if (movementMode === MovementMode.Parent) {
+                      setActiveObject(item);
+                    } else setActiveObject(child);
+                    PlaceMenuAtMouseposition(event);
+                    openMenu();
+                  }}
+                  key={child.id}
+                  {...child.piece}
+                  id={child.id}
+                  scale={
+                    child.piece.isFlipable && child.piece.isFlipped
+                      ? new Vector3(-1, 1, 1)
+                      : new Vector3(1, 1, 1)
+                  }
+                  applyOffset
+                  rotation={new Vector3(-90, 0, 0)}
+                  position={
+                    new Vector3(
+                      child.position[0],
+                      ((item.templateModel.base?.layers[child.layer]
+                        ?.positionOffset ?? 0) +
+                        childIndex * 0.01) /
+                        50,
+                      child.position[2]
+                    )
+                  }
+                />
+              ))}
+            </PngPlane>
+          </Suspense>
         ))}
         <PreviewHandler></PreviewHandler>
       </group>

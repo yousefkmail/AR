@@ -18,13 +18,11 @@ interface UnresolvedPieceChild {
 }
 
 export interface TemplateModel extends ProductItem {
-  tags: string[];
   base: Basis;
   children: PieceChild[];
 }
 
 export interface UnresolvedTemplateModel extends ProductItem {
-  tags: string[];
   base: DocumentReference;
   children: UnresolvedPieceChild[];
 }

@@ -4,4 +4,6 @@ export interface ProductItem {
   previewImage: string;
   name: string;
   description: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

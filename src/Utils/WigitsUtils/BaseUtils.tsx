@@ -1,1 +1,1 @@
-export const GetBaseRight = () => {};
+export const GetChildNeightbours = () => {};

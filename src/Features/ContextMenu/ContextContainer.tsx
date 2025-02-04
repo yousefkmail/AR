@@ -5,12 +5,18 @@ import BasisContextMenu from "./BasisContextMenu";
 import { useEffect, useState } from "react";
 import { useCart } from "../Cart/useCart";
 import { v4 as uuidv4 } from "uuid";
-import { TemplateModel } from "../../DataService/Models/TemplateModel";
+import {
+  TemplateModel,
+  UnresolvedTemplateModel,
+} from "../../DataService/Models/TemplateModel";
 import { TemplateObject } from "../../Core/Template";
 import { PieceObject } from "../../Core/PiecePlane";
 import CollectionAddToCartPopup from "./CollectionAddToCartPopup";
 import { Piece } from "../../DataService/Models/PieceModel";
-
+import { addDoc, collection, doc } from "firebase/firestore";
+import { firestore } from "../../Firebase/firebaseApp";
+import AddTemplatePopup from "./AddTemplatePopup";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 export default function ContextContainer() {
   const { isOpened, menuPosition, close, activeObject } =
     useObjectContextMenu();
@@ -20,6 +26,7 @@ export default function ContextContainer() {
   const [layer, setLayer] = useState<LayerOption>({ label: "1", value: 1 });
 
   const [addToCartOpened, setAddToCartOpened] = useState<boolean>(false);
+  const [addTemplateOpened, setAddTemplateOpened] = useState<boolean>(false);
   const {
     DispatchCreatedPieces,
     Deattach_Piece,
@@ -147,6 +154,44 @@ export default function ContextContainer() {
     setAddToCartOpened(true);
   };
 
+  const AddTemplateToDatabase = async (
+    name: string,
+    description: string,
+    file?: File
+  ) => {
+    if (!file) return;
+
+    const storage = getStorage(); // Ensure Firebase is initialized in your project
+    const storageRef = ref(storage, `templates/${file.name}`);
+    const uploadTask = await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(uploadTask.ref);
+    if (!activeObject) return;
+    if (!("templateModel" in activeObject)) return;
+
+    const collectionRef = collection(firestore, "bases");
+
+    const item: UnresolvedTemplateModel = {
+      base: doc(collectionRef, activeObject.templateModel.base.id),
+      name,
+      children: activeObject.templateModel.children.map((item) => ({
+        piece: doc(collection(firestore, "pieces"), item.piece.id),
+        id: item.id,
+        layer: item.layer,
+        position: item.position,
+      })),
+      description,
+      previewImage: url,
+      price: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      id: "",
+    };
+
+    const templatesCollection = collection(firestore, "templates");
+
+    await addDoc(templatesCollection, item);
+  };
+
   return (
     <div className="contextMenu_container" style={{ zIndex: 5200 }}>
       {isOpened &&
@@ -159,6 +204,7 @@ export default function ContextContainer() {
             posX={menuPosition.x}
             posY={menuPosition.y}
             onAddToCartPressed={OpenAddToCart}
+            onAddToSiteAsTemplate={() => setAddTemplateOpened(true)}
           />
         ) : (
           <PieceContextMenu
@@ -203,6 +249,24 @@ export default function ContextContainer() {
             AddToCart(amount, name);
           }}
           onClose={() => setAddToCartOpened(false)}
+        />
+      </div>
+
+      <div>
+        {addTemplateOpened && (
+          <div
+            style={{
+              backgroundColor: "rgba(128,128,128,0.2)",
+              position: "fixed",
+              inset: "0",
+            }}
+          ></div>
+        )}
+
+        <AddTemplatePopup
+          isShown={addTemplateOpened}
+          onClose={() => setAddTemplateOpened(false)}
+          onAddTemplatePressed={AddTemplateToDatabase}
         />
       </div>
     </div>

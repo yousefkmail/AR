@@ -7,7 +7,9 @@ export default function MainLayout() {
   return (
     <BottomFooterLayour
       Page={
-        <div>
+        <div
+          style={{ flexGrow: "1", display: "flex", flexDirection: "column" }}
+        >
           <Navbar />
           <Outlet />
         </div>

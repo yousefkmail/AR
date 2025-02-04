@@ -9,3 +9,7 @@ export const To2DigitFixed = (number: number) => {
 export const CalculatePrice = (price: number, quantity: number) => {
   return To2DigitFixed(MinimumPriceUnitToUSD(price * quantity));
 };
+
+export const GetCurrencyFormat = (price: number) => {
+  return `$${price}`;
+};

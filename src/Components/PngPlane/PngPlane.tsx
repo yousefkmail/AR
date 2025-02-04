@@ -39,7 +39,7 @@ interface PngPlaneProps {
   onDrop?: (event: MouseEvent) => void;
 }
 
-export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
+const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
   (props: PngPlaneProps, ref) => {
     const { id } = props;
     const texture = useTexture(props.previewImage ?? "");
@@ -65,6 +65,7 @@ export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
 
     return (
       <>
+        {" "}
         <group
           scale={[
             props?.scale?.x ?? 1,
@@ -118,3 +119,5 @@ export const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
     );
   }
 );
+
+export default PngPlane;

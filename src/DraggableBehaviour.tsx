@@ -101,32 +101,32 @@
 //         },
 //       });
 
-//       // const basis = FindBaseWithId(draggedPieceData.parent.id);
+//       const basis = FindBaseWithId(draggedPieceData.parent.id);
 
-//       // if (!basis) return;
+//       if (!basis) return;
 
-//       // let [leftChild, rightChild] = basis.getNeighbours(draggedPieceData);
+//       let [leftChild, rightChild] = basis.getNeighbours(draggedPieceData);
 
-//       // if (draggedPieceData.PiecePlane.position.x - xPos > 0) {
-//       //   if (leftChild) {
-//       //     const minPosX = leftChild.rightPosition();
-//       //     xPos = THREE.MathUtils.clamp(
-//       //       xPos,
-//       //       minPosX + draggedPieceData.PiecePlane.width / 100,
-//       //       Infinity
-//       //     );
-//       //   }
-//       // } else {
-//       //   if (rightChild) {
-//       //     const maxPosX = rightChild.leftPosition();
+//       if (draggedPieceData.PiecePlane.position.x - xPos > 0) {
+//         if (leftChild) {
+//           const minPosX = leftChild.rightPosition();
+//           xPos = THREE.MathUtils.clamp(
+//             xPos,
+//             minPosX + draggedPieceData.PiecePlane.width / 100,
+//             Infinity
+//           );
+//         }
+//       } else {
+//         if (rightChild) {
+//           const maxPosX = rightChild.leftPosition();
 
-//       //     xPos = THREE.MathUtils.clamp(
-//       //       xPos,
-//       //       -Infinity,
-//       //       maxPosX - draggedPieceData.PiecePlane.width / 100
-//       //     );
-//       //   }
-//       // }
+//           xPos = THREE.MathUtils.clamp(
+//             xPos,
+//             -Infinity,
+//             maxPosX - draggedPieceData.PiecePlane.width / 100
+//           );
+//         }
+//       }
 //     } else {
 //       raycaster.current.setFromCamera(mousePos, camera);
 //       SetObjectLayerTraverse(DraggedRef.current, 1);

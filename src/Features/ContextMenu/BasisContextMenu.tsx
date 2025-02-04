@@ -1,10 +1,12 @@
 import { ChangeEvent, useState } from "react";
 import FloatingContainer from "../../Components/FloatingContainer/FloatingContainer";
 import { Slider } from "@mui/material";
+import { getAuth } from "firebase/auth";
 import {
   faTrash,
   faRotate,
   faCartShopping,
+  faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 interface ObjectContextMenuProps {
@@ -14,6 +16,7 @@ interface ObjectContextMenuProps {
   OnRotationChangd: (number: number) => void;
   onAddToCartPressed: () => void;
   RotationValue: number;
+  onAddToSiteAsTemplate: () => void;
 }
 export default function BasisContextMenu({
   posX,
@@ -22,6 +25,7 @@ export default function BasisContextMenu({
   OnDelete,
   RotationValue,
   onAddToCartPressed,
+  onAddToSiteAsTemplate,
 }: Partial<ObjectContextMenuProps>) {
   const RotationChanged = (_event: Event, value: number | number[]) => {
     OnRotationChangd?.(value as number);
@@ -141,6 +145,22 @@ export default function BasisContextMenu({
             </div>
             Cart
           </button>
+
+          {getAuth().currentUser && (
+            <button
+              className={"contextmenu-button"}
+              onClick={() => onAddToSiteAsTemplate?.()}
+            >
+              <div style={{ marginBottom: "5px" }}>
+                <FontAwesomeIcon
+                  style={{ marginBottom: "3px" }}
+                  size="xl"
+                  icon={faDatabase}
+                />
+              </div>
+              Add template
+            </button>
+          )}
         </div>
       </div>
     </FloatingContainer>

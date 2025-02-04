@@ -66,7 +66,8 @@ export const PiecesContainer = () => {
                       name: "Tempolate",
                       previewImage: "",
                       price: 0,
-                      tags: [],
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
                     },
                   };
 
@@ -86,7 +87,8 @@ export const PiecesContainer = () => {
                       name: "Tempolate",
                       previewImage: "",
                       price: 0,
-                      tags: [],
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
                     },
                   };
                   DispatchCreatedTemplates({

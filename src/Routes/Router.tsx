@@ -4,6 +4,9 @@ import MainLayout from "../Layout/MainLayout";
 import { lazy, Suspense } from "react";
 import UserInfoFilling from "../Pages/UserInfoFilling/UserInfoFilling";
 import OrderPurchaseSuccess from "../Pages/OrderPurchaseSuccess";
+import Login from "../Pages/Admin/Login";
+import AuthComponent from "../Pages/Admin/Authcomponent";
+import Dashboard from "../Pages/Admin/Dashboard";
 
 const Home = lazy(() => import("../Pages/Home/Home"));
 const Cart = lazy(() => import("../Pages/Cart"));
@@ -23,6 +26,7 @@ export const AppRouter = createBrowserRouter([
           </Suspense>
         ),
       },
+
       {
         path: "cart",
         element: (
@@ -56,7 +60,29 @@ export const AppRouter = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: "admin",
+        element: <AuthComponent />,
+        children: [
+          {
+            path: "dashboard",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Dashboard />
+              </Suspense>
+            ),
+          },
+        ],
+      },
     ],
+  },
+  {
+    path: "admin-login",
+    element: (
+      <Suspense fallback={<div></div>}>
+        <Login />
+      </Suspense>
+    ),
   },
   {
     path: "3d_builder",
@@ -66,6 +92,7 @@ export const AppRouter = createBrowserRouter([
       </Suspense>
     ),
   },
+
   {
     path: "*",
     element: (
