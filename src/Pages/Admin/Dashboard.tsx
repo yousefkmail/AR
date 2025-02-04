@@ -1,4 +1,4 @@
-import { Admin, Layout, Resource } from "react-admin";
+import { Admin, Layout, Resource, defaultLightTheme } from "react-admin";
 import { FirebaseDataProvider } from "../../Firebase/FirebaseDataProvider";
 import PageWidthLayout from "../../Layout/PageWidthLayout";
 import { BasisList } from "../../React-admin/Basis/BasisList";
@@ -23,6 +23,7 @@ export default function Dashboard() {
       <div style={{ display: "flex", flexGrow: "1" }}>
         <PageWidthLayout maxWidth={1600}>
           <Admin
+            theme={defaultLightTheme}
             layout={(props) => <Layout {...props} appBar={undefined} />}
             dataProvider={firebaseDataProvider}
           >
