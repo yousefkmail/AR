@@ -24,11 +24,7 @@ export default function Login() {
     const auth = getAuth();
 
     try {
-      const user = await signInWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
+      await signInWithEmailAndPassword(auth, data.email, data.password);
       navigate("/admin/dashboard");
     } catch (e) {
       console.log("error logging in");

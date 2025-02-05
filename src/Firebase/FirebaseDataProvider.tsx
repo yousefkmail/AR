@@ -107,21 +107,19 @@ export class FirebaseDataProvider implements DataProvider {
   };
 
   delete = async (Resource: string, params: any) => {
-    const deleteDocument = await deleteDoc(
-      doc(collection(firestore, Resource), params.id)
-    );
+    await deleteDoc(doc(collection(firestore, Resource), params.id));
 
     return { data: {} as any, meta: {} };
   };
-  deleteMany = async (Resource: string, params: any) => {
+  deleteMany = async (_Resource: string, _params: any) => {
     const dataa: any = { id: "asd" };
     return { data: dataa, meta: {} };
   };
-  getMany = async (Resource: string, params: any) => {
+  getMany = async (_Resource: string, _params: any) => {
     const dataa: any = { id: "asd" };
     return { data: dataa, meta: {} };
   };
-  getManyReference = async (Resource: string, params: any) => {
+  getManyReference = async (_Resource: string, _params: any) => {
     const dataa: any = { id: "asd" };
     return { data: dataa, meta: {} };
   };
@@ -135,7 +133,7 @@ export class FirebaseDataProvider implements DataProvider {
       throw error; // Rethrow for handling in the caller function
     }
   };
-  updateMany = async (Resource: string, params: any) => {
+  updateMany = async (_Resource: string, _params: any) => {
     const dataa: any = { id: "asd" };
     return { data: dataa, meta: {} };
   };
