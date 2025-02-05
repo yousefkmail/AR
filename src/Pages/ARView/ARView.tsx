@@ -12,7 +12,7 @@ import { useState } from "react";
 const store = createXRStore();
 
 function RedWalls() {
-  const wallPlanes = useXRPlanes("wall");
+  const wallPlanes = useXRPlanes();
   return (
     <>
       {wallPlanes.map((plane) => (
