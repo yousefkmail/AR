@@ -58,7 +58,12 @@ export const ARView = () => {
     <>
       {/* Ensure the button directly calls enterAR */}
       <button onClick={enterAR}>Enter AR</button>
-      <h2 ref={ref}>asd</h2>
+      <h2
+        style={{ position: "absolute", top: "50", left: "0", zIndex: "9999" }}
+        ref={ref}
+      >
+        asd
+      </h2>
       <Canvas>
         {/* Pass the store to the XR component */}
         <XR store={store}>
