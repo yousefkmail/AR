@@ -7,7 +7,6 @@ import OrderPurchaseSuccess from "../Pages/OrderPurchaseSuccess";
 import Login from "../Pages/Admin/Login";
 import AuthComponent from "../Pages/Admin/Authcomponent";
 import Dashboard from "../Pages/Admin/Dashboard";
-import { ARView } from "../Pages/ARView/ARView";
 
 const Home = lazy(() => import("../Pages/Home/Home"));
 const Cart = lazy(() => import("../Pages/Cart"));
@@ -90,14 +89,6 @@ export const AppRouter = createBrowserRouter([
     element: (
       <Suspense fallback={<div></div>}>
         <Builder />
-      </Suspense>
-    ),
-  },
-  {
-    path: "AR/:id",
-    element: (
-      <Suspense fallback={<div></div>}>
-        <ARView />
       </Suspense>
     ),
   },
