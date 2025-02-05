@@ -7,7 +7,7 @@ import OrderPurchaseSuccess from "../Pages/OrderPurchaseSuccess";
 import Login from "../Pages/Admin/Login";
 import AuthComponent from "../Pages/Admin/Authcomponent";
 import Dashboard from "../Pages/Admin/Dashboard";
-import ARView from "../Pages/ARView/ARView";
+import { ARView } from "../Pages/ARView/ARView";
 
 const Home = lazy(() => import("../Pages/Home/Home"));
 const Cart = lazy(() => import("../Pages/Cart"));
