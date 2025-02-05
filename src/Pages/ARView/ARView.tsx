@@ -6,27 +6,32 @@ import {
   XRSpace,
   useXRPlanes,
 } from "@react-three/xr";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 // Create the XR store
 const store = createXRStore();
 
-function RedWalls() {
-  const wallPlanes = useXRPlanes();
-  return (
-    <>
-      {wallPlanes.map((plane) => (
-        <XRSpace space={plane.planeSpace}>
-          <XRPlaneModel plane={plane}>
-            <meshBasicMaterial color="red" />
-          </XRPlaneModel>
-        </XRSpace>
-      ))}
-    </>
-  );
-}
-
 export const ARView = () => {
+  const ref = useRef<HTMLHeadingElement | null>(null);
+
+  function RedWalls() {
+    const wallPlanes = useXRPlanes();
+    if (ref.current) {
+      ref.current.innerHTML = wallPlanes.length.toString();
+    }
+    return (
+      <>
+        {wallPlanes.map((plane) => (
+          <XRSpace space={plane.planeSpace}>
+            <XRPlaneModel plane={plane}>
+              <meshBasicMaterial color="red" />
+            </XRPlaneModel>
+          </XRSpace>
+        ))}
+      </>
+    );
+  }
+
   const enterAR = async () => {
     if (navigator.xr) {
       try {
@@ -53,6 +58,7 @@ export const ARView = () => {
     <>
       {/* Ensure the button directly calls enterAR */}
       <button onClick={enterAR}>Enter AR</button>
+      <h2 ref={ref}>asd</h2>
       <Canvas>
         {/* Pass the store to the XR component */}
         <XR store={store}>
