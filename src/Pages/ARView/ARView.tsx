@@ -1,9 +1,31 @@
 import { Canvas } from "@react-three/fiber";
-import { XR, createXRStore } from "@react-three/xr";
+import {
+  XR,
+  XRPlaneModel,
+  createXRStore,
+  useXRHitTest,
+  XRSpace,
+  useXRPlanes,
+} from "@react-three/xr";
 import { useState } from "react";
 
 // Create the XR store
 const store = createXRStore();
+
+function RedWalls() {
+  const wallPlanes = useXRPlanes("wall");
+  return (
+    <>
+      {wallPlanes.map((plane) => (
+        <XRSpace space={plane.planeSpace}>
+          <XRPlaneModel plane={plane}>
+            <meshBasicMaterial color="red" />
+          </XRPlaneModel>
+        </XRSpace>
+      ))}
+    </>
+  );
+}
 
 export const ARView = () => {
   const enterAR = async () => {
@@ -35,6 +57,7 @@ export const ARView = () => {
       <Canvas>
         {/* Pass the store to the XR component */}
         <XR store={store}>
+          <RedWalls />
           <mesh onClick={() => setRed(!red)} position={[0, 1, -1]}>
             <boxGeometry />
             <meshBasicMaterial color={red ? "red" : "blue"} />
