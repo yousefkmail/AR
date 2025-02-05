@@ -3,7 +3,6 @@ import {
   XR,
   XRPlaneModel,
   createXRStore,
-  useXRHitTest,
   XRSpace,
   useXRPlanes,
 } from "@react-three/xr";
@@ -29,22 +28,22 @@ function RedWalls() {
 
 export const ARView = () => {
   const enterAR = async () => {
-    // if (navigator.xr) {
-    //   try {
-    //     const supported = await navigator.xr.isSessionSupported("immersive-ar");
-    //     if (supported) {
-    //       // Enter AR mode using the store
-    //       await store.enterAR(); // Ensure this is awaited
-    //     } else {
-    //       alert("AR is not supported on this device.");
-    //     }
-    //   } catch (error) {
-    //     console.error("Error entering AR:", error);
-    //     alert("Failed to start AR session.");
-    //   }
-    // } else {
-    //   alert("WebXR is not supported.");
-    // }
+    if (navigator.xr) {
+      try {
+        const supported = await navigator.xr.isSessionSupported("immersive-ar");
+        if (supported) {
+          // Enter AR mode using the store
+          await store.enterAR(); // Ensure this is awaited
+        } else {
+          alert("AR is not supported on this device.");
+        }
+      } catch (error) {
+        console.error("Error entering AR:", error);
+        alert("Failed to start AR session.");
+      }
+    } else {
+      alert("WebXR is not supported.");
+    }
     await store.enterAR();
   };
 
