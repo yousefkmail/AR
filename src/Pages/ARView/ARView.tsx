@@ -1,11 +1,13 @@
 import { Canvas } from "@react-three/fiber";
-import { useParams } from "react-router-dom";
 import { XR, createXRStore } from "@react-three/xr";
+import { useEffect } from "react";
 
 export default function ARView() {
-  const { id } = useParams();
-  console.log(id);
   const store = createXRStore();
+
+  useEffect(() => {
+    store.enterAR();
+  }, []);
   return (
     <div style={{ height: "100%", position: "relative", overflow: "hidden" }}>
       <Canvas>
