@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import PageWidthLayout from "../../Layout/PageWidthLayout";
 import HomeAboutSection from "./HomeAboutSection";
 import HomePersonProfile from "./HomePersonProfile";
@@ -6,54 +5,15 @@ import { AboutSection } from "../../Data/Models/AboutSectionModel";
 import HomeAboutSkeleton from "./HomeAboutSkeleton";
 import HomePersonProfileSkeleton from "./HomePersonProfileSkeleton";
 import Skeleton from "react-loading-skeleton";
-import {
-  GetAboutSections,
-  GetTeamMembers,
-} from "../../Contentful/ContentfulClient";
-
+import { useContentful } from "@cms";
 export default function Home() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["aboutSections"],
-    queryFn: async () => {
-      const sections = await GetAboutSections();
-      return sections.map((item) => {
-        return {
-          description: item.fields.description,
-          grayBackground: item.fields.grayBackground,
-          id: item.fields.id,
-          image: item.fields.previewImage?.fields.file?.url ?? "",
-          label: item.fields.label,
-          leftDirection: item.fields.leftDirection,
-          order: item.fields.order,
-        };
-      });
-    },
-    staleTime: Infinity,
-    cacheTime: Infinity,
-  });
-
-  const { data: members, isLoading: membersLoading } = useQuery({
-    queryKey: ["teamMembers"],
-    queryFn: async () => {
-      const members = await GetTeamMembers();
-      return members.map((item) => {
-        return {
-          name: item.fields.name,
-          profilePicture: item.fields.profilePicture?.fields.file?.url ?? "",
-          role: item.fields.role,
-        };
-      });
-    },
-    staleTime: Infinity,
-    cacheTime: Infinity,
-  });
-
+  const { AboutSecionts, Members } = useContentful();
   return (
     <div className="pt-sm">
-      {isLoading ? (
+      {AboutSecionts.isLoading ? (
         <HomeAboutSkeleton sectionsCount={2} />
       ) : (
-        data
+        AboutSecionts.data
           ?.sort((a, b) => a.order - b.order)
           .map((section: AboutSection) => (
             <HomeAboutSection
@@ -67,7 +27,7 @@ export default function Home() {
           ))
       )}
 
-      {isLoading || membersLoading ? (
+      {AboutSecionts.isLoading || Members.isLoading ? (
         <PageWidthLayout maxWidth={1600}>
           <div className="mx-sm my-xl">
             <div className="home-memebers-skeleton-header">
@@ -90,7 +50,7 @@ export default function Home() {
           <div className="mx-sm my-xl">
             <h1 className="txt-center mb-lg">Our Team</h1>
             <div className="flex-center-wrap">
-              {members?.map((member, index) => (
+              {Members.data?.map((member, index) => (
                 <HomePersonProfile
                   key={index}
                   img={member.profilePicture}

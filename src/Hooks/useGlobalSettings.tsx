@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetGlobalSettings } from "../Contentful/ContentfulClient";
+import { GetGlobalSettings } from "@cms";
 
 export const useGlobalSettings = () => {
   const { data, isLoading } = useQuery({

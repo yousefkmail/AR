@@ -26,7 +26,8 @@
       "@components/*": ["components/*"],
       "@data/*": ["Data/*"],
       "@hooks/*": ["Hooks/*"],
-      "@hooks": ["Hooks"]
+      "@hooks": ["Hooks"],
+      "@cms": ["_Contentful"]
     }
   },
   "include": ["src"]

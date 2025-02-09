@@ -1,7 +1,8 @@
+import { AboutSectionType } from "../Types/AboutSectionType";
+import { TeamMemberType } from "../Types/TeamMemberType";
+import { GlobalSettingsType } from "../Types/GlobalSettingsType";
+
 import { createClient } from "contentful";
-import { AboutSectionType } from "./Types/AboutSectionType";
-import { TeamMemberType } from "./Types/TeamMemberType";
-import { GlobalSettingsType } from "./Types/GlobalSettingsType";
 
 export const ContentfulCleint = createClient({
   accessToken: import.meta.env.VITE_CONTENTFUL_ACCESSTOKEN,
