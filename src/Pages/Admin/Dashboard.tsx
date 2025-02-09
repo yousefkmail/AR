@@ -1,19 +1,24 @@
 import { Admin, Layout, Resource, defaultLightTheme } from "react-admin";
 import { FirebaseDataProvider } from "../../Firebase/FirebaseDataProvider";
 import PageWidthLayout from "../../Layout/PageWidthLayout";
-import { BasisList } from "../../React-admin/Basis/BasisList";
-import { PieceList } from "../../React-admin/Piece/PieceList";
-import { PieceShow } from "../../React-admin/Piece/PieceShow";
-import { PieceEdit } from "../../React-admin/Piece/PieceEdit";
-import BasisPost from "../../React-admin/Basis/BasisPost";
-import { BasisShow } from "../../React-admin/Basis/BasisShow";
-import BasisEdit from "../../React-admin/Basis/BasisEdit";
-import { PiecePost } from "../../React-admin/Piece/PiecePost";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGauge, faPuzzlePiece } from "@fortawesome/free-solid-svg-icons";
-import { OrderShow } from "../../React-admin/Order/OrderShow";
-import { OrderList } from "../../React-admin/Order/OrderList";
-import { OrderEdit } from "../../React-admin/Order/OrderEdit";
+import BasisEdit from "../../Components/admin/Basis/BasisEdit";
+import { BasisList } from "../../Components/admin/Basis/BasisList";
+import BasisPost from "../../Components/admin/Basis/BasisPost";
+import { BasisShow } from "../../Components/admin/Basis/BasisShow";
+import { OrderEdit } from "../../Components/admin/Order/OrderEdit";
+import { OrderList } from "../../Components/admin/Order/OrderList";
+import { OrderShow } from "../../Components/admin/Order/OrderShow";
+import { PieceEdit } from "../../Components/admin/Piece/PieceEdit";
+import { PieceList } from "../../Components/admin/Piece/PieceList";
+import { PiecePost } from "../../Components/admin/Piece/PiecePost";
+import { PieceShow } from "../../Components/admin/Piece/PieceShow";
+import TemplateEdit from "../../Components/admin/Template/TemplateEdit";
+import TemplateList from "../../Components/admin/Template/TemplateList";
+import TemplateShow from "../../Components/admin/Template/TemplateShow";
+
 const firebaseDataProvider = new FirebaseDataProvider();
 export default function Dashboard() {
   const basesIcon = () => <FontAwesomeIcon icon={faPuzzlePiece} />;
@@ -45,7 +50,12 @@ export default function Dashboard() {
               icon={piecesIcon}
               hasEdit={true}
             />
-
+            <Resource
+              name="templates"
+              list={TemplateList}
+              show={TemplateShow}
+              edit={TemplateEdit}
+            />
             <Resource
               name="orders"
               list={OrderList}

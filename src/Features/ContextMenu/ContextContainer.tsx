@@ -8,11 +8,11 @@ import { v4 as uuidv4 } from "uuid";
 import {
   TemplateModel,
   UnresolvedTemplateModel,
-} from "../../DataService/Models/TemplateModel";
-import { TemplateObject } from "../../Core/Template";
-import { PieceObject } from "../../Core/PiecePlane";
+} from "../../Data/Models/TemplateModel";
+import { TemplateObject } from "../../Data/R3F/Template";
+import { PieceObject } from "../../Data/R3F/PiecePlane";
 import CollectionAddToCartPopup from "./CollectionAddToCartPopup";
-import { Piece } from "../../DataService/Models/PieceModel";
+import { Piece } from "../../Data/Models/Piece";
 import { addDoc, collection, doc } from "firebase/firestore";
 import { firestore } from "../../Firebase/firebaseApp";
 import AddTemplatePopup from "./AddTemplatePopup";
@@ -181,7 +181,11 @@ export default function ContextContainer() {
       })),
       description,
       previewImage: url,
-      price: 0,
+      price:
+        activeObject.templateModel.children.reduce(
+          (prev, next) => prev + next.piece.price,
+          0
+        ) + activeObject.templateModel.base.price,
       createdAt: new Date(),
       updatedAt: new Date(),
       id: "",

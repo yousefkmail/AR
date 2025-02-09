@@ -1,7 +1,7 @@
 import {
   TemplateModel,
   UnresolvedTemplateModel,
-} from "../DataService/Models/TemplateModel";
+} from "../Data/Models/TemplateModel";
 
 export enum TemplateState {
   NotLoaded,

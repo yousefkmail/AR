@@ -4,8 +4,8 @@ import { useProgress } from "@react-three/drei";
 import { CircularProgress } from "@mui/material";
 import { useFullPieces } from "../../Hooks/useFullPieces";
 import { DraggedPieceContext } from "../../Context/DraggedPieceContext";
-import { PieceObject } from "../../Core/PiecePlane";
-import { TemplateObject } from "../../Core/Template";
+import { PieceObject } from "../../Data/R3F/PiecePlane";
+import { TemplateObject } from "../../Data/R3F/Template";
 import BuilderCanvasContent from "./BuilderCanvasContent";
 export default function BuilderCanvas() {
   const handleDragEnter = (_event: DragEvent) => {

@@ -1,7 +1,7 @@
 import { useReducer } from "react";
-import { TemplateObject } from "../Core/Template";
-import { PieceChild } from "../DataService/Models/TemplateModel";
-import { PieceObject } from "../Core/PiecePlane";
+import { TemplateObject } from "../Data/R3F/Template";
+import { PieceChild } from "../Data/Models/TemplateModel";
+import { PieceObject } from "../Data/R3F/PiecePlane";
 
 export type createdTemplatesAction =
   | { type: "add"; payload: TemplateObject }

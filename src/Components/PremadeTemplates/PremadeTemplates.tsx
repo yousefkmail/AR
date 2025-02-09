@@ -6,7 +6,7 @@ import { ChangeEvent } from "react";
 import { GetPageCount } from "../../Utils/PageUtils";
 import CenterLayout from "../../Layout/CenterLayout";
 import Template from "./Template";
-import { PaginationCustomStyle } from "../../CustomStyles/mui/PaginationCustomStyle";
+import { PaginationCustomStyle } from "../../Styles/CustomStyles/mui/PaginationCustomStyle";
 
 interface PremadeTemplatesProps {
   cellMinWidth?: number;

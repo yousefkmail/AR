@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ContextMenu_Context } from "./ContextMenu_Context";
-import { TemplateObject } from "../../Core/Template";
-import { PieceObject } from "../../Core/PiecePlane";
-import { PieceChild } from "../../DataService/Models/TemplateModel";
+import { TemplateObject } from "../../Data/R3F/Template";
+import { PieceObject } from "../../Data/R3F/PiecePlane";
+import { PieceChild } from "../../Data/Models/TemplateModel";
 
 export const ContextMenuProvider = ({ children }: any) => {
   const [isOpened, setIsOpened] = useState<boolean>(false);

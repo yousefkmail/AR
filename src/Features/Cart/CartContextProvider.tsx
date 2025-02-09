@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { ProductItem } from "../../DataService/Models/ProductItem";
+import { ProductItem } from "../../Data/Models/ProductItem";
 import { backendDataService as dataService } from "../../Services/Services";
-import { TemplateModel } from "../../DataService/Models/TemplateModel";
+import { TemplateModel } from "../../Data/Models/TemplateModel";
 import { IncrementalArray } from "../../Utils/IncrementalArray";
 import {
   DecrementItemAddition,

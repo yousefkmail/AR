@@ -1,37 +1,57 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { backendDataService } from "../Services/Services";
-import { Piece } from "../DataService/Models/PieceModel";
+import { Piece } from "../Data/Models/Piece";
+import { collection, onSnapshot } from "firebase/firestore";
+import { firestore } from "../Firebase/firebaseApp";
+import { Basis } from "../Data/Models/Basis";
 export interface OptionType {
   value: string;
   label: string;
 }
 
 export const usePlanesQuery = () => {
-  const [activePieces, setActivePieces] = useState<Piece[]>([]);
-
   const [selectedOption, setSelectedOption] = useState<OptionType>({
     value: "Base",
     label: "Base",
   });
 
+  const [activePieces, setActivePieces] = useState<Piece[]>([]);
+
   const [categories, setCategories] = useState<OptionType[]>([]);
 
-  const { data: pieces } = useQuery({
-    queryKey: ["pieces"],
-    queryFn: async () => {
-      return await backendDataService.GetAllPieces();
-    },
-  });
+  const [pieces, setPieces] = useState<Piece[]>();
+  const [basis, setBasis] = useState<Basis[]>();
 
-  const { data: basis } = useQuery({
-    queryKey: ["basis"],
-    queryFn: async () => {
-      return await backendDataService.GetAllBasis();
-    },
-    cacheTime: Infinity,
-    staleTime: Infinity,
-  });
+  useEffect(() => {
+    const piecesRef = collection(firestore, "pieces");
+
+    // Listen for real-time changes
+    const unsubscribe = onSnapshot(piecesRef, (snapshot) => {
+      const updatedPieces = snapshot.docs.map((doc) => ({
+        ...(doc.data() as Piece),
+        id: doc.id,
+      }));
+      setPieces(updatedPieces);
+    });
+
+    // Clean up the listener when the component is unmounted
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const basesRef = collection(firestore, "bases");
+
+    // Listen for real-time changes
+    const unsubscribe = onSnapshot(basesRef, (snapshot) => {
+      const updatedBasis = snapshot.docs.map((doc) => ({
+        ...(doc.data() as Basis),
+        id: doc.id,
+      }));
+      setBasis(updatedBasis);
+    });
+
+    // Clean up the listener when the component is unmounted
+    return () => unsubscribe();
+  }, []);
 
   const SetPiecesCategoryAsActivePlanes = (category: string) => {
     const items = pieces?.filter((item) => item.category === category);

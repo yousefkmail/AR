@@ -5,15 +5,13 @@ const NotificationList = () => {
   const { notifications } = useNotification();
 
   return (
-    <div
-      style={{ position: "fixed", top: "1rem", right: "1rem", zIndex: 1000 }}
-    >
+    <div style={{ position: "fixed", top: "1rem", left: "1rem", zIndex: 1000 }}>
       {notifications.map(({ message, type }) => (
         <div style={{ marginTop: "10px" }}>
           <Snackbar
             open
             autoHideDuration={1000}
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            anchorOrigin={{ vertical: "top", horizontal: "left" }}
           >
             <Alert severity={type} variant="filled">
               {message}

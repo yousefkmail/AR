@@ -1,7 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import FloatingContainer from "../../Components/FloatingContainer/FloatingContainer";
 import { Slider } from "@mui/material";
-import { getAuth } from "firebase/auth";
 import {
   faTrash,
   faRotate,
@@ -9,6 +8,7 @@ import {
   faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import UserOnly from "../../Components/admin/Components/Auth/UserOnly";
 interface ObjectContextMenuProps {
   posX: number;
   posY: number;
@@ -145,8 +145,7 @@ export default function BasisContextMenu({
             </div>
             Cart
           </button>
-
-          {getAuth().currentUser && (
+          <UserOnly>
             <button
               className={"contextmenu-button"}
               onClick={() => onAddToSiteAsTemplate?.()}
@@ -160,7 +159,7 @@ export default function BasisContextMenu({
               </div>
               Add template
             </button>
-          )}
+          </UserOnly>
         </div>
       </div>
     </FloatingContainer>

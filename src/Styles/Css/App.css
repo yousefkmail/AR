@@ -445,6 +445,7 @@ body {
 .about-section-move-right {
     transform: translate(500px);
 
+
 }
 
 .about-section-move-left {
@@ -610,6 +611,8 @@ body {
 .PhoneInputCountrySelect {
     padding: 16.5px 14px;
     border: var(--default-border);
+
+
 }
 
 .builder_windows-container {

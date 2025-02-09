@@ -1,16 +1,16 @@
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { IDataService } from "../DataService/IDataService";
-import { AboutSection } from "../DataService/Models/AboutSectionModel";
-import { Basis } from "../DataService/Models/BasisModel";
-import { GlobalSettings } from "../DataService/Models/GlobalSettings";
-import { Piece } from "../DataService/Models/PieceModel";
-import { ProductItem } from "../DataService/Models/ProductItem";
-import { TeamMemberModel } from "../DataService/Models/TeamMemberModel";
+import { IDataService } from "@data/DataService/IDataService";
 import {
+  AboutSection,
+  Basis,
+  Piece,
+  GlobalSettings,
+  ProductItem,
+  TeamMemberModel,
   PieceChild,
   TemplateModel,
   UnresolvedTemplateModel,
-} from "../DataService/Models/TemplateModel";
+} from "@data/Models";
 import { firestore } from "../Firebase/firebaseApp";
 
 export class BackendDataService implements IDataService {

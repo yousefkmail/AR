@@ -17,7 +17,12 @@ function App() {
   return (
     <div className="app-root">
       <SiteMetadata />
-      <RouterProvider router={AppRouter}></RouterProvider>
+      <RouterProvider
+        future={{
+          v7_startTransition: true,
+        }}
+        router={AppRouter}
+      ></RouterProvider>
       <NotificationList />
     </div>
   );

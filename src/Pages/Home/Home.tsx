@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import PageWidthLayout from "../../Layout/PageWidthLayout";
 import HomeAboutSection from "./HomeAboutSection";
 import HomePersonProfile from "./HomePersonProfile";
-import { AboutSection } from "../../DataService/Models/AboutSectionModel";
+import { AboutSection } from "../../Data/Models/AboutSectionModel";
 import HomeAboutSkeleton from "./HomeAboutSkeleton";
 import HomePersonProfileSkeleton from "./HomePersonProfileSkeleton";
 import Skeleton from "react-loading-skeleton";

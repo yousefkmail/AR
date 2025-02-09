@@ -18,23 +18,22 @@ import {
 } from "three";
 import { GroupProps, useThree } from "@react-three/fiber";
 import PreviewHandler from "../PreviewHandler";
-import { ArrayToVector3 } from "../../Utils/MathUtils";
-import {
-  NDCToObjectWorld,
-  SetObjectLayerTraverse,
-} from "../../Utils/ThreeUtils";
-import { PieceObject } from "../../Core/PiecePlane";
-import { useMousePosition } from "../../Hooks/useMousePositiion";
-import { TemplateObject } from "../../Core/Template";
+import { ArrayToVector3 } from "@utils/Math/MathUtils";
+import { NDCToObjectWorld, SetObjectLayerTraverse } from "@utils/ThreeUtils";
+import { PieceObject, TemplateObject } from "@data/R3F";
+import { useMousePosition } from "@hooks";
 import { useSceneSettings } from "../../Hooks/useSceneSettings";
 import { MovementMode } from "../../Context/SceneSettingsContext";
-import { PieceChild } from "../../DataService/Models/TemplateModel";
+import { PieceChild } from "@data/Models";
 import {
   GetPieceLeft,
+  GetPieceMostLeft,
+  GetPieceMostRight,
   GetPieceRight,
-} from "../../Utils/WigitsUtils/PieceUtils";
+} from "../../Utils/Wigits/PieceUtils";
 import { useMouseRaycaster } from "../../Hooks/useMouseRaycaster";
 import { useObjectContextMenu } from "../../Features/ContextMenu/useObjectContextMenu";
+import { GetPieceChildNeighbours } from "@utils/Wigits/TemplateUtils";
 
 export type ScenePiecesContainerRef = {
   group: Group;
@@ -163,6 +162,31 @@ export const ScenePiecesContainer = forwardRef<
       const leftOffset =
         -(moveableAreaWidth / 2 - GetPieceLeft(pieceChild.piece)) / 50;
 
+      let [leftChild, rightChild] = GetPieceChildNeighbours(
+        parentTemplate,
+        pieceChild
+      );
+
+      if (pieceChild.position[0] - xPos > 0) {
+        if (leftChild) {
+          const minPosX = GetPieceMostRight(leftChild);
+          xPos = MathUtils.clamp(
+            xPos,
+            minPosX + pieceChild.piece.width / 100,
+            Infinity
+          );
+        }
+      } else {
+        if (rightChild) {
+          const maxPosX = GetPieceMostLeft(rightChild);
+          xPos = MathUtils.clamp(
+            xPos,
+            -Infinity,
+            maxPosX - pieceChild.piece.width / 100
+          );
+        }
+      }
+
       DispatchCreatedTemplates({
         type: "move_child",
         payload: {
@@ -183,7 +207,6 @@ export const ScenePiecesContainer = forwardRef<
   ) => {
     setIgnoredArray([piece3DObject.container]);
     const obj = getFirstObject();
-
     if (obj?.object.userData.id) {
       const template = FindTemplateWithId(obj?.object.userData.id);
       if (template) {

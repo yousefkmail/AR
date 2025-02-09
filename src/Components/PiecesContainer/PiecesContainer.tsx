@@ -1,13 +1,13 @@
 import Select from "react-select";
 import { OptionType, usePlanesQuery } from "../../Hooks/usePlanesQuery";
 import GridLayout from "../../Layout/GridLayout";
-import { PiecesSelectStyle } from "../../CustomStyles/react-select/PiecesSelectStyle";
+import { PiecesSelectStyle } from "../../Styles/CustomStyles/react-select/PiecesSelectStyle";
 import DraggableBasis from "../DraggableBasis";
 import { DragEvent, useContext } from "react";
 import { DraggedPieceContext } from "../../Context/DraggedPieceContext";
-import { PieceObject } from "../../Core/PiecePlane";
+import { PieceObject } from "../../Data/R3F/PiecePlane";
 import { useFullPieces } from "../../Hooks/useFullPieces";
-import { TemplateObject } from "../../Core/Template";
+import { TemplateObject } from "../../Data/R3F/Template";
 import { v4 as uuidv4 } from "uuid";
 export const PiecesContainer = () => {
   const {

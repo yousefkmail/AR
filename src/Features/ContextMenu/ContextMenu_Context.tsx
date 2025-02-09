@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-import { TemplateObject } from "../../Core/Template";
-import { PieceObject } from "../../Core/PiecePlane";
-import { PieceChild } from "../../DataService/Models/TemplateModel";
+import { TemplateObject } from "../../Data/R3F/Template";
+import { PieceObject } from "../../Data/R3F/PiecePlane";
+import { PieceChild } from "../../Data/Models/TemplateModel";
 
 interface ContextMenuProps {
   isOpened: boolean;

@@ -1,0 +1,1 @@
+export { camelCaseToLabel } from "./CamelCaseToLabel";

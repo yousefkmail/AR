@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import { PieceObject } from "../Core/PiecePlane";
+import { PieceObject } from "../Data/R3F/PiecePlane";
 
 export type CreatedPiecesAction =
   | { type: "add"; payload: PieceObject }

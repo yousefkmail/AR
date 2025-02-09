@@ -12,8 +12,8 @@ import {
   LoadableTemplate,
   TemplateState,
 } from "../../Interfaces/LoadableTemplate";
-import { TemplateModel } from "../../DataService/Models/TemplateModel";
-import { TemplateObject } from "../../Core/Template";
+import { TemplateModel } from "../../Data/Models/TemplateModel";
+import { TemplateObject } from "../../Data/R3F/Template";
 import { v4 as uuidv4 } from "uuid";
 interface TemplateProps {
   item: LoadableTemplate;

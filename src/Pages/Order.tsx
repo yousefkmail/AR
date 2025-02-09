@@ -6,8 +6,8 @@ import PaymentComponent from "../Components/CheckoutComponent";
 import { PaymentSessionResponse } from "@checkout.com/checkout-web-components";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { firestore } from "../Firebase/firebaseApp";
-import { Order } from "../DataService/Models/Order";
-import { CalculatePrice } from "../Utils/CurrencyUtils";
+import { Order } from "@data/Models";
+import { CalculatePrice } from "@utils/index";
 import { CircularProgress } from "@mui/material";
 export default function OrderPage() {
   const { id } = useParams();

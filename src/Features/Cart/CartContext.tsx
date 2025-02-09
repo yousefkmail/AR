@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { ProductItem } from "../../DataService/Models/ProductItem";
+import { ProductItem } from "../../Data/Models/ProductItem";
 import { CartItem } from "./CartItem";
 
 interface CartContextProps {

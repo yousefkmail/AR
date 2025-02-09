@@ -11,11 +11,11 @@ import { useState } from "react";
 import { useCart } from "../../Features/Cart/useCart";
 import { useNavigate } from "react-router-dom";
 import CartItemMobile from "../../Features/Cart/Components/CartItemMobile";
-import { OrderInfo } from "../../DataService/Models/Customer";
+import { OrderInfo } from "../../Data/Models/Customer";
 import { CreateOrderValidationRules } from "../../Validations/ReactHookForm/CreateOrderValidations";
 import InputField from "./Forms/InputField";
 import FormRow from "./Forms/FormRow";
-import { Order } from "../../DataService/Models/Order";
+import { Order } from "../../Data/Models/Order";
 
 export default function UserInfoFilling() {
   const {

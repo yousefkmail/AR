@@ -1,14 +1,15 @@
 import React, { createContext, Dispatch, useContext } from "react";
 import { Object3D, Object3DEventMap, Vector3 } from "three";
 import { PlanesContainerContext } from "./PlanesContainerContext";
-import { PieceObject } from "../Core/PiecePlane";
+import { PieceObject } from "../Data/R3F/PiecePlane";
 import { CreatedPiecesAction, usePieces } from "../Hooks/usePieces";
 import {
   createdTemplatesAction,
   useTemplateObjects,
 } from "../Hooks/useTemplateObjects";
-import { PieceChild } from "../DataService/Models/TemplateModel";
-import { TemplateObject } from "../Core/Template";
+import { PieceChild } from "../Data/Models/TemplateModel";
+import { TemplateObject } from "../Data/R3F/Template";
+import { useNotification } from "../Features/NotificationService/NotificationContext";
 export const PiecesContext = createContext<PiecesContextProps>(
   {} as PiecesContextProps
 );
@@ -55,6 +56,7 @@ export const PiecesContextProvider = ({
 
   const { DispatchCreatedPieces, createdPieces } = usePieces();
 
+  const { addNotification } = useNotification();
   const Deattach_Piece = (piece: PieceChild) => {
     dispatchCreatedTemplates({ type: "deattach_piece", payload: piece });
 
@@ -104,20 +106,40 @@ export const PiecesContextProvider = ({
     basis: TemplateObject,
     NDCPosition: Vector3
   ) => {
-    dispatchCreatedTemplates({
-      type: "add_child",
-      payload: {
-        piece,
-        template: basis,
-        position: [NDCPosition.x, NDCPosition.y, NDCPosition.z],
-        layer: 0,
-      },
-    });
+    //add logic for checking if the basis has enough space for this piece.
+    console.log(basis.templateModel.base);
+    for (let i = 0; i < basis.templateModel.base.layers.length; i++) {
+      //calculate available space
+      console.log(basis.templateModel.base.layers[i]);
+      const space =
+        basis.templateModel.base.layers[i].width -
+        basis.templateModel.children.reduce(
+          (prev, next) => prev + (next.layer === i ? next.piece.width : 0),
+          0
+        );
+      if (space > piece.piece.width) {
+        //insert the piece into an appropriate place.
+        dispatchCreatedTemplates({
+          type: "add_child",
+          payload: {
+            piece,
+            template: basis,
+            position: [NDCPosition.x, NDCPosition.y, NDCPosition.z],
+            layer: i,
+          },
+        });
 
-    DispatchCreatedPieces({
-      type: "delete",
-      payload: piece,
-    });
+        DispatchCreatedPieces({
+          type: "delete",
+          payload: piece,
+        });
+        addNotification(
+          `${piece.piece.name} has been added on  ${basis.templateModel.base.layers[i].name}`,
+          "info"
+        );
+        break;
+      }
+    }
   };
 
   const FindParent = (piece: PieceChild) => {

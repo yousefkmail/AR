@@ -1,4 +1,4 @@
-import { ProductItem } from "../../DataService/Models/ProductItem";
+import { ProductItem } from "../../Data/Models/ProductItem";
 import {
   IncrementalArrayThreshouldBehaviour,
   useIncrementalArray,
