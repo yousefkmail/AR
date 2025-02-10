@@ -1,37 +1,13 @@
 import { Canvas } from "@react-three/fiber";
-import { DragEvent, MouseEvent, useContext } from "react";
+import { DragEvent } from "react";
 import { useProgress } from "@react-three/drei";
 import { CircularProgress } from "@mui/material";
-import { useFullPieces } from "../../Hooks/useFullPieces";
-import { DraggedPieceContext } from "../../Context/DraggedPieceContext";
-import { PieceObject } from "../../Data/R3F/PiecePlane";
-import { TemplateObject } from "../../Data/R3F/Template";
 import BuilderCanvasContent from "./BuilderCanvasContent";
+import { CanvasScreneshotContextProvider } from "@features/Screenshot/Context/CanvasScreenshotContext";
+import { ObjectPreviewContextProvider } from "@features/DragAndDrop/UIToCanvasDrag/ObjectPreview";
 export default function BuilderCanvas() {
   const handleDragEnter = (_event: DragEvent) => {
     _event.preventDefault();
-  };
-
-  const { DispatchCreatedPieces, DispatchCreatedTemplates } = useFullPieces();
-  const { DraggedItem, setDraggedItem } = useContext(DraggedPieceContext);
-
-  const onDrop = (_event: MouseEvent) => {
-    if (DraggedItem && "piece" in DraggedItem) {
-      DispatchCreatedPieces({
-        type: "add",
-        payload: DraggedItem as PieceObject,
-      });
-    }
-    if (DraggedItem && "templateModel" in DraggedItem) {
-      // if (previewRef.current) {
-      //   (DraggedItem as TemplateObject).position = previewRef.current.position;
-      // }
-      DispatchCreatedTemplates({
-        type: "add",
-        payload: DraggedItem as TemplateObject,
-      });
-    }
-    setDraggedItem(null);
   };
 
   const HandleDragOver = (event: DragEvent) => {
@@ -44,10 +20,13 @@ export default function BuilderCanvas() {
       <Canvas
         gl={{ depth: true, preserveDrawingBuffer: true, alpha: true }}
         onDragEnter={handleDragEnter}
-        onDrop={onDrop}
         onDragOver={HandleDragOver}
       >
-        <BuilderCanvasContent />
+        <CanvasScreneshotContextProvider>
+          <ObjectPreviewContextProvider>
+            <BuilderCanvasContent />
+          </ObjectPreviewContextProvider>
+        </CanvasScreneshotContextProvider>
       </Canvas>
       {progress < 100 && (
         <div
@@ -58,6 +37,7 @@ export default function BuilderCanvas() {
             alignItems: "center",
             inset: 0,
             zIndex: 10000,
+            pointerEvents: "none",
           }}
         >
           <CircularProgress style={{ position: "absolute" }} />

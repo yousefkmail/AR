@@ -5,7 +5,6 @@ import { CartItem } from "Features/Cart/CartItem";
 
 export default function OrderItemsPiecesShow() {
   const record = useRecordContext();
-  console.log(record);
   return (
     <div>
       <h4>Pieces</h4>

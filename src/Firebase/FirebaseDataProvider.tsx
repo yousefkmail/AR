@@ -145,7 +145,6 @@ export class FirebaseDataProvider implements DataProvider {
     resolvedData.updatedAt = (
       itemSnapshot.data().updatedAt as Timestamp
     )?.toDate();
-    console.log(resolvedData);
     return { data: resolvedData };
   };
 
@@ -182,7 +181,6 @@ export class FirebaseDataProvider implements DataProvider {
     try {
       const firestore = getFirestore();
       const docRef = doc(collection(firestore, Resource), params.id); // Reference the document
-      console.log(params);
       // Function to transform data before updating Firebase
       const transformDataForFirebase = (data: any): any => {
         if (Array.isArray(data)) {

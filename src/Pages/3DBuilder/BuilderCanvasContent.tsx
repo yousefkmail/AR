@@ -1,9 +1,5 @@
 import { Suspense, useContext, useEffect, useRef } from "react";
 import CanvasSetup from "./CanvasSetup";
-import {
-  ScreenShotHandler,
-  ScreenShotHandlerRef,
-} from "../../Components/ScreenShotHandler/ScreenShotHandler";
 import React from "react";
 import {
   ScenePiecesContainer,
@@ -13,7 +9,6 @@ import { PlanesContainerContext } from "../../Context/PlanesContainerContext";
 const Environment = React.lazy(() => import("../../Environment"));
 
 export default function BuilderCanvasContent() {
-  const ScreenshotterRef = useRef<ScreenShotHandlerRef>(null);
   const ref = useRef<ScenePiecesContainerRef>(null);
   const { ContainerRef } = useContext(PlanesContainerContext);
 
@@ -27,7 +22,6 @@ export default function BuilderCanvasContent() {
         <Environment />
       </Suspense>
       <ScenePiecesContainer ref={ref} />
-      <ScreenShotHandler ref={ScreenshotterRef} />
     </>
   );
 }

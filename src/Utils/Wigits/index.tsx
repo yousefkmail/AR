@@ -1,4 +1,3 @@
-export { GetChildNeightbours } from "./BaseUtils";
 export {
   GetPieceLeft,
   GetPieceMostLeft,

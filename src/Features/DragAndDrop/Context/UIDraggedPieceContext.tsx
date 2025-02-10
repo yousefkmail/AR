@@ -5,7 +5,7 @@ interface DraggedPieceContextProps {
   setDraggedItem: Dispatch<SetStateAction<object | null>>;
 }
 
-export const DraggedPieceContext = createContext<DraggedPieceContextProps>(
+export const UIDraggedPieceContext = createContext<DraggedPieceContextProps>(
   {} as DraggedPieceContextProps
 );
 
@@ -13,13 +13,13 @@ export const DraggedPieceContextProvider = ({ children }: any) => {
   const [DraggedItem, setDraggedItem] = useState<object | null>(null);
 
   return (
-    <DraggedPieceContext.Provider
+    <UIDraggedPieceContext.Provider
       value={{
         DraggedItem,
         setDraggedItem,
       }}
     >
       {children}
-    </DraggedPieceContext.Provider>
+    </UIDraggedPieceContext.Provider>
   );
 };

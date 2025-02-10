@@ -3,12 +3,12 @@ import { OptionType, usePlanesQuery } from "../../Hooks/usePlanesQuery";
 import GridLayout from "../../Layout/GridLayout";
 import { PiecesSelectStyle } from "../../Styles/CustomStyles/react-select/PiecesSelectStyle";
 import DraggableBasis from "../DraggableBasis";
-import { DragEvent, useContext } from "react";
-import { DraggedPieceContext } from "../../Context/DraggedPieceContext";
+import { DragEvent } from "react";
 import { PieceObject } from "../../Data/R3F/PiecePlane";
 import { useFullPieces } from "../../Hooks/useFullPieces";
 import { TemplateObject } from "../../Data/R3F/Template";
 import { v4 as uuidv4 } from "uuid";
+import { useUIDraggedWigit } from "@features/DragAndDrop";
 export const PiecesContainer = () => {
   const {
     activePieces,
@@ -26,7 +26,7 @@ export const PiecesContainer = () => {
       setSelectedOption(option);
     }
   };
-  const { setDraggedItem } = useContext(DraggedPieceContext);
+  const { setDraggedItem } = useUIDraggedWigit();
 
   return (
     <div>
@@ -63,14 +63,13 @@ export const PiecesContainer = () => {
                       description: "",
                       base: item,
                       id: uuidv4(),
-                      name: "Tempolate",
+                      name: "template",
                       previewImage: "",
                       price: 0,
                       createdAt: new Date(),
                       updatedAt: new Date(),
                     },
                   };
-
                   setDraggedItem(newTemplate);
                 }}
                 onClick={() => {

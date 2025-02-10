@@ -106,11 +106,7 @@ export const PiecesContextProvider = ({
     basis: TemplateObject,
     NDCPosition: Vector3
   ) => {
-    //add logic for checking if the basis has enough space for this piece.
-    console.log(basis.templateModel.base);
     for (let i = 0; i < basis.templateModel.base.layers.length; i++) {
-      //calculate available space
-      console.log(basis.templateModel.base.layers[i]);
       const space =
         basis.templateModel.base.layers[i].width -
         basis.templateModel.children.reduce(

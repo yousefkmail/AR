@@ -37,6 +37,7 @@ interface PngPlaneProps {
   height: number;
   onDrag?: () => void;
   onDrop?: (event: MouseEvent) => void;
+  layer?: number;
 }
 
 const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
@@ -65,7 +66,6 @@ const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
 
     return (
       <>
-        {" "}
         <group
           scale={[
             props?.scale?.x ?? 1,
@@ -93,6 +93,7 @@ const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
           onPointerLeave={() => {
             setHovered(false);
           }}
+          layers={props.layer}
         >
           <Plane
             position={[
@@ -102,6 +103,7 @@ const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
             ]}
             args={[(props?.width ?? 0) / 50, (props?.height ?? 0) / 50]}
             userData={{ id: id }}
+            layers={props.layer}
           >
             <meshBasicMaterial
               transparent={true}
