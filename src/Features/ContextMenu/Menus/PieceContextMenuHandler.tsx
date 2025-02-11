@@ -10,10 +10,10 @@ interface PieceContextMenuHandlerProps {
 export default function PieceContextMenuHandler({
   piece,
 }: PieceContextMenuHandlerProps) {
-  const [layer, setLayer] = useState<LayerOption>({ label: "1", value: 1 });
-  const { DispatchCreatedPieces, DispatchCreatedTemplates } = useFullPieces();
+  const [layer, _setLayer] = useState<LayerOption>({ label: "1", value: 1 });
+  const { DispatchCreatedPieces } = useFullPieces();
   const { setMenu } = useObjectContextMenu();
-  const HandleRotationChanged = (rotation: number) => {
+  const HandleRotationChanged = (_rotation: number) => {
     // DispatchCreatedPieces({
     //   type: "rotate",
     //   payload: {
@@ -31,7 +31,7 @@ export default function PieceContextMenuHandler({
     setMenu(null);
   };
 
-  const HandleLayerChanged = (layer: number) => {
+  const HandleLayerChanged = (_layer: number) => {
     // DispatchCreatedTemplates({
     //   type: "changeLayer",
     //   payload: { layer, piece: piece },

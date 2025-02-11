@@ -12,7 +12,7 @@ interface PieceChildContextMenuHandlerProps {
 export default function PieceChildContextMenuHandler({
   piece,
 }: PieceChildContextMenuHandlerProps) {
-  const [layer, setLayer] = useState<LayerOption>({ label: "1", value: 1 });
+  const [layer, _setLayer] = useState<LayerOption>({ label: "1", value: 1 });
   const { DispatchCreatedTemplates, Deattach_Piece } = useFullPieces();
   const { setMenu } = useObjectContextMenu();
 
