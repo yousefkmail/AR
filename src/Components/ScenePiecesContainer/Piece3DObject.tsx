@@ -9,6 +9,7 @@ import { useMouseRaycaster } from "@hooks/useMouseRaycaster";
 import { useThree } from "@react-three/fiber";
 import { useFullPieces, useMousePosition } from "@hooks/index";
 import { NDCToObjectWorld } from "@utils/ThreeUtils";
+import PieceContextMenuHandler from "@features/ContextMenu/Menus/PieceContextMenuHandler";
 const PngPlane = React.lazy(() => import("../PngPlane/PngPlane"));
 
 export default function Piece3DObject() {
@@ -19,6 +20,7 @@ export default function Piece3DObject() {
     open: openMenu,
     setMenuPosition,
     setActiveObject,
+    setMenu,
   } = useObjectContextMenu();
 
   const { getFirstObject, setIgnoredArray } = useMouseRaycaster(camera, scene);
@@ -82,6 +84,11 @@ export default function Piece3DObject() {
         onDrop={(event: MouseEvent) => {
           handlePieceDropped(pieceObject, ref.current);
           setActiveObject(pieceObject);
+          setMenu(
+            <PieceContextMenuHandler
+              piece={pieceObject}
+            ></PieceContextMenuHandler>
+          );
           PlaceMenuAtMouseposition(event);
           openMenu();
         }}

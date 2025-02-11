@@ -4,29 +4,29 @@ import { useState } from "react";
 
 import { queryClient } from "../main";
 import { useNotification } from "../Features/NotificationService/NotificationContext";
-import {
-  LoadableTemplate,
-  TemplateState,
-} from "../Interfaces/LoadableTemplate";
+import { UnresolvedTemplateModel } from "@data/Models";
+import { ResolvedTemplateModel } from "@data/Models/TemplateModel";
 
 export const useTemplatesQuery = () => {
   const { addNotification } = useNotification();
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(5);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<{
+    templates: (ResolvedTemplateModel | UnresolvedTemplateModel)[];
+    count: number;
+  }>({
     queryKey: ["templates", page],
     queryFn: async () => {
       const [templates, count] = await backendDataService.GetAllTemplates(
         page,
         pageSize
       );
-
       return {
         templates: templates.map((item) => {
-          const itemm: LoadableTemplate = {
-            template: item,
-            state: TemplateState.NotLoaded,
+          const itemm: ResolvedTemplateModel | UnresolvedTemplateModel = {
+            ...item,
+            state: "NotLoaded",
           };
           return itemm;
         }),
@@ -44,11 +44,13 @@ export const useTemplatesQuery = () => {
         return {
           ...oldData,
           templates: oldData.templates.map(
-            (Loadabletemplate: LoadableTemplate) => {
-              if (Loadabletemplate.template.id === id) {
-                const templatee: LoadableTemplate = {
-                  template: Loadabletemplate.template,
-                  state: TemplateState.Loading,
+            (
+              Loadabletemplate: ResolvedTemplateModel | UnresolvedTemplateModel
+            ) => {
+              if (Loadabletemplate.id === id) {
+                const templatee: UnresolvedTemplateModel = {
+                  ...(Loadabletemplate as UnresolvedTemplateModel),
+                  state: "Loading",
                 };
                 return templatee;
               } else return Loadabletemplate;
@@ -72,9 +74,11 @@ export const useTemplatesQuery = () => {
         return {
           ...oldData,
           templates: oldData.templates.map(
-            (Loadabletemplate: LoadableTemplate) =>
-              Loadabletemplate.template.id === fullTemplate.id
-                ? { template: fullTemplate, state: TemplateState.Loaded }
+            (
+              Loadabletemplate: ResolvedTemplateModel | UnresolvedTemplateModel
+            ) =>
+              Loadabletemplate.id === fullTemplate.id
+                ? { ...fullTemplate, state: "Loaded" }
                 : Loadabletemplate
           ),
         };

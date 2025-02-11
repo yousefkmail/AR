@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext, Dispatch, ReactNode, SetStateAction } from "react";
 import { TemplateObject } from "../../Data/R3F/Template";
 import { PieceObject } from "../../Data/R3F/PiecePlane";
 import { PieceChild } from "../../Data/Models/TemplateModel";
@@ -12,6 +12,7 @@ interface ContextMenuProps {
   setActiveObject: Dispatch<
     SetStateAction<TemplateObject | PieceObject | PieceChild | null>
   >;
+  setMenu: Dispatch<SetStateAction<ReactNode>>;
 }
 
 export const ContextMenu_Context = createContext<ContextMenuProps>(

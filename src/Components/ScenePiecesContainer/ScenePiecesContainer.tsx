@@ -16,6 +16,7 @@ import Template3DObject from "./Template3DObject";
 import { useUIDraggedWigit } from "@features/DragAndDrop";
 import { PieceObject, TemplateObject } from "@data/R3F";
 import { useMousePosition } from "@hooks/useMousePositiion";
+import { NDCToObjectWorld } from "@utils/ThreeUtils";
 
 export type ScenePiecesContainerRef = {
   group: Group;
@@ -31,8 +32,13 @@ export const ScenePiecesContainer = forwardRef<
   }));
   const { gl, camera, scene } = useThree();
   const { mousePos } = useMousePosition();
-  const { createdPieces, createdTemplates } = useFullPieces();
-  const { close } = useObjectContextMenu();
+  const {
+    createdPieces,
+    createdTemplates,
+    FindTemplateWithId,
+    FindSceneObjectWithId,
+  } = useFullPieces();
+  const { setMenu } = useObjectContextMenu();
   const { DispatchCreatedPieces, DispatchCreatedTemplates } = useFullPieces();
   const { DraggedItem, setDraggedItem } = useUIDraggedWigit();
   const raycaster = useRef(new Raycaster());
@@ -41,20 +47,48 @@ export const ScenePiecesContainer = forwardRef<
     raycaster.current.setFromCamera(mousePos, camera);
     const intersects = raycaster.current.intersectObjects(scene.children, true);
     if (intersects.length > 0) {
+      if (DraggedItem && "piece" in DraggedItem) {
+        const template = FindTemplateWithId(intersects[0]?.object.userData.id);
+        if (template) {
+          const tempalate3DObject = FindSceneObjectWithId(template.id);
+          const item = DraggedItem as PieceObject;
+
+          if (!tempalate3DObject) return;
+          const position = NDCToObjectWorld(
+            mousePos,
+            tempalate3DObject,
+            camera
+          );
+          const localPos = tempalate3DObject.worldToLocal(position);
+          DispatchCreatedTemplates({
+            type: "add_child",
+            payload: {
+              template,
+              layer: 0,
+              position: [localPos.x, localPos.y, localPos.z],
+              piece: item,
+            },
+          });
+        } else {
+          if (DraggedItem && "piece" in DraggedItem) {
+            const intersectionPoint = intersects[0].point;
+
+            const item = DraggedItem as PieceObject;
+            item.position = [
+              intersectionPoint.x,
+              intersectionPoint.y + 0.01,
+              intersectionPoint.z,
+            ];
+            DispatchCreatedPieces({
+              type: "add",
+              payload: item,
+            });
+          }
+        }
+      }
+
       const intersectionPoint = intersects[0].point;
 
-      if (DraggedItem && "piece" in DraggedItem) {
-        const item = DraggedItem as PieceObject;
-        item.position = [
-          intersectionPoint.x,
-          intersectionPoint.y + 0.01,
-          intersectionPoint.z,
-        ];
-        DispatchCreatedPieces({
-          type: "add",
-          payload: item,
-        });
-      }
       if (DraggedItem && "templateModel" in DraggedItem) {
         const item = DraggedItem as TemplateObject;
         item.position = [
@@ -71,11 +105,14 @@ export const ScenePiecesContainer = forwardRef<
     }
   };
 
+  const CloseMenu = () => {
+    setMenu(null);
+  };
+
   useEffect(() => {
-    gl.domElement.addEventListener("pointerdown", close);
+    gl.domElement.addEventListener("pointerdown", CloseMenu);
     return () => {
-      gl.domElement.removeEventListener("pointerdown", close);
-      gl.domElement.removeEventListener("drop", onDrop);
+      gl.domElement.removeEventListener("pointerdown", CloseMenu);
     };
   }, []);
 
@@ -90,12 +127,18 @@ export const ScenePiecesContainer = forwardRef<
     <Suspense>
       <group ref={groupRef}>
         {createdPieces.map((pieceObject) => (
-          <Piece3DObjectContext.Provider value={{ pieceObject }}>
-            <Piece3DObject />\
+          <Piece3DObjectContext.Provider
+            key={pieceObject.id}
+            value={{ pieceObject }}
+          >
+            <Piece3DObject />
           </Piece3DObjectContext.Provider>
         ))}
         {createdTemplates.map((item) => (
-          <Template3DObjectContext.Provider value={{ templateObject: item }}>
+          <Template3DObjectContext.Provider
+            key={item.id}
+            value={{ templateObject: item }}
+          >
             <Template3DObject />
           </Template3DObjectContext.Provider>
         ))}

@@ -1,13 +1,14 @@
+import AddCartItemWindow from "@features/Cart/AddItemWindow/AddCartItemWindow";
 import Sidenav from "../../Components/Sidenav/Sidenav";
 import WindowsContainer from "../../Components/WindowsContainer/WindowsContainer";
-import ContextContainer from "../../Features/ContextMenu/ContextContainer";
-
+import AddTemplateWindow from "@features/Templates/AddTemplateWindow/AddTemplateWindow";
 export default function BuilderUI() {
   return (
     <>
       <WindowsContainer />
       <Sidenav />
-      <ContextContainer />
+      <AddCartItemWindow />
+      <AddTemplateWindow />
     </>
   );
 }

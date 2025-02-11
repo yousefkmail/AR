@@ -49,6 +49,7 @@ export default function AddTemplatePopup({
         overflow: "hidden",
         transition: "all ease-in-out 0.4s",
         top: isShown ? "50px" : "-500px",
+        pointerEvents: "all",
       }}
     >
       <div

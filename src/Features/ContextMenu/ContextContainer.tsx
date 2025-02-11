@@ -1,7 +1,7 @@
 import { useFullPieces } from "../../Hooks/useFullPieces";
 import { useObjectContextMenu } from "./useObjectContextMenu";
-import PieceContextMenu, { LayerOption } from "./PieceContextMenu";
-import BasisContextMenu from "./BasisContextMenu";
+import PieceContextMenu, { LayerOption } from "./Menus/PieceContextMenu";
+import BasisContextMenu from "./Menus/BasisContextMenu";
 import { useEffect, useState } from "react";
 import { useCart } from "../Cart/useCart";
 import { v4 as uuidv4 } from "uuid";
@@ -18,8 +18,7 @@ import { firestore } from "../../Firebase/firebaseApp";
 import AddTemplatePopup from "./AddTemplatePopup";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 export default function ContextContainer() {
-  const { isOpened, menuPosition, close, activeObject } =
-    useObjectContextMenu();
+  const { isOpened, close, activeObject } = useObjectContextMenu();
 
   const [rotation, setRotation] = useState<number>(0);
   const [layerOptions, setLayerOptions] = useState<LayerOption[]>([]);
@@ -173,6 +172,7 @@ export default function ContextContainer() {
     const item: UnresolvedTemplateModel = {
       base: doc(collectionRef, activeObject.templateModel.base.id),
       name,
+      state: "NotLoaded",
       children: activeObject.templateModel.children.map((item) => ({
         piece: doc(collection(firestore, "pieces"), item.piece.id),
         id: item.id,
@@ -205,8 +205,6 @@ export default function ContextContainer() {
             OnRotationChangd={HandleRotationChanged}
             OnDelete={DeleteActiveBasis}
             RotationValue={rotation}
-            posX={menuPosition.x}
-            posY={menuPosition.y}
             onAddToCartPressed={OpenAddToCart}
             onAddToSiteAsTemplate={() => setAddTemplateOpened(true)}
           />
@@ -217,8 +215,6 @@ export default function ContextContainer() {
             OnDelete={DeleteActivePiece}
             OnDeattach={DeattachActiveObject}
             layer={layer}
-            posX={menuPosition.x}
-            posY={menuPosition.y}
             RotationValue={rotation}
             OnFlip={FlipActivePiece}
             Flipable={activeObject?.piece.isFlipable}

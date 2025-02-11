@@ -22,7 +22,12 @@ export interface TemplateModel extends ProductItem {
   children: PieceChild[];
 }
 
+export interface ResolvedTemplateModel extends TemplateModel {
+  state: "Loaded";
+}
+
 export interface UnresolvedTemplateModel extends ProductItem {
+  state: "Loading" | "NotLoaded";
   base: DocumentReference;
   children: UnresolvedPieceChild[];
 }

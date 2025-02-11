@@ -3,10 +3,11 @@ import GridLayout from "../../Layout/GridLayout";
 import Pagination from "@mui/material/Pagination";
 import { useTemplatesQuery } from "../../Hooks/useTemplatesQuery";
 import { ChangeEvent } from "react";
-import { GetPageCount } from "../../Utils/PageUtils";
+import { GetPageCount } from "@utils";
 import CenterLayout from "../../Layout/CenterLayout";
-import Template from "./Template";
 import { PaginationCustomStyle } from "../../Styles/CustomStyles/mui/PaginationCustomStyle";
+import LoadedTemplate from "./LoadedTemplate";
+import NotLoadedTemplate from "./NotLoadedTemplate";
 
 interface PremadeTemplatesProps {
   cellMinWidth?: number;
@@ -33,15 +34,20 @@ export default function PremadeTemplates({
       <div>
         <GridLayout cellMinWidth={cellMinWidth ?? 250}>
           {templates ? (
-            templates?.map((item) => (
-              <Template
-                OnLoadPresed={() =>
-                  fetchFullTemplate({ id: item.template.id, page: page })
-                }
-                key={item.template.id}
-                item={item}
-              />
-            ))
+            templates.map((item) =>
+              item.state === "Loaded" ? (
+                <LoadedTemplate key={item.id} item={item}></LoadedTemplate>
+              ) : (
+                <NotLoadedTemplate
+                  key={item.id}
+                  isLoading={item.state === "Loading"}
+                  OnLoadPresed={() =>
+                    fetchFullTemplate({ id: item.id, page: page })
+                  }
+                  item={item}
+                ></NotLoadedTemplate>
+              )
+            )
           ) : (
             <PremadeTemplatesSkeleton count={5} />
           )}

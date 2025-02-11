@@ -12,33 +12,39 @@ import { ContextMenuProvider } from "./Features/ContextMenu/ContextMenuProvider.
 import { EnvironmentContextProvider } from "./Features/Screenshot/Context/EnvironmentContext.tsx";
 import { NotificationProvider } from "./Features/NotificationService/NotificationContext.tsx";
 import { CartContextProvider } from "./Features/Cart/CartContextProvider.tsx";
+import { CartPopupProvider } from "@features/Cart/AddItemWindow/CartPopupContext.tsx";
+import { AddTemplatePopupProvider } from "@features/Templates/AddTemplateWindow/AddTemplateWindowContext.tsx";
 
 export const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <NotificationProvider>
       <CartContextProvider>
-        <EnvironmentContextProvider>
-          <ContextMenuProvider>
-            <SceneSettingsContextProvider>
-              <QueryClientProvider client={queryClient}>
-                <PlanesContainerContextProvider>
-                  <PiecesContextProvider>
-                    <DraggedPieceContextProvider>
-                      <SkeletonTheme
-                        baseColor="#b3aaa6"
-                        highlightColor="#eaeaea"
-                        duration={2}
-                      >
-                        <App />
-                      </SkeletonTheme>
-                    </DraggedPieceContextProvider>
-                  </PiecesContextProvider>
-                </PlanesContainerContextProvider>
-              </QueryClientProvider>
-            </SceneSettingsContextProvider>
-          </ContextMenuProvider>
-        </EnvironmentContextProvider>
+        <CartPopupProvider>
+          <AddTemplatePopupProvider>
+            <EnvironmentContextProvider>
+              <SceneSettingsContextProvider>
+                <QueryClientProvider client={queryClient}>
+                  <PlanesContainerContextProvider>
+                    <PiecesContextProvider>
+                      <DraggedPieceContextProvider>
+                        <ContextMenuProvider>
+                          <SkeletonTheme
+                            baseColor="#b3aaa6"
+                            highlightColor="#eaeaea"
+                            duration={2}
+                          >
+                            <App />
+                          </SkeletonTheme>
+                        </ContextMenuProvider>
+                      </DraggedPieceContextProvider>
+                    </PiecesContextProvider>
+                  </PlanesContainerContextProvider>
+                </QueryClientProvider>
+              </SceneSettingsContextProvider>
+            </EnvironmentContextProvider>
+          </AddTemplatePopupProvider>
+        </CartPopupProvider>
       </CartContextProvider>
     </NotificationProvider>
   </StrictMode>

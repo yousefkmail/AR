@@ -6,37 +6,28 @@ import { DragEvent, useState } from "react";
 import { useNotification } from "../../Features/NotificationService/NotificationContext";
 import IconButton from "../Button/IconButton";
 import DraggableItem from "../DragableItem";
-import { CircularProgress } from "@mui/material";
-import {
-  LoadableTemplate,
-  TemplateState,
-} from "../../Interfaces/LoadableTemplate";
 import { TemplateModel } from "../../Data/Models/TemplateModel";
 import { TemplateObject } from "../../Data/R3F/Template";
 import { v4 as uuidv4 } from "uuid";
 import { useUIDraggedWigit } from "@features/DragAndDrop";
 interface TemplateProps {
-  item: LoadableTemplate;
-  OnLoadPresed: () => void;
+  item: TemplateModel;
 }
 
-export default function Template({ item, OnLoadPresed }: TemplateProps) {
+export default function LoadedTemplate({ item }: TemplateProps) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const { addNotification } = useNotification();
   const { setDraggedItem } = useUIDraggedWigit();
   const handleDragStart = () => {
-    if (!(item.state === TemplateState.Loaded)) {
-      addNotification(
-        `you need to load template ${item.template.name} before dragging it.`,
-        "warning"
-      );
-
-      return;
-    }
-
     const template: TemplateObject = {
       id: uuidv4(),
-      templateModel: { ...(item.template as TemplateModel) },
+      templateModel: {
+        ...item,
+        children: item.children.map((item) => ({
+          ...item,
+          id: uuidv4(),
+        })),
+      },
       position: [1, 1, 1],
       rotation: [90, 0, 0],
       scale: [1, 1, 1],
@@ -57,16 +48,16 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
         <img
           draggable={false}
           className="template-img"
-          src={item.template.previewImage}
+          src={item.previewImage}
           alt=""
         />
         <Spacer padding={4}>
-          <div className="template-name">{item.template.name}</div>
+          <div className="template-name">{item.name}</div>
         </Spacer>
 
         <Spacer padding={4}>
           <div style={{ fontWeight: "bolder", fontSize: "1.25rem" }}>
-            {item.template.price / 100}$
+            {item.price / 100}$
           </div>
         </Spacer>
 
@@ -112,20 +103,10 @@ export default function Template({ item, OnLoadPresed }: TemplateProps) {
               backgroundColor: "black",
               color: "white",
             }}
-            disabled={item.state !== TemplateState.NotLoaded}
-            onClick={() => OnLoadPresed?.()}
+            disabled={true}
             isActive={false}
           >
-            {item.state === TemplateState.Loaded ? (
-              "Loaded"
-            ) : item.state === TemplateState.Loading ? (
-              <CircularProgress
-                size={"10px"}
-                sx={{ color: "white" }}
-              ></CircularProgress>
-            ) : (
-              "Load template"
-            )}
+            {"Loaded"}
           </IconButton>
         </Spacer>
       </div>

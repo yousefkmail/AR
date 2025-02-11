@@ -64,7 +64,17 @@ export const ObjectPreviewContextProvider = ({
             {...templateObject.templateModel.base}
             position={new Vector3(1, 1, 1)}
             rotation={new Vector3(90, 0, 0)}
-          ></PngPlane>
+          >
+            {templateObject.templateModel.children.map((item) => (
+              <PngPlane
+                layer={1}
+                {...item.piece}
+                position={new Vector3(...item.position)}
+                rotation={new Vector3(-90, 0, 0)}
+                applyOffset
+              ></PngPlane>
+            ))}
+          </PngPlane>
         );
         break;
       }

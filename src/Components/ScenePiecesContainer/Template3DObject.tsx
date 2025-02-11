@@ -25,6 +25,8 @@ import {
   GetPieceRight,
 } from "@utils/Wigits";
 import { PieceChild } from "@data/Models";
+import BasisContextMenuHandler from "@features/ContextMenu/Menus/BasisContextMenuHandler";
+import PieceChildContextMenuHandler from "@features/ContextMenu/Menus/PieceChildContextMenuHandler";
 
 export default function Template3DObject() {
   const { templateObject } = useContext(Template3DObjectContext);
@@ -63,6 +65,7 @@ export default function Template3DObject() {
 
   const {
     open: openMenu,
+    setMenu,
     setMenuPosition,
     setActiveObject,
   } = useObjectContextMenu();
@@ -170,6 +173,11 @@ export default function Template3DObject() {
         onDrop={(event) => {
           setActiveObject(templateObject);
           PlaceMenuAtMouseposition(event);
+          setMenu(
+            <BasisContextMenuHandler
+              template={templateObject}
+            ></BasisContextMenuHandler>
+          );
           openMenu();
         }}
         key={templateObject.id}
@@ -195,6 +203,12 @@ export default function Template3DObject() {
                 setActiveObject(templateObject);
               } else setActiveObject(child);
               PlaceMenuAtMouseposition(event);
+              setMenu(
+                <PieceChildContextMenuHandler
+                  piece={child}
+                  template={templateObject}
+                ></PieceChildContextMenuHandler>
+              );
               openMenu();
             }}
             key={child.id}
