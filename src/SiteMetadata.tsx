@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useGlobalSettings } from "./Hooks/useGlobalSettings";
 
 export default function SiteMetadata() {

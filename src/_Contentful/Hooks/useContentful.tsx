@@ -12,7 +12,7 @@ export const useContentful = () => {
           return {
             description: item.fields.description,
             grayBackground: item.fields.grayBackground,
-            id: item.fields.id,
+            id: item.sys.id,
             image: item.fields.previewImage?.fields.file?.url ?? "",
             label: item.fields.label,
             leftDirection: item.fields.leftDirection,

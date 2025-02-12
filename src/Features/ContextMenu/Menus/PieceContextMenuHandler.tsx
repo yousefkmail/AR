@@ -3,6 +3,7 @@ import PieceContextMenu from "./PieceContextMenu";
 import { useFullPieces } from "@hooks/index";
 import { useObjectContextMenu } from "../useObjectContextMenu";
 import { useCartPopup } from "@features/Cart/AddItemWindow/CartPopupContext";
+import { useEffect, useState } from "react";
 
 interface PieceContextMenuHandlerProps {
   piece: PieceObject;
@@ -12,6 +13,8 @@ export default function PieceContextMenuHandler({
 }: PieceContextMenuHandlerProps) {
   const { DispatchCreatedPieces } = useFullPieces();
   const { setMenu } = useObjectContextMenu();
+  const [rotation, setRotation] = useState<number>(0);
+
   const HandleRotationChanged = (rotation: number) => {
     DispatchCreatedPieces({
       type: "rotate",
@@ -20,6 +23,7 @@ export default function PieceContextMenuHandler({
         piece: piece,
       },
     });
+    setRotation(rotation);
   };
 
   const DeleteActivePiece = () => {
@@ -41,6 +45,10 @@ export default function PieceContextMenuHandler({
   const OpenAddToCart = () => {
     openPopup(piece.piece);
   };
+  useEffect(() => {
+    setRotation(piece.rotation[1]);
+    console.log(piece);
+  }, []);
 
   return (
     <PieceContextMenu
@@ -49,6 +57,7 @@ export default function PieceContextMenuHandler({
       OnAddToCartPressed={OpenAddToCart}
       Flipable={piece.piece.isFlipable}
       OnFlip={FlipPiece}
+      RotationValue={rotation}
     />
   );
 }

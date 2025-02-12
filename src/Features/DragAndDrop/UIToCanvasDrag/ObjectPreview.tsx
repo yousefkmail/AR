@@ -67,6 +67,7 @@ export const ObjectPreviewContextProvider = ({
           >
             {templateObject.templateModel.children.map((item) => (
               <PngPlane
+                key={item.id}
                 layer={1}
                 {...item.piece}
                 position={new Vector3(...item.position)}

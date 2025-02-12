@@ -38,9 +38,7 @@ export default function Home() {
               {Array(2)
                 .fill(0)
                 .map((_item, index) => (
-                  <HomePersonProfileSkeleton
-                    key={index}
-                  ></HomePersonProfileSkeleton>
+                  <HomePersonProfileSkeleton key={index} />
                 ))}
             </div>
           </div>

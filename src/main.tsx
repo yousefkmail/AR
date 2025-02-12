@@ -14,38 +14,41 @@ import { NotificationProvider } from "./Features/NotificationService/Notificatio
 import { CartContextProvider } from "./Features/Cart/CartContextProvider.tsx";
 import { CartPopupProvider } from "@features/Cart/AddItemWindow/CartPopupContext.tsx";
 import { AddTemplatePopupProvider } from "@features/Templates/AddTemplateWindow/AddTemplateWindowContext.tsx";
+import { HelmetProvider } from "react-helmet-async";
 
 export const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <NotificationProvider>
-      <CartContextProvider>
-        <CartPopupProvider>
-          <AddTemplatePopupProvider>
-            <EnvironmentContextProvider>
-              <SceneSettingsContextProvider>
-                <QueryClientProvider client={queryClient}>
-                  <PlanesContainerContextProvider>
-                    <PiecesContextProvider>
-                      <DraggedPieceContextProvider>
-                        <ContextMenuProvider>
-                          <SkeletonTheme
-                            baseColor="#b3aaa6"
-                            highlightColor="#eaeaea"
-                            duration={2}
-                          >
-                            <App />
-                          </SkeletonTheme>
-                        </ContextMenuProvider>
-                      </DraggedPieceContextProvider>
-                    </PiecesContextProvider>
-                  </PlanesContainerContextProvider>
-                </QueryClientProvider>
-              </SceneSettingsContextProvider>
-            </EnvironmentContextProvider>
-          </AddTemplatePopupProvider>
-        </CartPopupProvider>
-      </CartContextProvider>
-    </NotificationProvider>
+    <HelmetProvider>
+      <NotificationProvider>
+        <CartContextProvider>
+          <CartPopupProvider>
+            <AddTemplatePopupProvider>
+              <EnvironmentContextProvider>
+                <SceneSettingsContextProvider>
+                  <QueryClientProvider client={queryClient}>
+                    <PlanesContainerContextProvider>
+                      <PiecesContextProvider>
+                        <DraggedPieceContextProvider>
+                          <ContextMenuProvider>
+                            <SkeletonTheme
+                              baseColor="#b3aaa6"
+                              highlightColor="#eaeaea"
+                              duration={2}
+                            >
+                              <App />
+                            </SkeletonTheme>
+                          </ContextMenuProvider>
+                        </DraggedPieceContextProvider>
+                      </PiecesContextProvider>
+                    </PlanesContainerContextProvider>
+                  </QueryClientProvider>
+                </SceneSettingsContextProvider>
+              </EnvironmentContextProvider>
+            </AddTemplatePopupProvider>
+          </CartPopupProvider>
+        </CartContextProvider>
+      </NotificationProvider>
+    </HelmetProvider>
   </StrictMode>
 );

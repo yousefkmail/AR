@@ -96,7 +96,7 @@ export const PiecesContainer = () => {
                   });
                 }}
                 key={item.id}
-                {...item}
+                plane={item}
               />
             ))
           : activePieces?.map((item) => (
@@ -128,7 +128,7 @@ export const PiecesContainer = () => {
                   DispatchCreatedPieces({ type: "add", payload: newPiece });
                 }}
                 key={item.id}
-                {...item}
+                plane={item}
               />
             ))}
       </GridLayout>

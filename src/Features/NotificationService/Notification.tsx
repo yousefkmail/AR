@@ -6,8 +6,8 @@ const NotificationList = () => {
 
   return (
     <div style={{ position: "fixed", top: "1rem", left: "1rem", zIndex: 1000 }}>
-      {notifications.map(({ message, type }) => (
-        <div style={{ marginTop: "10px" }}>
+      {notifications.map(({ message, type, id }) => (
+        <div key={id} style={{ marginTop: "10px" }}>
           <Snackbar
             open
             autoHideDuration={1000}

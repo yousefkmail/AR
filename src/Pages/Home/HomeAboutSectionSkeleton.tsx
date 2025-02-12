@@ -11,8 +11,8 @@ export default function HomeAboutSectionSkeleton() {
 
         {Array(8)
           .fill(0)
-          .map(() => (
-            <Skeleton width={"100%"} height={10} />
+          .map((_item, index) => (
+            <Skeleton key={index} width={"100%"} height={10} />
           ))}
       </div>
       <div className={"about-section-split "} style={{ width: "100%" }}>

@@ -1,23 +1,15 @@
 import { HTMLAttributes } from "react";
 import DraggableItem from "./DragableItem";
+import { Plane } from "@data/Models";
 interface DraggablebasisProps extends HTMLAttributes<HTMLDivElement> {
-  previewImage: string;
-  name: string;
-  price: number;
-  width: number;
-  height: number;
-  stock: number;
+  plane: Plane;
 }
 
 export default function DraggableBasis({
-  previewImage,
-  height,
-  name,
-  price,
-  width,
-  stock,
+  plane,
   ...rest
 }: DraggablebasisProps) {
+  const { previewImage, width, height, stock, price, name } = plane;
   return (
     <DraggableItem {...rest}>
       <div className="drag-image-inner">

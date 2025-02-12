@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BasisContextMenu from "./BasisContextMenu";
 import { TemplateObject } from "@data/R3F";
 import { useFullPieces } from "@hooks/index";
@@ -44,6 +44,9 @@ export default function BasisContextMenuHandler({
   const OpenAddToCart = () => {
     openPopup(template.templateModel);
   };
+  useEffect(() => {
+    setRotation(template.rotation[2]);
+  }, []);
 
   return (
     <>

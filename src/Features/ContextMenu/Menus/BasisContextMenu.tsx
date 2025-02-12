@@ -81,7 +81,6 @@ export default function BasisContextMenu({
               max={180}
             />
             <input
-              defaultValue={0}
               min={-180}
               onChange={handleInputValue}
               max={180}

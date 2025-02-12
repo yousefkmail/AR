@@ -33,6 +33,11 @@ export default function PieceChildContextMenuHandler({
       type: "changeLayer",
       payload: { layer, piece: piece },
     });
+    setLayer({
+      label: template.templateModel.base.layers[layer].name,
+      value: layer,
+    });
+
     close();
   };
 
