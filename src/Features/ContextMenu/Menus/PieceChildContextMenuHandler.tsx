@@ -37,8 +37,6 @@ export default function PieceChildContextMenuHandler({
       label: template.templateModel.base.layers[layer].name,
       value: layer,
     });
-
-    close();
   };
 
   const DeattachActiveObject = () => {
