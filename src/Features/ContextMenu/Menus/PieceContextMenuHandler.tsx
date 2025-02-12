@@ -1,8 +1,8 @@
 import { PieceObject } from "@data/R3F";
-import PieceContextMenu, { LayerOption } from "./PieceContextMenu";
-import { useState } from "react";
+import PieceContextMenu from "./PieceContextMenu";
 import { useFullPieces } from "@hooks/index";
 import { useObjectContextMenu } from "../useObjectContextMenu";
+import { useCartPopup } from "@features/Cart/AddItemWindow/CartPopupContext";
 
 interface PieceContextMenuHandlerProps {
   piece: PieceObject;
@@ -10,17 +10,16 @@ interface PieceContextMenuHandlerProps {
 export default function PieceContextMenuHandler({
   piece,
 }: PieceContextMenuHandlerProps) {
-  const [layer, _setLayer] = useState<LayerOption>({ label: "1", value: 1 });
   const { DispatchCreatedPieces } = useFullPieces();
   const { setMenu } = useObjectContextMenu();
-  const HandleRotationChanged = (_rotation: number) => {
-    // DispatchCreatedPieces({
-    //   type: "rotate",
-    //   payload: {
-    //     rotation: [activeObject.rotation[0], 0, rotation],
-    //     template: activeObject,
-    //   },
-    // });
+  const HandleRotationChanged = (rotation: number) => {
+    DispatchCreatedPieces({
+      type: "rotate",
+      payload: {
+        rotation: [piece.rotation[0], rotation, 0],
+        piece: piece,
+      },
+    });
   };
 
   const DeleteActivePiece = () => {
@@ -31,33 +30,25 @@ export default function PieceContextMenuHandler({
     setMenu(null);
   };
 
-  const HandleLayerChanged = (_layer: number) => {
-    // DispatchCreatedTemplates({
-    //   type: "changeLayer",
-    //   payload: { layer, piece: piece },
-    // });
-    // close();
+  const FlipPiece = () => {
+    DispatchCreatedPieces({
+      type: "flip",
+      payload: { piece },
+    });
+  };
+  const { openPopup } = useCartPopup();
+
+  const OpenAddToCart = () => {
+    openPopup(piece.piece);
   };
 
-  const DeattachActiveObject = () => {
-    // if (!activeObject) return;
-    // if ("layer" in activeObject) Deattach_Piece(activeObject);
-    // close();
-  };
   return (
     <PieceContextMenu
       OnRotationChangd={HandleRotationChanged}
-      OnLayerChanged={HandleLayerChanged}
       OnDelete={DeleteActivePiece}
-      OnDeattach={DeattachActiveObject}
-      layer={layer}
-      //   posX={menuPosition.x}
-      //   posY={menuPosition.y}
-      //   RotationValue={rotation}
-      //   OnFlip={FlipActivePiece}
+      OnAddToCartPressed={OpenAddToCart}
       Flipable={piece.piece.isFlipable}
-      //   layersOptions={layerOptions}
-      //   OnAddToCartPressed={OpenAddToCart}
+      OnFlip={FlipPiece}
     />
   );
 }

@@ -58,7 +58,15 @@ export default function Piece3DObject() {
       if (template) {
         const tempalate3DObject = FindSceneObjectWithId(template.id);
 
-        if (!tempalate3DObject) return;
+        if (!tempalate3DObject) {
+          setMenu(
+            <PieceContextMenuHandler
+              piece={pieceObject}
+            ></PieceContextMenuHandler>
+          );
+          openMenu();
+          return;
+        }
         const position = NDCToObjectWorld(mousePos, tempalate3DObject, camera);
         HandlePieceDroppedOnPlane(
           piece,
@@ -66,6 +74,11 @@ export default function Piece3DObject() {
           tempalate3DObject.worldToLocal(position)
         );
       }
+    } else {
+      setMenu(
+        <PieceContextMenuHandler piece={pieceObject}></PieceContextMenuHandler>
+      );
+      openMenu();
     }
   };
 
@@ -84,13 +97,7 @@ export default function Piece3DObject() {
         onDrop={(event: MouseEvent) => {
           handlePieceDropped(pieceObject, ref.current);
           setActiveObject(pieceObject);
-          setMenu(
-            <PieceContextMenuHandler
-              piece={pieceObject}
-            ></PieceContextMenuHandler>
-          );
           PlaceMenuAtMouseposition(event);
-          openMenu();
         }}
         {...pieceObject.piece}
         id={pieceObject.id}

@@ -60,7 +60,7 @@ export default function AddTemplatePopup({
           alignItems: "center",
         }}
       >
-        <h3>Add item to cart</h3>
+        <h3>Add template</h3>
         <FontawesomeIconButton
           onClick={() => onClose?.()}
           icon={faXmark}

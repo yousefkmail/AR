@@ -9,7 +9,14 @@ export type CreatedPiecesAction =
       type: "move";
       payload: { piece: PieceObject; position: [number, number, number] };
     }
-  | { type: "flip"; payload: { piece: PieceObject } };
+  | { type: "flip"; payload: { piece: PieceObject } }
+  | {
+      type: "rotate";
+      payload: {
+        piece: PieceObject;
+        rotation: [number, number, number];
+      };
+    };
 
 export const usePieces = () => {
   const [createdPieces, DispatchCreatedPieces] = useReducer(
@@ -46,6 +53,14 @@ export const usePieces = () => {
             newItem.piece.isFlipped = !newItem.piece.isFlipped;
             return newItem;
           } else return item;
+        });
+      }
+      case "rotate": {
+        return state.map((item) => {
+          if (item.id === action.payload.piece.id) {
+            item.rotation = action.payload.rotation;
+          }
+          return item;
         });
       }
 

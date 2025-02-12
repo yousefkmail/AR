@@ -66,7 +66,7 @@ export const AppRouter = createBrowserRouter(
           element: <AuthComponent />,
           children: [
             {
-              path: "dashboard",
+              path: "dashboard/*",
               element: (
                 <Suspense fallback={<div>Loading.</div>}>
                   <Dashboard />

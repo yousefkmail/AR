@@ -1,9 +1,10 @@
 import { TemplateObject } from "@data/R3F";
-import PieceContextMenu, { LayerOption } from "./PieceContextMenu";
-import { useState } from "react";
+import { LayerOption } from "./PieceChildContextMenu";
+import { useEffect, useState } from "react";
 import { useFullPieces } from "@hooks/index";
 import { useObjectContextMenu } from "../useObjectContextMenu";
 import { PieceChild } from "@data/Models";
+import PieceChildContextMenu from "./PieceChildContextMenu";
 
 interface PieceChildContextMenuHandlerProps {
   piece: PieceChild;
@@ -11,9 +12,12 @@ interface PieceChildContextMenuHandlerProps {
 }
 export default function PieceChildContextMenuHandler({
   piece,
+  template,
 }: PieceChildContextMenuHandlerProps) {
-  const [layer, _setLayer] = useState<LayerOption>({ label: "1", value: 1 });
+  const [layer, setLayer] = useState<LayerOption>({ label: "1", value: 1 });
   const { DispatchCreatedTemplates, Deattach_Piece } = useFullPieces();
+  const [layerOptions, setLayerOptions] = useState<LayerOption[]>([]);
+
   const { setMenu } = useObjectContextMenu();
 
   const DeleteActivePiece = () => {
@@ -37,19 +41,37 @@ export default function PieceChildContextMenuHandler({
     setMenu(null);
     close();
   };
+
+  const FlipActivePiece = () => {
+    DispatchCreatedTemplates({
+      type: "flip_child",
+      payload: { piece },
+    });
+  };
+
+  useEffect(() => {
+    setLayerOptions(
+      template.templateModel.base.layers.map((item, index) => ({
+        label: item.name,
+        value: index,
+      }))
+    );
+  }, [piece]);
+
+  useEffect(() => {
+    const templateLayers = template.templateModel.base.layers;
+    setLayer({ label: templateLayers[piece.layer].name, value: piece.layer });
+  }, []);
+
   return (
-    <PieceContextMenu
+    <PieceChildContextMenu
       OnLayerChanged={HandleLayerChanged}
       OnDelete={DeleteActivePiece}
       OnDeattach={DeattachActiveObject}
       layer={layer}
-      //   posX={menuPosition.x}
-      //   posY={menuPosition.y}
-      //   RotationValue={rotation}
-      //   OnFlip={FlipActivePiece}
-      //   Flipable={activeObject?.piece.isFlipable}
-      //   layersOptions={layerOptions}
-      //   OnAddToCartPressed={OpenAddToCart}
+      layersOptions={layerOptions}
+      OnFlip={FlipActivePiece}
+      Flipable={piece.piece.isFlipable}
     />
   );
 }

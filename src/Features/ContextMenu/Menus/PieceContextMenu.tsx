@@ -1,11 +1,9 @@
 import { ChangeEvent, useState } from "react";
-import Select, { SingleValue } from "react-select";
 import { Slider } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRotate,
   faTrash,
-  faPaperclip,
   faRepeat,
   faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
@@ -16,33 +14,21 @@ export interface LayerOption {
 }
 
 interface ObjectContextMenuProps {
-  layer: LayerOption;
-  OnLayerChanged: (layer: number) => void;
   OnRotationChangd: (number: number) => void;
   OnDelete: () => void;
-  OnDeattach: () => void;
   RotationValue: number;
   OnFlip: () => void;
   Flipable: boolean;
-  layersOptions: LayerOption[];
   OnAddToCartPressed: () => void;
 }
 export default function PieceContextMenu({
-  layer,
-  OnLayerChanged,
   OnRotationChangd,
   OnDelete,
-  OnDeattach,
   OnFlip,
   Flipable,
   RotationValue,
-  layersOptions,
   OnAddToCartPressed,
 }: Partial<ObjectContextMenuProps>) {
-  const LayerChanged = (data: SingleValue<LayerOption>) => {
-    if (data) OnLayerChanged?.(data.value);
-  };
-
   const RotationChanged = (_event: Event, value: number | number[]) => {
     OnRotationChangd?.(value as number);
   };
@@ -125,20 +111,6 @@ export default function PieceContextMenu({
           pointerEvents: "all",
         }}
       >
-        <span style={{ padding: "10px", width: "130px" }}>
-          <label
-            style={{ marginBottom: "5px", display: "inline-block" }}
-            htmlFor=""
-          >
-            Layer
-          </label>
-          <Select
-            onChange={LayerChanged}
-            options={layersOptions}
-            value={layer}
-          ></Select>
-        </span>
-
         <button
           className="contextmenu-button"
           onClick={() => setIsRotationOpened(!isRotationOpened)}
@@ -161,16 +133,6 @@ export default function PieceContextMenu({
             />
           </div>
           Delete
-        </button>
-        <button className="contextmenu-button" onClick={() => OnDeattach?.()}>
-          <div style={{ marginBottom: "5px" }}>
-            <FontAwesomeIcon
-              style={{ marginBottom: "3px" }}
-              size="xl"
-              icon={faPaperclip}
-            />
-          </div>
-          Deattach
         </button>
 
         <button
