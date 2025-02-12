@@ -81,7 +81,6 @@ const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
           onPointerDown={(event: ThreeEvent<PointerEvent>) => {
             events.onPointerDown();
             event.stopPropagation();
-            event.stopPropagation();
           }}
           rotation={[
             MathUtils.degToRad(props?.rotation?.x ?? 0),

@@ -1,4 +1,4 @@
-import { CartItem } from "../../Features/Cart/CartItem";
+import { CartItemType } from "../../Features/Cart/CartItem";
 import { Basis } from "./Basis";
 import { Customer } from "./Customer";
 import { Piece } from "./Piece";
@@ -16,8 +16,8 @@ export interface Order {
   paymentType: "Online" | "OnReceipt";
   paymentStatus: "Paid" | "NotPaid";
   status: OrderStatus;
-  bases: CartItem<Basis>[];
-  pieces: CartItem<Piece>[];
+  bases: CartItemType<Basis>[];
+  pieces: CartItemType<Piece>[];
   totalPrice: number;
   productsPrice: number;
   createdAt: Date;

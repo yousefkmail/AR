@@ -1,6 +1,5 @@
-import { useCart } from "../Features/Cart/useCart";
+import { useCart, CartItemMobile } from "@features/Cart";
 import PageWidthLayout from "../Layout/PageWidthLayout";
-import CartItemMobile from "../Features/Cart/Components/CartItemMobile";
 import { CalculatePrice, MinimumPriceUnitToUSD } from "../Utils/CurrencyUtils";
 
 export default function MobileCart() {

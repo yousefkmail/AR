@@ -8,14 +8,13 @@ import {
 import { useForm } from "react-hook-form";
 import PageWidthLayout from "../../Layout/PageWidthLayout";
 import { useState } from "react";
-import { useCart } from "../../Features/Cart/useCart";
 import { useNavigate } from "react-router-dom";
-import CartItemMobile from "../../Features/Cart/Components/CartItemMobile";
 import { OrderInfo } from "../../Data/Models/Customer";
 import { CreateOrderValidationRules } from "../../Validations/ReactHookForm/CreateOrderValidations";
 import InputField from "./Forms/InputField";
 import FormRow from "./Forms/FormRow";
-import { Order } from "../../Data/Models/Order";
+import { Order } from "@data/Models";
+import { CartItemMobile, useCart } from "@features/Cart";
 
 export default function UserInfoFilling() {
   const {

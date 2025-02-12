@@ -3,21 +3,21 @@ import {
   IncrementalArrayThreshouldBehaviour,
   useIncrementalArray,
 } from "../../Hooks/useIncrementalArray";
-import { CartItem } from "./CartItem";
+import { CartItemType } from "./CartItem";
 
 export function useCartItems() {
   const compareFn: (
-    first: CartItem<ProductItem>,
-    second: CartItem<ProductItem>
+    first: CartItemType<ProductItem>,
+    second: CartItemType<ProductItem>
   ) => boolean = (
-    first: CartItem<ProductItem>,
-    second: CartItem<ProductItem>
+    first: CartItemType<ProductItem>,
+    second: CartItemType<ProductItem>
   ) => {
     return first.item.id === second.item.id;
   };
 
   const { addItem, clearItems, decreaseItem, items, setItems, removeItem } =
-    useIncrementalArray<CartItem<ProductItem>>(
+    useIncrementalArray<CartItemType<ProductItem>>(
       compareFn,
       IncrementalArrayThreshouldBehaviour.delete
     );

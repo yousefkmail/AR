@@ -2,7 +2,7 @@ import { PieceObject } from "@data/R3F";
 import PieceContextMenu from "./PieceContextMenu";
 import { useFullPieces } from "@hooks/index";
 import { useObjectContextMenu } from "../useObjectContextMenu";
-import { useCartPopup } from "@features/Cart/AddItemWindow/CartPopupContext";
+import { useCartPopup } from "@features/Cart";
 import { useEffect, useState } from "react";
 
 interface PieceContextMenuHandlerProps {
@@ -47,7 +47,6 @@ export default function PieceContextMenuHandler({
   };
   useEffect(() => {
     setRotation(piece.rotation[1]);
-    console.log(piece);
   }, []);
 
   return (

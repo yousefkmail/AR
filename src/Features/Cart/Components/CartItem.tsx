@@ -16,7 +16,7 @@ export interface CartItemProps extends HTMLAttributes<HTMLDivElement> {
   onRemove?: () => void;
 }
 
-export default function CartItem({
+export function CartItem({
   previewImage,
   id,
   name,

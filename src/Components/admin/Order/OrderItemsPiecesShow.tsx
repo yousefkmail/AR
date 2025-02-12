@@ -1,7 +1,7 @@
 import { useRecordContext } from "react-admin";
 import OrderItemShow from "./OrderItemShow";
 import { Piece } from "Data/Models/Piece";
-import { CartItem } from "Features/Cart/CartItem";
+import { CartItemType } from "Features/Cart/CartItem";
 
 export default function OrderItemsPiecesShow() {
   const record = useRecordContext();
@@ -10,7 +10,7 @@ export default function OrderItemsPiecesShow() {
       <h4>Pieces</h4>
 
       <div style={{ backgroundColor: "#fafafb" }}>
-        {record?.["pieces"].map((item: CartItem<Piece>) => (
+        {record?.["pieces"].map((item: CartItemType<Piece>) => (
           <OrderItemShow
             name={item.item.name}
             price={item.item.price}

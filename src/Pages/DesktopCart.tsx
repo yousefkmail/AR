@@ -1,13 +1,7 @@
-import CartItem from "../Features/Cart/Components/CartItem";
-import CartItemsHeader from "../Features/Cart/Components/CartItemsHeader";
-import { useCart } from "../Features/Cart/useCart";
 import PageWidthLayout from "../Layout/PageWidthLayout";
 import { useNavigate } from "react-router-dom";
-import {
-  CalculatePrice,
-  MinimumPriceUnitToUSD,
-  To2DigitFixed,
-} from "../Utils/CurrencyUtils";
+import { CalculatePrice, MinimumPriceUnitToUSD, To2DigitFixed } from "@utils";
+import { useCart, CartItemsHeader, CartItem } from "@features/Cart";
 
 export default function DesktopCart() {
   const {

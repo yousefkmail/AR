@@ -10,7 +10,7 @@ import {
 } from "../../Hooks/useIncrementalArray";
 import { useCartItems } from "./useCartItems";
 import { CartContext } from "./CartContext";
-import { CartItem } from "./CartItem";
+import { CartItemType } from "./CartItem";
 
 export function CartContextProvider({ children }: any) {
   const [updated, setUpdated] = useState(false);
@@ -30,7 +30,7 @@ export function CartContextProvider({ children }: any) {
     setUpdated(true);
 
     setitemsState(
-      (JSON.parse(ids) as CartItem<ProductItem>[]).map(({ ...item }) => ({
+      (JSON.parse(ids) as CartItemType<ProductItem>[]).map(({ ...item }) => ({
         quantity: item.quantity,
         item: {
           ...item.item,
@@ -50,11 +50,11 @@ export function CartContextProvider({ children }: any) {
   }, []);
 
   const compareFn: (
-    first: CartItem<ProductItem>,
-    second: CartItem<ProductItem>
+    first: CartItemType<ProductItem>,
+    second: CartItemType<ProductItem>
   ) => boolean = (
-    first: CartItem<ProductItem>,
-    second: CartItem<ProductItem>
+    first: CartItemType<ProductItem>,
+    second: CartItemType<ProductItem>
   ) => {
     return first.item.id === second.item.id;
   };
@@ -64,13 +64,13 @@ export function CartContextProvider({ children }: any) {
     decreaseItem: decreaseRemovedItem,
     clearItems: clearRemovedItems,
     items: removedItems,
-  } = useIncrementalArray<CartItem<ProductItem>>(
+  } = useIncrementalArray<CartItemType<ProductItem>>(
     compareFn,
     IncrementalArrayThreshouldBehaviour.AllowNegative
   );
 
-  const [basesItems, setBasesItems] = useState<CartItem<ProductItem>[]>();
-  const [piecesItems, setPiecesItems] = useState<CartItem<ProductItem>[]>();
+  const [basesItems, setBasesItems] = useState<CartItemType<ProductItem>[]>();
+  const [piecesItems, setPiecesItems] = useState<CartItemType<ProductItem>[]>();
   const {
     addItem: addItemState,
     decreaseItem: decreaseItemState,
@@ -81,11 +81,11 @@ export function CartContextProvider({ children }: any) {
 
   useEffect(() => {
     //everytime the templates or the products changes in the cart, we need to update the final product items.
-    const updatedPiecesItems: IncrementalArray<CartItem<ProductItem>> =
-      new IncrementalArray<CartItem<ProductItem>>(compareFn);
+    const updatedPiecesItems: IncrementalArray<CartItemType<ProductItem>> =
+      new IncrementalArray<CartItemType<ProductItem>>(compareFn);
 
-    const updatedBasisItems: IncrementalArray<CartItem<ProductItem>> =
-      new IncrementalArray<CartItem<ProductItem>>(compareFn);
+    const updatedBasisItems: IncrementalArray<CartItemType<ProductItem>> =
+      new IncrementalArray<CartItemType<ProductItem>>(compareFn);
 
     //we iterate over all items in the cart, and for each template, we add all of its component into the updatedProductItems.
     itemsState.forEach((cartItem) => {
@@ -149,7 +149,7 @@ export function CartContextProvider({ children }: any) {
     localStorage.setItem("cart", JSON.stringify(itemsState));
   }, [updated, itemsState]);
 
-  const addItem = (item: CartItem<ProductItem>) => {
+  const addItem = (item: CartItemType<ProductItem>) => {
     addItemState(item);
   };
 

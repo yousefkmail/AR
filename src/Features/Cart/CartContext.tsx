@@ -1,18 +1,18 @@
 import { createContext } from "react";
 import { ProductItem } from "../../Data/Models/ProductItem";
-import { CartItem } from "./CartItem";
+import { CartItemType } from "./CartItem";
 
 interface CartContextProps {
-  addItem: (ProductItem: CartItem<ProductItem>) => void;
+  addItem: (ProductItem: CartItemType<ProductItem>) => void;
   removeItem: (ProductItem: ProductItem) => void;
   increaseItem: (ProductItem: ProductItem) => void;
   decreaseItem: (ProductItem: ProductItem) => void;
   increaseProductItem: (ProductItem: ProductItem) => void;
   decreaseProductItem: (ProductItem: ProductItem) => void;
   resetPieces: () => void;
-  basesItems: CartItem<ProductItem>[] | undefined;
-  piecesItems: CartItem<ProductItem>[] | undefined;
-  items: CartItem<ProductItem>[];
+  basesItems: CartItemType<ProductItem>[] | undefined;
+  piecesItems: CartItemType<ProductItem>[] | undefined;
+  items: CartItemType<ProductItem>[];
 }
 
 export const CartContext = createContext<CartContextProps | undefined>(
