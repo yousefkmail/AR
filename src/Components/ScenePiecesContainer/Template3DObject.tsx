@@ -2,7 +2,7 @@ import PngPlane, { PngPlaneRef } from "../PngPlane/PngPlane";
 
 import { Suspense, useContext, useRef } from "react";
 import { Template3DObjectContext } from "./Template3DObjectContext";
-import { TemplateObject } from "@data/R3F";
+import { MovementMode, PieceChild, TemplateObject } from "@core";
 import {
   MathUtils,
   Object3D,
@@ -14,9 +14,8 @@ import { useThree } from "@react-three/fiber";
 import { useMousePosition } from "@hooks/useMousePositiion";
 import { NDCToObjectWorld, SetObjectLayerTraverse } from "@utils/ThreeUtils";
 import { useFullPieces, useSceneSettings } from "@hooks/index";
-import { useObjectContextMenu } from "@features/ContextMenu/useObjectContextMenu";
+import { useObjectContextMenu } from "@features/ContextMenu/Hooks/useObjectContextMenu";
 import { ArrayToVector3 } from "@utils/Math";
-import { MovementMode } from "../../../src/Context/SceneSettingsContext";
 import {
   GetPieceChildNeighbours,
   GetPieceLeft,
@@ -24,9 +23,8 @@ import {
   GetPieceMostRight,
   GetPieceRight,
 } from "@utils/Wigits";
-import { PieceChild } from "@data/Models";
-import BasisContextMenuHandler from "@features/ContextMenu/Menus/BasisContextMenuHandler";
-import PieceChildContextMenuHandler from "@features/ContextMenu/Menus/PieceChildContextMenuHandler";
+import BasisContextMenuHandler from "../ContextMenuhandlers/BasisContextMenuHandler";
+import PieceChildContextMenuHandler from "../ContextMenuhandlers/PieceChildContextMenuHandler";
 
 export default function Template3DObject() {
   const { templateObject } = useContext(Template3DObjectContext);
@@ -63,12 +61,7 @@ export default function Template3DObject() {
     }
   };
 
-  const {
-    open: openMenu,
-    setMenu,
-    setMenuPosition,
-    setActiveObject,
-  } = useObjectContextMenu();
+  const { open: openMenu, setMenu, setMenuPosition } = useObjectContextMenu();
 
   const ref = useRef<PngPlaneRef>(null!);
 
@@ -171,7 +164,6 @@ export default function Template3DObject() {
           handleTemplateDrag(ref.current, templateObject);
         }}
         onDrop={(event) => {
-          setActiveObject(templateObject);
           PlaceMenuAtMouseposition(event);
           setMenu(
             <BasisContextMenuHandler
@@ -199,9 +191,6 @@ export default function Template3DObject() {
               )
             }
             onDrop={(event) => {
-              if (movementMode === MovementMode.Parent) {
-                setActiveObject(templateObject);
-              } else setActiveObject(child);
               PlaceMenuAtMouseposition(event);
               setMenu(
                 <PieceChildContextMenuHandler

@@ -1,6 +1,6 @@
-import { MovementMode } from "../../Context/SceneSettingsContext";
-import Spacer from "../../Layout/Spacer";
+import { MovementMode } from "@core";
 import MovementModeButton from "./MovementModeButton";
+import Spacer from "@components/Layout/Spacer";
 
 export const SceneSettings = () => {
   return (

@@ -1,16 +1,13 @@
-export { CartContext } from "./CartContext";
-export { CartContextProvider } from "./CartContextProvider";
-export type { CartItemType as CartItemType } from "./CartItem";
-export { useCart } from "./useCart";
-export { useCartItems } from "./useCartItems";
-export { default as AddCartItemWindow } from "./AddItemWindow/AddCartItemWindow";
-export {
-  CartPopupProvider,
-  useCartPopup,
-} from "./AddItemWindow/CartPopupContext";
+export type { CartItemType as CartItemType } from "./Models/CartItemType";
+export { useCart } from "./Hooks/useCart";
+export { useCartItems } from "./Hooks/useCartItems";
+export { default as AddCartItemWindow } from "./Components/AddCartItemWindow";
+export { CartPopupProvider, useCartPopup } from "./Contexts/CartPopupContext";
 export type { CartItemProps } from "./Components/CartItem";
 export { CartItem } from "./Components/CartItem";
 export { default as CartItemLayout } from "./Components/CartItemLayout";
 export { default as CartItemMobile } from "./Components/CartItemMobile";
 export { default as CartItemsHeader } from "./Components/CartItemsHeader";
 export { default as QuantityChange } from "./Components/QuantityChange";
+export { CartContext } from "./Contexts/CartContext";
+export { CartContextProvider } from "./Contexts/Providers/CartContextProvider";

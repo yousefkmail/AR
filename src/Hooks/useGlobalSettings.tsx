@@ -1,17 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetGlobalSettings } from "@cms";
-
+import { siteDataService } from "../Services/Services";
 export const useGlobalSettings = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["globalSettings"],
-    queryFn: async () => {
-      const data = await GetGlobalSettings();
-      return {
-        logo: data.fields.logo?.fields.file?.url,
-        preview: data.fields.preview?.fields.file?.url,
-        siteName: data.fields.siteName,
-      };
-    },
+    queryFn: siteDataService.GetGlobalSettings,
     staleTime: Infinity,
     cacheTime: Infinity,
   });

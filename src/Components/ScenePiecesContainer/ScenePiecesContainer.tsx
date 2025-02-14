@@ -5,22 +5,22 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
-import { useFullPieces } from "../../Hooks/useFullPieces";
+import { useFullPieces } from "../../Core/Hooks/useFullPieces";
 import { Group, Raycaster } from "three";
 import { GroupProps, useThree } from "@react-three/fiber";
-import { useObjectContextMenu } from "../../Features/ContextMenu/useObjectContextMenu";
+import { useObjectContextMenu } from "@features/ContextMenu/Hooks/useObjectContextMenu";
 import { Piece3DObjectContext } from "./Piece3DObjectContext";
 import Piece3DObject from "./Piece3DObject";
 import { Template3DObjectContext } from "./Template3DObjectContext";
 import Template3DObject from "./Template3DObject";
 import { useUIDraggedWigit } from "@features/DragAndDrop";
-import { PieceObject, TemplateObject } from "@data/R3F";
 import { useMousePosition } from "@hooks/useMousePositiion";
 import { NDCToObjectWorld } from "@utils/ThreeUtils";
-
-export type ScenePiecesContainerRef = {
-  group: Group;
-};
+import {
+  PieceObject,
+  ScenePiecesContainerRef,
+  TemplateObject,
+} from "@core/index";
 
 export const ScenePiecesContainer = forwardRef<
   ScenePiecesContainerRef,

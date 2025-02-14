@@ -6,15 +6,15 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import PageWidthLayout from "../../Layout/PageWidthLayout";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { OrderInfo } from "../../Data/Models/Customer";
+import { OrderInfo } from "../../Data/Customer";
 import { CreateOrderValidationRules } from "../../Validations/ReactHookForm/CreateOrderValidations";
 import InputField from "./Forms/InputField";
 import FormRow from "./Forms/FormRow";
-import { Order } from "@data/Models";
 import { CartItemMobile, useCart } from "@features/Cart";
+import { Order } from "@data/Order";
+import PageWidthLayout from "@components/Layout/PageWidthLayout";
 
 export default function UserInfoFilling() {
   const {

@@ -2,26 +2,21 @@ import React, { Suspense, useContext, useRef } from "react";
 import { Piece3DObjectContext } from "./Piece3DObjectContext";
 import { ArrayToVector3 } from "@utils/Math";
 import { Vector3 } from "three";
-import { useObjectContextMenu } from "@features/ContextMenu/useObjectContextMenu";
+import { useObjectContextMenu } from "@features/ContextMenu/Hooks/useObjectContextMenu";
 import { PngPlaneRef } from "../PngPlane/PngPlane";
-import { PieceObject } from "@data/R3F";
-import { useMouseRaycaster } from "@hooks/useMouseRaycaster";
+import { PieceObject } from "@core";
+import { useMouseRaycaster } from "@hooks";
 import { useThree } from "@react-three/fiber";
 import { useFullPieces, useMousePosition } from "@hooks/index";
 import { NDCToObjectWorld } from "@utils/ThreeUtils";
-import PieceContextMenuHandler from "@features/ContextMenu/Menus/PieceContextMenuHandler";
+import PieceContextMenuHandler from "../ContextMenuhandlers/PieceContextMenuHandler";
 const PngPlane = React.lazy(() => import("../PngPlane/PngPlane"));
 
 export default function Piece3DObject() {
   const { pieceObject } = useContext(Piece3DObjectContext);
   const { camera, scene, gl } = useThree();
 
-  const {
-    open: openMenu,
-    setMenuPosition,
-    setActiveObject,
-    setMenu,
-  } = useObjectContextMenu();
+  const { open: openMenu, setMenuPosition, setMenu } = useObjectContextMenu();
 
   const { getFirstObject, setIgnoredArray } = useMouseRaycaster(camera, scene);
 
@@ -96,7 +91,6 @@ export default function Piece3DObject() {
         onDrag={() => handlePieceDrag(ref.current, pieceObject)}
         onDrop={(event: MouseEvent) => {
           handlePieceDropped(pieceObject, ref.current);
-          setActiveObject(pieceObject);
           PlaceMenuAtMouseposition(event);
         }}
         {...pieceObject.piece}

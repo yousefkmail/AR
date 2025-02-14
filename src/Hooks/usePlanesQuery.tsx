@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Piece } from "../Data/Models/Piece";
-import { collection, onSnapshot } from "firebase/firestore";
-import { firestore } from "../Firebase/firebaseApp";
-import { Basis } from "../Data/Models/Basis";
+import { Piece } from "../Core/Models/Piece";
+import { collection, getFirestore, onSnapshot } from "firebase/firestore";
+import { Basis } from "../Core/Models/Basis";
 export interface OptionType {
   value: string;
   label: string;
@@ -22,7 +21,7 @@ export const usePlanesQuery = () => {
   const [basis, setBasis] = useState<Basis[]>();
 
   useEffect(() => {
-    const piecesRef = collection(firestore, "pieces");
+    const piecesRef = collection(getFirestore(), "pieces");
 
     // Listen for real-time changes
     const unsubscribe = onSnapshot(piecesRef, (snapshot) => {
@@ -38,7 +37,7 @@ export const usePlanesQuery = () => {
   }, []);
 
   useEffect(() => {
-    const basesRef = collection(firestore, "bases");
+    const basesRef = collection(getFirestore(), "bases");
 
     // Listen for real-time changes
     const unsubscribe = onSnapshot(basesRef, (snapshot) => {

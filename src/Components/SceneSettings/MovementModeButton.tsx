@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { ClassnameMerge } from "../../Utils/CssUtils";
-import { MovementMode } from "../../Context/SceneSettingsContext";
 import { useSceneSettings } from "../../Hooks/useSceneSettings";
-import Spacer from "../../Layout/Spacer";
 import Button from "../Button/Button";
+import { MovementMode } from "@core/index";
+import Spacer from "@components/Layout/Spacer";
 
 interface MovementModeButtonProps {
   children: ReactNode;

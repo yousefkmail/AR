@@ -1,4 +1,4 @@
-import { PieceObject } from "@data/R3F";
+import { PieceObject } from "@core";
 import { createContext } from "react";
 
 export interface Piece3DObjectContextProps {

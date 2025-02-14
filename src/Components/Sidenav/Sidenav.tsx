@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import FontawesomeIconButton from "../Button/FontawesomeIconButton";
+import FontawesomeIconButton from "@components/Button/FontawesomeIconButton";
 import { faCartShopping, faHome } from "@fortawesome/free-solid-svg-icons";
 
 export default function Sidenav() {

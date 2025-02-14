@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as FaSolidHeart } from "@fortawesome/free-solid-svg-icons";
-import Spacer from "../../Layout/Spacer";
 import { DragEvent, useState } from "react";
 import { useNotification } from "../../Features/NotificationService/NotificationContext";
 import IconButton from "../Button/IconButton";
 import DraggableItem from "../DragableItem";
 import { CircularProgress } from "@mui/material";
-import { UnresolvedTemplateModel } from "../../Data/Models/TemplateModel";
+import { UnresolvedTemplateModel } from "../../Core/Models/TemplateModel";
+import Spacer from "@components/Layout/Spacer";
 interface TemplateProps {
   item: UnresolvedTemplateModel;
   isLoading: boolean;

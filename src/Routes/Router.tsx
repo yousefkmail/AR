@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import MainLayout from "../Layout/MainLayout";
 import { lazy, Suspense } from "react";
 import UserInfoFilling from "../Pages/UserInfoFilling/UserInfoFilling";
-import OrderPurchaseSuccess from "../Pages/OrderPurchaseSuccess";
+import OrderPurchaseSuccess from "../Pages/OrderSuccess/OrderPurchaseSuccess";
 import Login from "../Pages/Admin/Login";
 import AuthComponent from "../Pages/Admin/Authcomponent";
-import Dashboard from "../Pages/Admin/Dashboard";
+import Dashboard from "@features/AdminDashboard/Pages/Dashboard";
+import MainLayout from "@components/Layout/MainLayout";
 
 const Home = lazy(() => import("../Pages/Home/Home"));
-const Cart = lazy(() => import("../Pages/Cart"));
-const Order = lazy(() => import("../Pages/Order"));
+const Cart = lazy(() => import("../Pages/Cart/Cart"));
+const Order = lazy(() => import("../Pages/Order/Order"));
 const Builder = lazy(() => import("../Pages/3DBuilder/Builder"));
 
 export const AppRouter = createBrowserRouter(

@@ -9,11 +9,11 @@ import {
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import IconedNavlink from "./Button/IconedNavlink";
 import FontawesomeIconButton from "./Button/FontawesomeIconButton";
-import PageWidthLayout from "../Layout/PageWidthLayout";
 import { useGlobalSettings } from "../Hooks/useGlobalSettings";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Skeleton from "react-loading-skeleton";
+import PageWidthLayout from "./Layout/PageWidthLayout";
 export default function () {
   const navigate = useNavigate();
   const { data, isLoading } = useGlobalSettings();

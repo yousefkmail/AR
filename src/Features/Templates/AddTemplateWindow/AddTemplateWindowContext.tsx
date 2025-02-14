@@ -1,5 +1,5 @@
+import { TemplateModel } from "@core";
 import { createContext, useContext, useState } from "react";
-import { TemplateModel } from "@data/Models";
 
 interface CartPopupContextType {
   isOpen: boolean;

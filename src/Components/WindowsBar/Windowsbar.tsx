@@ -1,5 +1,5 @@
 import { WindowData } from "../WindowsContainer/WindowsContainer";
-import FontawesomeIconButton from "../Button/FontawesomeIconButton";
+import FontawesomeIconButton from "@components/Button/FontawesomeIconButton";
 interface WindowsBarProps {
   windowsData?: (WindowData | null)[];
   activeWindow: WindowData;

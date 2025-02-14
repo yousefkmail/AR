@@ -19,16 +19,23 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@utils/*": ["Utils/*"],
-      "@utils*": ["Utils"],
-      "@components/*": ["components/*"],
-      "@data/*": ["Data/*"],
-      "@hooks/*": ["Hooks/*"],
-      "@hooks": ["Hooks"],
-      "@cms": ["_Contentful"],
-      "@features/*": ["Features/*"]
+      "@utils/*": ["src/Utils/*"],
+      "@utils*": ["src/Utils"],
+      "@components/*": ["src/Components/*"],
+      "@data/*": ["src/Data/*"],
+      "@data": ["src/Data"],
+      "@hooks/*": ["src/Hooks/*"],
+      "@hooks": ["src/Hooks"],
+      "@cms": ["src/Lib/Contentful"],
+      "@features/*": ["src/Features/*"],
+      "@core/*": ["src/Core/*"],
+      "@lib/*": ["src/Lib/*"],
+      "@core": ["src/Core"],
+      "@lib": ["src/Lib"],
+      "@services": ["src/Services"],
+      "@services/*": ["src/Services/*"]
     }
   },
   "include": ["src"]

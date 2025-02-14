@@ -10,7 +10,7 @@ import { faNewspaper } from "@fortawesome/free-regular-svg-icons";
 import { PiecesContainer } from "../PiecesContainer/PiecesContainer";
 import { SceneSettings } from "../SceneSettings/SceneSettings";
 import PremadeTemplates from "../PremadeTemplates/PremadeTemplates";
-import FontawesomeIconButton from "../Button/FontawesomeIconButton";
+import FontawesomeIconButton from "@components/Button/FontawesomeIconButton";
 
 export interface WindowData {
   name: string;

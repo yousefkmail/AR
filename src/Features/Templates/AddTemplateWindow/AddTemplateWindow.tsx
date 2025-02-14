@@ -1,9 +1,8 @@
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useAddTemplatePopup } from "./AddTemplateWindowContext";
-import AddTemplatePopup from "@features/ContextMenu/AddTemplatePopup";
-import { UnresolvedTemplateModel } from "@data/Models";
-import { firestore } from "../../../Firebase/firebaseApp";
-import { collection, doc, addDoc } from "firebase/firestore";
+import { UnresolvedTemplateModel } from "@core";
+import { collection, doc, addDoc, getFirestore } from "firebase/firestore";
+import { AddTemplatePopup } from "@features/ContextMenu";
 
 export default function AddTemplateWindow() {
   const { isOpen, item, closePopup } = useAddTemplatePopup();
@@ -20,14 +19,14 @@ export default function AddTemplateWindow() {
     const uploadTask = await uploadBytes(storageRef, file);
     const url = await getDownloadURL(uploadTask.ref);
 
-    const collectionRef = collection(firestore, "bases");
+    const collectionRef = collection(getFirestore(), "bases");
 
     const itemm: UnresolvedTemplateModel = {
       base: doc(collectionRef, item.base.id),
       name,
       state: "NotLoaded",
       children: item.children.map((item) => ({
-        piece: doc(collection(firestore, "pieces"), item.piece.id),
+        piece: doc(collection(getFirestore(), "pieces"), item.piece.id),
         id: item.id,
         layer: item.layer,
         position: item.position,
@@ -42,7 +41,7 @@ export default function AddTemplateWindow() {
       id: "",
     };
 
-    const templatesCollection = collection(firestore, "templates");
+    const templatesCollection = collection(getFirestore(), "templates");
 
     await addDoc(templatesCollection, itemm);
   };

@@ -1,4 +1,4 @@
-import { PieceChild } from "@data/Models";
+import { PieceChild } from "Core/Models";
 import { PieceObject, TemplateObject } from "@data/R3F";
 
 export type WigitType = "TemplateObject" | "PieceChild" | "PieceObject";

@@ -19,6 +19,9 @@ export default defineConfig({
       "@hooks": path.resolve(__dirname, "src/Hooks"),
       "@cms": path.resolve(__dirname, "src/_Contentful"),
       "@features": path.resolve(__dirname, "src/Features"),
+      "@core": path.resolve(__dirname, "src/Core"),
+      "@lib": path.resolve(__dirname, "src/Lib"),
+      "@services": path.resolve(__dirname, "src/Services"),
     },
   },
 });

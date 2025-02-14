@@ -1,5 +1,5 @@
 import { HTMLAttributes } from "react";
-import FontawesomeIconButton from "../../../Components/Button/FontawesomeIconButton";
+import FontawesomeIconButton from "@components/Button/FontawesomeIconButton";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 interface QuantityChangeProps extends HTMLAttributes<HTMLDivElement> {

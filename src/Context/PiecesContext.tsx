@@ -1,15 +1,13 @@
 import React, { createContext, Dispatch, useContext } from "react";
 import { Object3D, Object3DEventMap, Vector3 } from "three";
-import { PlanesContainerContext } from "./PlanesContainerContext";
-import { PieceObject } from "../Data/R3F/PiecePlane";
-import { CreatedPiecesAction, usePieces } from "../Hooks/usePieces";
+import { CreatedPiecesAction, usePieces } from "../Core/Hooks/usePieces";
 import {
   createdTemplatesAction,
   useTemplateObjects,
-} from "../Hooks/useTemplateObjects";
-import { PieceChild } from "../Data/Models/TemplateModel";
-import { TemplateObject } from "../Data/R3F/Template";
+} from "../Core/Hooks/useTemplateObjects";
+import { PieceChild } from "../Core/Models/TemplateModel";
 import { useNotification } from "../Features/NotificationService/NotificationContext";
+import { PieceObject, PlanesContainerContext, TemplateObject } from "@core";
 export const PiecesContext = createContext<PiecesContextProps>(
   {} as PiecesContextProps
 );

@@ -1,13 +1,13 @@
 import PremadeTemplatesSkeleton from "../PremadeTemplates/PremadeTemplatesSkeleton";
-import GridLayout from "../../Layout/GridLayout";
 import Pagination from "@mui/material/Pagination";
-import { useTemplatesQuery } from "../../Hooks/useTemplatesQuery";
 import { ChangeEvent } from "react";
 import { GetPageCount } from "@utils";
-import CenterLayout from "../../Layout/CenterLayout";
 import { PaginationCustomStyle } from "../../Styles/CustomStyles/mui/PaginationCustomStyle";
 import LoadedTemplate from "./LoadedTemplate";
 import NotLoadedTemplate from "./NotLoadedTemplate";
+import { useTemplates } from "@hooks/Template/useTemplates";
+import CenterLayout from "@components/Layout/CenterLayout";
+import GridLayout from "@components/Layout/GridLayout";
 
 interface PremadeTemplatesProps {
   cellMinWidth?: number;
@@ -23,7 +23,7 @@ export default function PremadeTemplates({
     pageSize,
     page,
     fetchFullTemplate,
-  } = useTemplatesQuery();
+  } = useTemplates();
 
   const HandleChange = (_data: ChangeEvent<unknown>, page: number) => {
     setPage(page);

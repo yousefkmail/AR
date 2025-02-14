@@ -11,7 +11,7 @@ import { AppRouter } from "./Routes/Router";
 import NotificationList from "./Features/NotificationService/Notification";
 
 // App Metadata
-import SiteMetadata from "./SiteMetadata";
+import SiteMetadata from "./Site/SiteMetadata";
 
 function App() {
   return (

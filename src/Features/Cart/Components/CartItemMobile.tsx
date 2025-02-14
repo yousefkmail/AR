@@ -1,5 +1,5 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import FontawesomeIconButton from "../../../Components/Button/FontawesomeIconButton";
+import FontawesomeIconButton from "@components/Button/FontawesomeIconButton";
 import { CartItemProps } from "./CartItem";
 import QuantityChange from "./QuantityChange";
 

@@ -1,5 +1,5 @@
-import { Piece } from "../../Data/Models/Piece";
-import { PieceChild } from "../../Data/Models/TemplateModel";
+import { Piece } from "../../Core/Models/Piece";
+import { PieceChild } from "../../Core/Models/TemplateModel";
 
 export const GetPieceRight: (piece: Piece) => number = (piece: Piece) => {
   if (piece.isFlipped) {

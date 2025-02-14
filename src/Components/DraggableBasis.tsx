@@ -1,6 +1,6 @@
 import { HTMLAttributes } from "react";
 import DraggableItem from "./DragableItem";
-import { Plane } from "@data/Models";
+import { Plane } from "@core/index";
 interface DraggablebasisProps extends HTMLAttributes<HTMLDivElement> {
   plane: Plane;
 }

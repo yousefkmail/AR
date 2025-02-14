@@ -1,4 +1,4 @@
-import { TemplateObject } from "@data/R3F";
+import { TemplateObject } from "@core";
 import { createContext } from "react";
 
 export interface Template3DObjectContextProps {
