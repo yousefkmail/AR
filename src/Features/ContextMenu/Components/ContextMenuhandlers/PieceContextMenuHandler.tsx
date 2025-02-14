@@ -1,8 +1,5 @@
 import { PieceObject } from "@core";
-import {
-  PieceContextMenu,
-  useObjectContextMenu,
-} from "../../Features/ContextMenu";
+import { PieceContextMenu, useObjectContextMenu } from "../..";
 import { useFullPieces } from "@hooks/index";
 
 import { useCartPopup } from "@features/Cart";

@@ -23,8 +23,8 @@ import {
   GetPieceMostRight,
   GetPieceRight,
 } from "@utils/Wigits";
-import BasisContextMenuHandler from "../ContextMenuhandlers/BasisContextMenuHandler";
-import PieceChildContextMenuHandler from "../ContextMenuhandlers/PieceChildContextMenuHandler";
+import BasisContextMenuHandler from "../../Features/ContextMenu/Components/ContextMenuhandlers/BasisContextMenuHandler";
+import PieceChildContextMenuHandler from "../../Features/ContextMenu/Components/ContextMenuhandlers/PieceChildContextMenuHandler";
 
 export default function Template3DObject() {
   const { templateObject } = useContext(Template3DObjectContext);

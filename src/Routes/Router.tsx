@@ -1,12 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import { lazy, Suspense } from "react";
-import UserInfoFilling from "../Pages/UserInfoFilling/UserInfoFilling";
-import OrderPurchaseSuccess from "../Pages/OrderSuccess/OrderPurchaseSuccess";
-import Login from "../Pages/Admin/Login";
 import AuthComponent from "../Pages/Admin/Authcomponent";
-import Dashboard from "@features/AdminDashboard/Pages/Dashboard";
 import MainLayout from "@components/Layout/MainLayout";
+import {
+  Dashboard,
+  Login,
+  OrderPurchaseSuccess,
+  UserInfoFilling,
+} from "@pages";
 
 const Home = lazy(() => import("../Pages/Home/Home"));
 const Cart = lazy(() => import("../Pages/Cart/Cart"));

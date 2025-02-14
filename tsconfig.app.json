@@ -28,14 +28,14 @@
       "@data": ["src/Data"],
       "@hooks/*": ["src/Hooks/*"],
       "@hooks": ["src/Hooks"],
-      "@cms": ["src/Lib/Contentful"],
       "@features/*": ["src/Features/*"],
       "@core/*": ["src/Core/*"],
       "@lib/*": ["src/Lib/*"],
       "@core": ["src/Core"],
       "@lib": ["src/Lib"],
       "@services": ["src/Services"],
-      "@services/*": ["src/Services/*"]
+      "@services/*": ["src/Services/*"],
+      "@pages": ["src/Pages"]
     }
   },
   "include": ["src"]

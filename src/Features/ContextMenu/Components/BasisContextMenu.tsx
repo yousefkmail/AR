@@ -7,7 +7,7 @@ import {
   faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import UserOnly from "../../../Components/Auth/UserOnly";
+import UserOnly from "@features/Auth/Components/UserOnly";
 interface ObjectContextMenuProps {
   OnDelete: () => void;
   OnRotationChangd: (number: number) => void;

@@ -1,0 +1,8 @@
+export { default as Builder } from "./3DBuilder/Builder";
+export { default as Cart } from "./Cart/Cart";
+export { default as Login } from "./Admin/Login";
+export { default as Dashboard } from "./Dashboard/Dashboard";
+export { default as Home } from "./Home/Home";
+export { default as OrderPage } from "./Order/Order";
+export { default as OrderPurchaseSuccess } from "./OrderSuccess/OrderPurchaseSuccess";
+export { default as UserInfoFilling } from "./UserInfoFilling/UserInfoFilling";

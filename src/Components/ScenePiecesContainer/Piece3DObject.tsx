@@ -9,7 +9,7 @@ import { useMouseRaycaster } from "@hooks";
 import { useThree } from "@react-three/fiber";
 import { useFullPieces, useMousePosition } from "@hooks/index";
 import { NDCToObjectWorld } from "@utils/ThreeUtils";
-import PieceContextMenuHandler from "../ContextMenuhandlers/PieceContextMenuHandler";
+import PieceContextMenuHandler from "../../Features/ContextMenu/Components/ContextMenuhandlers/PieceContextMenuHandler";
 const PngPlane = React.lazy(() => import("../PngPlane/PngPlane"));
 
 export default function Piece3DObject() {

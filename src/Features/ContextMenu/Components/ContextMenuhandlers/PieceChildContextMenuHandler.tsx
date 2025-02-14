@@ -5,7 +5,7 @@ import {
 } from "@features/ContextMenu";
 import { useEffect, useState } from "react";
 import { useFullPieces } from "@hooks/index";
-import { PieceChild, TemplateObject } from "../../Core";
+import { PieceChild, TemplateObject } from "../../../../Core";
 
 interface PieceChildContextMenuHandlerProps {
   piece: PieceChild;

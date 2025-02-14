@@ -1,14 +1,7 @@
 import { AboutSectionType } from "../../Lib/Contentful/Types/AboutSectionType";
 import { TeamMemberType } from "../../Lib/Contentful/Types/TeamMemberType";
 import { GlobalSettingsType } from "../../Lib/Contentful/Types/GlobalSettingsType";
-
-import { createClient } from "contentful";
-
-export const ContentfulCleint = createClient({
-  accessToken: import.meta.env.VITE_CONTENTFUL_ACCESSTOKEN,
-  space: import.meta.env.VITE_CONTENTFUL_SPACE,
-  host: import.meta.env.VITE_CONTENTFUL_HOST,
-});
+import { ContentfulCleint } from "@lib/Contentful/Client";
 
 export const GetAboutSections = async () => {
   const data =
