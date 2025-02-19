@@ -20,8 +20,9 @@ function IconedNavlink({
   return (
     <NavLink
       className={ClassnameMerge(
-        "btn-sec-color",
-        "start-creating",
+        "btn-color",
+        "btn-shape",
+        "iconed-navlink",
         className?.toString() ?? ""
       )}
       {...rest}

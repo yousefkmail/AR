@@ -64,13 +64,20 @@ export function CartContextProvider({ children }: any) {
     decreaseItem: decreaseRemovedItem,
     clearItems: clearRemovedItems,
     items: removedItems,
+    setItems: setRemovedItems,
   } = useIncrementalArray<CartItemType<ProductItem>>(
     compareFn,
     IncrementalArrayThreshouldBehaviour.AllowNegative
   );
 
-  const [basesItems, setBasesItems] = useState<CartItemType<ProductItem>[]>();
-  const [piecesItems, setPiecesItems] = useState<CartItemType<ProductItem>[]>();
+  const [productItems, setProductItems] = useState<CartItemType<ProductItem>[]>(
+    []
+  );
+
+  const [finalProductItems, setFinalProductItems] = useState<
+    CartItemType<ProductItem>[]
+  >([]);
+
   const {
     addItem: addItemState,
     decreaseItem: decreaseItemState,
@@ -81,10 +88,7 @@ export function CartContextProvider({ children }: any) {
 
   useEffect(() => {
     //everytime the templates or the products changes in the cart, we need to update the final product items.
-    const updatedPiecesItems: IncrementalArray<CartItemType<ProductItem>> =
-      new IncrementalArray<CartItemType<ProductItem>>(compareFn);
-
-    const updatedBasisItems: IncrementalArray<CartItemType<ProductItem>> =
+    const updatedProductItems: IncrementalArray<CartItemType<ProductItem>> =
       new IncrementalArray<CartItemType<ProductItem>>(compareFn);
 
     //we iterate over all items in the cart, and for each template, we add all of its component into the updatedProductItems.
@@ -97,7 +101,7 @@ export function CartContextProvider({ children }: any) {
         //  if so we increment the quantity by the templates amout, since each template can only have 1 base, if not, we
         //add a new product item with the quantity of how many of that templates we have.
 
-        updatedBasisItems.addItem({
+        updatedProductItems.addItem({
           item: templateModel.base,
           quantity: cartItem.quantity,
         });
@@ -105,7 +109,7 @@ export function CartContextProvider({ children }: any) {
         //now we handle the rest of the children for each template, and do the same operation as bases, but this time iterating over all children.
 
         templateModel.children.forEach((PieceChild) => {
-          updatedPiecesItems.addItem({
+          updatedProductItems.addItem({
             item: PieceChild.piece,
             quantity: cartItem.quantity,
           });
@@ -113,25 +117,54 @@ export function CartContextProvider({ children }: any) {
       } else {
         //if the product item is not a template, then it is a native product, so we just check it and add it directly.
         if ("layers" in cartItem) {
-          updatedBasisItems.addItem({
+          updatedProductItems.addItem({
             ...cartItem,
           });
         } else {
-          updatedPiecesItems.addItem({
+          updatedProductItems.addItem({
             ...cartItem,
           });
         }
       }
     });
-    //finally, we remove all product items that the user chose to decrease.
-    for (let item of removedItems) {
-      updatedPiecesItems.removeQuantity(item);
-      updatedBasisItems.removeQuantity(item);
+
+    setProductItems(updatedProductItems.getItems());
+  }, [itemsState]);
+
+  useEffect(() => {
+    let updatedItems: CartItemType<ProductItem>[] = [];
+    for (let removedItem of removedItems) {
+      const item = productItems.find(
+        (productItem) => productItem.item.id === removedItem.item.id
+      );
+      if (item) {
+        if (removedItem.quantity > item.quantity) {
+          updatedItems.push({
+            ...removedItem,
+            quantity: item.quantity,
+          });
+        } else {
+          updatedItems.push(removedItem);
+        }
+      }
+    }
+    setRemovedItems(updatedItems);
+  }, [productItems]);
+
+  useEffect(() => {
+    const updatedProductItems: IncrementalArray<CartItemType<ProductItem>> =
+      new IncrementalArray<CartItemType<ProductItem>>(compareFn);
+
+    for (let productItem of productItems) {
+      updatedProductItems.addItem(productItem);
     }
 
-    setPiecesItems(updatedPiecesItems.getItems());
-    setBasesItems(updatedBasisItems.getItems());
-  }, [itemsState, removedItems]);
+    for (let removedItem of removedItems) {
+      updatedProductItems.removeQuantity(removedItem);
+    }
+
+    setFinalProductItems(updatedProductItems.getItems());
+  }, [removedItems, productItems]);
 
   const decreaseProductItem = (productItem: ProductItem) => {
     increaseRemovedItem({ item: productItem, quantity: 1 });
@@ -172,6 +205,7 @@ export function CartContextProvider({ children }: any) {
     <CartContext.Provider
       value={{
         addItem,
+        finalProductItems,
         removeItem,
         items: itemsState,
         increaseItem,
@@ -179,8 +213,7 @@ export function CartContextProvider({ children }: any) {
         increaseProductItem,
         decreaseProductItem,
         resetPieces,
-        basesItems,
-        piecesItems,
+        productItems,
       }}
     >
       {children}

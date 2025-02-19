@@ -2,12 +2,12 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { ResolvedTemplateModel, UnresolvedTemplateModel } from "@core/index";
-import { useNotification } from "@features/NotificationService/NotificationContext";
 import { templateService } from "../../Services/Services";
 import { queryClient } from "@lib/ReactQuery/Client";
+import { useAddNotification } from "@features/NotificationService/useAddNotification";
 
 export const useTemplates = () => {
-  const { addNotification } = useNotification();
+  const addNotification = useAddNotification();
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(5);
 

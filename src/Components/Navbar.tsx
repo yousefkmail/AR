@@ -59,6 +59,7 @@ export default function () {
               ></FontawesomeIconButton>
             </div>
             <IconedNavlink
+              className={"start-creating"}
               content="Start creating"
               to={"/3D_builder"}
               icon={<IconedNavlink.FontawesomeNavlinkIcon icon={faPlus} />}

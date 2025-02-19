@@ -12,6 +12,7 @@ import NotificationList from "./Features/NotificationService/Notification";
 
 // App Metadata
 import SiteMetadata from "./Site/SiteMetadata";
+import ContextMenuContainer from "@features/ContextMenu/ContextMenuContainer";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <SiteMetadata />
       <RouterProvider router={AppRouter}></RouterProvider>
       <NotificationList />
+      <ContextMenuContainer />
     </div>
   );
 }

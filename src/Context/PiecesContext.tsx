@@ -6,8 +6,8 @@ import {
   useTemplateObjects,
 } from "../Core/Hooks/useTemplateObjects";
 import { PieceChild } from "../Core/Models/TemplateModel";
-import { useNotification } from "../Features/NotificationService/NotificationContext";
 import { PieceObject, PlanesContainerContext, TemplateObject } from "@core";
+import { useAddNotification } from "@features/NotificationService/useAddNotification";
 export const PiecesContext = createContext<PiecesContextProps>(
   {} as PiecesContextProps
 );
@@ -54,7 +54,7 @@ export const PiecesContextProvider = ({
 
   const { DispatchCreatedPieces, createdPieces } = usePieces();
 
-  const { addNotification } = useNotification();
+  const addNotification = useAddNotification();
   const Deattach_Piece = (piece: PieceChild) => {
     dispatchCreatedTemplates({ type: "deattach_piece", payload: piece });
 

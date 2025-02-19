@@ -3,13 +3,15 @@ import InputField from "../../../Pages/UserInfoFilling/Forms/InputField";
 import FontawesomeIconButton from "@components/Button/FontawesomeIconButton";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
+import { HTMLAttributes } from "react";
+import { ClassnameMerge } from "@utils/CssUtils";
 
-export interface CollectionAddToCartPopupProps {
+export interface CollectionAddToCartPopupProps
+  extends HTMLAttributes<HTMLDivElement> {
   name?: string;
   nameEditable?: boolean;
   onAddToCartPressed?: (amount: number, name: string) => void;
   onClose?: () => void;
-  isShown: boolean;
 }
 
 interface AddToCartFormProps {
@@ -20,8 +22,9 @@ export function CollectionAddToCartPopup({
   name,
   nameEditable,
   onAddToCartPressed,
-  isShown,
   onClose,
+  className,
+  ...rest
 }: CollectionAddToCartPopupProps) {
   const { register, handleSubmit, watch } = useForm<AddToCartFormProps>();
 
@@ -32,28 +35,10 @@ export function CollectionAddToCartPopup({
   const nameValue = watch("name");
   return (
     <div
-      style={{
-        position: "absolute",
-        backgroundColor: "white",
-        maxWidth: "350px",
-        width: "100%",
-        left: "50%",
-        transform: "translate(-50%,0)",
-        padding: "20px",
-        borderRadius: "7px",
-        overflow: "hidden",
-        transition: "all ease-in-out 0.4s",
-        top: isShown ? "50px" : "-500px",
-      }}
+      className={ClassnameMerge("add-to-cart-conatiner", className)}
+      {...rest}
     >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          margin: "0 10px",
-          alignItems: "center",
-        }}
-      >
+      <div className="cart-add-item-header">
         <h3>Add item to cart</h3>
         <FontawesomeIconButton
           onClick={() => onClose?.()}

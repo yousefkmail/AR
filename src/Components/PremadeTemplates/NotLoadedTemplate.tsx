@@ -2,12 +2,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as FaSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { DragEvent, useState } from "react";
-import { useNotification } from "../../Features/NotificationService/NotificationContext";
 import IconButton from "../Button/IconButton";
 import DraggableItem from "../DragableItem";
 import { CircularProgress } from "@mui/material";
 import { UnresolvedTemplateModel } from "../../Core/Models/TemplateModel";
 import Spacer from "@components/Layout/Spacer";
+import { useAddNotification } from "@features/NotificationService/useAddNotification";
 interface TemplateProps {
   item: UnresolvedTemplateModel;
   isLoading: boolean;
@@ -20,7 +20,7 @@ export default function NotLoadedTemplate({
   isLoading,
 }: TemplateProps) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const { addNotification } = useNotification();
+  const addNotification = useAddNotification();
   const handleDragStart = () => {
     addNotification(
       `you need to load template ${item.name} before dragging it.`,

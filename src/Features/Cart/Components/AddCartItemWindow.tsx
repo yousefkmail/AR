@@ -15,9 +15,12 @@ export default function AddCartItemWindow() {
   };
 
   return (
-    <div style={{ zIndex: "9999", position: "relative" }}>
+    <div className="cart-add-item-window">
       <CollectionAddToCartPopup
-        isShown={isOpen}
+        className="cart-add-item-container"
+        style={{
+          top: isOpen ? "50px" : "-500px",
+        }}
         name={item?.name}
         nameEditable={item ? "base" in item : false}
         onAddToCartPressed={AddToCart}

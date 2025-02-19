@@ -1,9 +1,8 @@
 import { Alert, Snackbar } from "@mui/material";
-import { useNotification } from "./NotificationContext";
+import { useNotifications } from "./useNotifications";
 
 const NotificationList = () => {
-  const { notifications } = useNotification();
-
+  const notifications = useNotifications();
   return (
     <div style={{ position: "fixed", top: "1rem", left: "1rem", zIndex: 1000 }}>
       {notifications.map(({ message, type, id }) => (

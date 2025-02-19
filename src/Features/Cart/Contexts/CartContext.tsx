@@ -10,8 +10,8 @@ interface CartContextProps {
   increaseProductItem: (ProductItem: ProductItem) => void;
   decreaseProductItem: (ProductItem: ProductItem) => void;
   resetPieces: () => void;
-  basesItems: CartItemType<ProductItem>[] | undefined;
-  piecesItems: CartItemType<ProductItem>[] | undefined;
+  productItems: CartItemType<ProductItem>[];
+  finalProductItems: CartItemType<ProductItem>[];
   items: CartItemType<ProductItem>[];
 }
 

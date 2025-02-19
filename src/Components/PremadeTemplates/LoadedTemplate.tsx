@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as FaSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { DragEvent, useState } from "react";
-import { useNotification } from "../../Features/NotificationService/NotificationContext";
 import IconButton from "../Button/IconButton";
 import DraggableItem from "../DragableItem";
 import { TemplateModel } from "../../Core/Models/TemplateModel";
@@ -10,13 +9,14 @@ import { v4 as uuidv4 } from "uuid";
 import { useUIDraggedWigit } from "@features/DragAndDrop";
 import { TemplateObject } from "@core/index";
 import Spacer from "@components/Layout/Spacer";
+import { useAddNotification } from "@features/NotificationService/useAddNotification";
 interface TemplateProps {
   item: TemplateModel;
 }
 
 export default function LoadedTemplate({ item }: TemplateProps) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const { addNotification } = useNotification();
+  const addNotification = useAddNotification();
   const { setDraggedItem } = useUIDraggedWigit();
   const handleDragStart = () => {
     const template: TemplateObject = {

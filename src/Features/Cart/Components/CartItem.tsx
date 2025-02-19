@@ -9,7 +9,7 @@ export interface CartItemProps extends HTMLAttributes<HTMLDivElement> {
   id: string;
   name: string;
   previewImage: string;
-  totalPrice?: number;
+  totalPrice: number;
   price: number;
   onIncrease?: () => void;
   onDecrease?: () => void;

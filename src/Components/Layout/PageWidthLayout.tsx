@@ -1,3 +1,4 @@
+import { ClassnameMerge } from "@utils/CssUtils";
 import { HTMLAttributes } from "react";
 
 interface PageWidthLayoutProps extends HTMLAttributes<HTMLDivElement> {
@@ -9,13 +10,9 @@ export default function PageWidthLayout(props: PageWidthLayoutProps) {
     <div
       style={{
         maxWidth: props.maxWidth + "px",
-        width: "100%",
-        margin: "0 auto",
-        padding: "0 16px",
-        boxSizing: "border-box",
         ...props.style,
       }}
-      className={props.className}
+      className={ClassnameMerge("page-width-layout", props.className)}
     >
       {props.children}
     </div>

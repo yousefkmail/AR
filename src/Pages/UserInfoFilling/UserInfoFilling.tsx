@@ -1,5 +1,4 @@
 import {
-  Button,
   FormControl,
   FormControlLabel,
   Radio,
@@ -15,6 +14,7 @@ import FormRow from "./Forms/FormRow";
 import { CartItemMobile, useCart } from "@features/Cart";
 import { Order } from "@data/Order";
 import PageWidthLayout from "@components/Layout/PageWidthLayout";
+import Button from "@components/Button/Button";
 
 export default function UserInfoFilling() {
   const {
@@ -213,7 +213,11 @@ export default function UserInfoFilling() {
             </FormControl>
           </div>
 
-          <Button type="submit" disabled={isloading} variant="outlined">
+          <Button
+            style={{ fontSize: "1rem" }}
+            type="submit"
+            disabled={isloading}
+          >
             {isloading
               ? "Loading..."
               : paymentType === "Online"

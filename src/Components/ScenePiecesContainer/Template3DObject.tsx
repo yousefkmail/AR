@@ -68,7 +68,7 @@ export default function Template3DObject() {
   const PlaceMenuAtMouseposition = (event: MouseEvent) => {
     const offsetX = event.clientX - gl.domElement.getBoundingClientRect().left;
     const offsetY = event.clientY - gl.domElement.getBoundingClientRect().top;
-    setMenuPosition({ x: offsetX, y: offsetY - 80 });
+    setMenuPosition(offsetX, offsetY);
   };
   const { movementMode } = useSceneSettings();
 
