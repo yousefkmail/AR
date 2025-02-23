@@ -1,12 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
-import { useCart } from "../Hooks/useCart";
 import { useCartPopup } from "../Contexts/CartPopupContext";
 import { CollectionAddToCartPopup } from "@features/ContextMenu";
+import useCartStore from "../Store/CartStore";
 
 export default function AddCartItemWindow() {
   const { isOpen, item, closePopup } = useCartPopup();
-  const { addItem } = useCart();
-
+  const addItem = useCartStore((state) => state.addItem);
   const AddToCart = (quantity: number, name: string) => {
     if (!item) return;
     const newItem = { ...item, name, id: uuidv4() };
