@@ -2,7 +2,6 @@ export type { CartItemType as CartItemType } from "./Models/CartItemType";
 export { useCart } from "./Hooks/useCart";
 export { useCartItems } from "./Hooks/useCartItems";
 export { default as AddCartItemWindow } from "./Components/AddCartItemWindow";
-export { CartPopupProvider, useCartPopup } from "./Contexts/CartPopupContext";
 export type { CartItemProps } from "./Components/CartItem";
 export { CartItem } from "./Components/CartItem";
 export { default as CartItemLayout } from "./Components/CartItemLayout";

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { BasisContextMenu, useObjectContextMenu } from "@features/ContextMenu";
 import { TemplateObject } from "@core";
 import { useFullPieces } from "@hooks";
-import { useCartPopup } from "@features/Cart";
-import { useAddTemplatePopup } from "@features/Templates/AddTemplateWindow/AddTemplateWindowContext";
+import { useTemplateStore } from "@features/Templates/AddTemplateWindow/AddTemplateStore";
+import { useCartPopup } from "@features/Cart/Store/CartPopupStore";
 
 interface BasisContextMenuHandlerProps {
   template: TemplateObject;
@@ -36,13 +36,16 @@ export default function BasisContextMenuHandler({
     setMenu(null);
   };
 
-  const { openPopup } = useCartPopup();
+  const setIsOpened = useCartPopup((state) => state.setIsOpen);
+  const setItem = useCartPopup((state) => state.setItem);
 
-  const { openPopup: openTemplatePopup } = useAddTemplatePopup();
+  const openTemplatePopup = useTemplateStore((state) => state.openPopup);
 
   const OpenAddToCart = () => {
-    openPopup(template.templateModel);
+    setItem(template.templateModel);
+    setIsOpened(true);
   };
+
   useEffect(() => {
     setRotation(template.rotation[2]);
   }, []);

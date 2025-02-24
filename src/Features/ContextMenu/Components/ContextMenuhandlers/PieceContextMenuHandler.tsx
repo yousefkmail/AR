@@ -2,8 +2,8 @@ import { PieceObject } from "@core";
 import { PieceContextMenu, useObjectContextMenu } from "../..";
 import { useFullPieces } from "@hooks/index";
 
-import { useCartPopup } from "@features/Cart";
 import { useEffect, useState } from "react";
+import { useCartPopup } from "@features/Cart/Store/CartPopupStore";
 
 interface PieceContextMenuHandlerProps {
   piece: PieceObject;
@@ -40,11 +40,14 @@ export default function PieceContextMenuHandler({
       payload: { piece },
     });
   };
-  const { openPopup } = useCartPopup();
+  const setIsOpened = useCartPopup((state) => state.setIsOpen);
+  const setItem = useCartPopup((state) => state.setItem);
 
   const OpenAddToCart = () => {
-    openPopup(piece.piece);
+    setItem(piece.piece);
+    setIsOpened(true);
   };
+
   useEffect(() => {
     setRotation(piece.rotation[1]);
   }, []);

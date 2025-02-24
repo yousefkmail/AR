@@ -13,8 +13,20 @@ export default function Cart() {
   const decreaseItem = useCartStore((statusbar) => statusbar.decreaseItem);
   const addItem = useCartStore((statusbar) => statusbar.addItem);
   const initializeCart = useCartStore((statusbar) => statusbar.initializeCart);
-  const navigate = useNavigate();
+  const finalProductItems = useCartStore((state) => state.getFinalProductItems);
+  const resetPieces = useCartStore((state) => state.resetPieces);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const removedItems = useCartStore((state) => state.removedItems);
+  const increaseProductItem = useCartStore(
+    (state) => state.increaseProductItem
+  );
+  const decreaseProductItem = useCartStore(
+    (state) => state.decreaseProductItem
+  );
 
+  console.log(productItems);
+  console.log(removedItems);
+  const navigate = useNavigate();
   useEffect(() => {
     initializeCart();
   }, []);
@@ -38,14 +50,14 @@ export default function Cart() {
               onIncrease={(item) => {
                 addItem({ item, quantity: 1 });
               }}
-              // onRemove={removeItem}
+              onRemove={(item) => removeItem({ item, quantity: 0 })}
             />
 
             <CartPiecesContainer
-              items={productItems}
-              // onDecrease={decreaseProductItem}
-              // onIncrease={increaseProductItem}
-              // onResetPieces={() => resetPieces()}
+              items={finalProductItems()}
+              onDecrease={(item) => decreaseProductItem({ item, quantity: 1 })}
+              onIncrease={(item) => increaseProductItem({ item, quantity: 1 })}
+              onResetPieces={() => resetPieces()}
             />
 
             <CartBottomSection

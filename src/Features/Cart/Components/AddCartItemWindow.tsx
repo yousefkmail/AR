@@ -1,16 +1,17 @@
 import { v4 as uuidv4 } from "uuid";
-import { useCartPopup } from "../Contexts/CartPopupContext";
 import { CollectionAddToCartPopup } from "@features/ContextMenu";
 import useCartStore from "../Store/CartStore";
+import { useCartPopup } from "../Store/CartPopupStore";
 
 export default function AddCartItemWindow() {
-  const { isOpen, item, closePopup } = useCartPopup();
+  const { isOpen, item, setIsOpen } = useCartPopup();
+
   const addItem = useCartStore((state) => state.addItem);
   const AddToCart = (quantity: number, name: string) => {
     if (!item) return;
     const newItem = { ...item, name, id: uuidv4() };
     addItem({ quantity, item: newItem });
-    closePopup();
+    setIsOpen(false);
   };
 
   return (
@@ -23,7 +24,7 @@ export default function AddCartItemWindow() {
         name={item?.name}
         nameEditable={item ? "base" in item : false}
         onAddToCartPressed={AddToCart}
-        onClose={closePopup}
+        onClose={() => setIsOpen(false)}
       />
     </div>
   );

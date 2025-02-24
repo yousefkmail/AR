@@ -9,18 +9,16 @@ interface CartStore {
   items: CartItemType<ProductItem>[];
   setItems: (items: CartItemType<ProductItem>[]) => void;
   addItem: (item: CartItemType<ProductItem>) => void;
-  removeItem: (item: ProductItem) => void;
+  removeItem: (item: CartItemType<ProductItem>) => void;
   decreaseItem: (item: CartItemType<ProductItem>) => void;
   initializeCart: () => void;
 
-  removedItems: CartItemType<ProductItem>[];
+  getFinalProductItems: () => CartItemType<ProductItem>[];
+
   productItems: CartItemType<ProductItem>[];
-  finalProductItems: CartItemType<ProductItem>[];
-  setRemovedItems: (items: CartItemType<ProductItem>[]) => void;
-  setProductItems: (items: CartItemType<ProductItem>[]) => void;
-  setFinalProductItems: (items: CartItemType<ProductItem>[]) => void;
-  increaseProductItem: (productItem: ProductItem) => void;
-  decreaseProductItem: (productItem: ProductItem) => void;
+  removedItems: CartItemType<ProductItem>[];
+  increaseProductItem: (productItem: CartItemType<ProductItem>) => void;
+  decreaseProductItem: (productItem: CartItemType<ProductItem>) => void;
   resetPieces: () => void;
 }
 
@@ -59,44 +57,20 @@ const useCartStore = create<CartStore>((set, get) => {
     set({ removedItems: updatedItems });
   };
 
-  const updateFinalProductItems = () => {
-    const updatedProductItems: IncrementalArray<CartItemType<ProductItem>> =
-      new IncrementalArray<CartItemType<ProductItem>>(compareFn);
-
-    for (let productItem of get().productItems) {
-      updatedProductItems.addItem(productItem);
-    }
-
-    for (let removedItem of get().productItems) {
-      updatedProductItems.removeQuantity(removedItem);
-    }
-
-    set({ finalProductItems: updatedProductItems.getItems() });
-  };
-
   const computerProductItems = () => {
-    //everytime the templates or the products changes in the cart, we need to update the final product items.
     const updatedProductItems: IncrementalArray<CartItemType<ProductItem>> =
       new IncrementalArray<CartItemType<ProductItem>>(
         (a, b) => a.item.id === b.item.id
       );
 
-    //we iterate over all items in the cart, and for each template, we add all of its component into the updatedProductItems.
     get().items.forEach((cartItem) => {
-      //lets first check if the item is template.
       if ("children" in cartItem.item) {
         const templateModel = cartItem.item as TemplateModel;
-
-        //lets first add the base to the final products, we first check if it was previously added,
-        //  if so we increment the quantity by the templates amout, since each template can only have 1 base, if not, we
-        //add a new product item with the quantity of how many of that templates we have.
 
         updatedProductItems.addItem({
           item: templateModel.base,
           quantity: cartItem.quantity,
         });
-
-        //now we handle the rest of the children for each template, and do the same operation as bases, but this time iterating over all children.
 
         templateModel.children.forEach((PieceChild) => {
           updatedProductItems.addItem({
@@ -105,7 +79,6 @@ const useCartStore = create<CartStore>((set, get) => {
           });
         });
       } else {
-        //if the product item is not a template, then it is a native product, so we just check it and add it directly.
         if ("layers" in cartItem) {
           updatedProductItems.addItem({
             ...cartItem,
@@ -123,6 +96,19 @@ const useCartStore = create<CartStore>((set, get) => {
 
   return {
     items: [],
+    getFinalProductItems: () => {
+      const updatedProductItems: IncrementalArray<CartItemType<ProductItem>> =
+        new IncrementalArray<CartItemType<ProductItem>>(compareFn);
+      for (let productItem of get().productItems) {
+        updatedProductItems.addItem(productItem);
+      }
+
+      for (let removedItem of get().removedItems) {
+        updatedProductItems.removeQuantity(removedItem);
+      }
+
+      return updatedProductItems.getItems();
+    },
     setItems: (items) => {
       set({ items });
     },
@@ -150,17 +136,17 @@ const useCartStore = create<CartStore>((set, get) => {
       StoreCart(get().items);
       computerProductItems();
       updateRemovedItems();
-      updateFinalProductItems();
     },
 
     removeItem: (item) => {
       set((state) => ({
-        items: state.items.filter((cartItem) => cartItem.item.id !== item.id),
+        items: state.items.filter(
+          (cartItem) => cartItem.item.id !== item.item.id
+        ),
       }));
       StoreCart(get().items);
       computerProductItems();
       updateRemovedItems();
-      updateFinalProductItems();
     },
 
     decreaseItem: (item) => {
@@ -189,7 +175,6 @@ const useCartStore = create<CartStore>((set, get) => {
       computerProductItems();
 
       updateRemovedItems();
-      updateFinalProductItems();
     },
 
     initializeCart: async () => {
@@ -223,35 +208,62 @@ const useCartStore = create<CartStore>((set, get) => {
       computerProductItems();
 
       updateRemovedItems();
-      updateFinalProductItems();
     },
 
     removedItems: [],
     productItems: [],
     finalProductItems: [],
 
-    setRemovedItems: (removedItems) => set({ removedItems }),
-    setProductItems: (productItems) => set({ productItems }),
-    setFinalProductItems: (finalProductItems) => set({ finalProductItems }),
-
     increaseProductItem: (productItem) => {
-      const { removedItems, setRemovedItems } = get();
-      const updatedRemovedItems = removedItems.map((item) =>
-        item.item.id === productItem.id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
-      setRemovedItems(updatedRemovedItems);
-    },
+      const { removedItems } = get();
 
-    decreaseProductItem: (productItem) => {
-      const { removedItems, setRemovedItems } = get();
+      const existingItem = get().removedItems.find((entry) =>
+        compareFn(entry, productItem)
+      );
+
+      if (!existingItem) {
+        set({
+          removedItems: [
+            ...get().removedItems,
+            { ...productItem, quantity: -productItem.quantity },
+          ],
+        });
+
+        return;
+      }
+
       const updatedRemovedItems = removedItems.map((item) =>
-        item.item.id === productItem.id
+        item.item.id === productItem.item.id
           ? { ...item, quantity: item.quantity - 1 }
           : item
       );
-      setRemovedItems(updatedRemovedItems);
+      set({ removedItems: updatedRemovedItems });
+    },
+
+    decreaseProductItem: (productItem) => {
+      const { removedItems } = get();
+
+      const existingItem = get().removedItems.find((entry) =>
+        compareFn(entry, productItem)
+      );
+
+      if (!existingItem) {
+        set({
+          removedItems: [
+            ...get().removedItems,
+            { ...productItem, quantity: productItem.quantity },
+          ],
+        });
+
+        return;
+      }
+
+      const updatedRemovedItems = removedItems.map((item) =>
+        item.item.id === productItem.item.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+      set({ removedItems: updatedRemovedItems });
     },
 
     resetPieces: () => {

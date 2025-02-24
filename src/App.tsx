@@ -12,15 +12,14 @@ import NotificationList from "./Features/NotificationService/Notification";
 
 // App Metadata
 import SiteMetadata from "./Site/SiteMetadata";
-import ContextMenuContainer from "@features/ContextMenu/ContextMenuContainer";
 
 function App() {
+  console.log("refreshed");
   return (
     <div className="app-root">
       <SiteMetadata />
       <RouterProvider router={AppRouter}></RouterProvider>
       <NotificationList />
-      <ContextMenuContainer />
     </div>
   );
 }

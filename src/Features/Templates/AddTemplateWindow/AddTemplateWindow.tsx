@@ -1,12 +1,13 @@
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { useAddTemplatePopup } from "./AddTemplateWindowContext";
 import { UnresolvedTemplateModel } from "@core";
 import { collection, doc, addDoc, getFirestore } from "firebase/firestore";
 import { AddTemplatePopup } from "@features/ContextMenu";
+import { useTemplateStore } from "./AddTemplateStore";
 
 export default function AddTemplateWindow() {
-  const { isOpen, item, closePopup } = useAddTemplatePopup();
-
+  const item = useTemplateStore((state) => state.item);
+  const isOpen = useTemplateStore((state) => state.isOpen);
+  const closePopup = useTemplateStore((state) => state.closePopup);
   const AddTemplateToDatabase = async (
     name: string,
     description: string,
