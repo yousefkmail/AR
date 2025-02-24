@@ -1,5 +1,4 @@
 export {
-  ContentfulCleint,
   GetAboutSections,
   GetGlobalSettings,
   GetTeamMembers,
@@ -8,3 +7,4 @@ export {
 export type { AboutSectionType } from "./Types/AboutSectionType";
 export type { GlobalSettingsType } from "./Types/GlobalSettingsType";
 export type { TeamMemberType } from "./Types/TeamMemberType";
+export { ContentfulCleint } from "./Client";

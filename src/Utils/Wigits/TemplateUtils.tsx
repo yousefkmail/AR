@@ -1,4 +1,4 @@
-import { TemplateObject } from "../../Data/R3F/Template";
+import { TemplateObject } from "@core";
 import { PieceChild } from "../../Core/Models/TemplateModel";
 
 export const GetPieceChildNeighbours = (

@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, HTMLAttributes } from "react";
+import { ButtonHTMLAttributes } from "react";
 import { ClassnameMerge } from "../../Utils/CssUtils";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}

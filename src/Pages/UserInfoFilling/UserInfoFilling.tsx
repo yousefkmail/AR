@@ -11,10 +11,11 @@ import { OrderInfo } from "../../Data/Customer";
 import { CreateOrderValidationRules } from "../../Validations/ReactHookForm/CreateOrderValidations";
 import InputField from "./Forms/InputField";
 import FormRow from "./Forms/FormRow";
-import { CartItemMobile, useCart } from "@features/Cart";
+import { CartItemMobile } from "@features/Cart";
 import { Order } from "@data/Order";
 import PageWidthLayout from "@components/Layout/PageWidthLayout";
 import Button from "@components/Button/Button";
+import useCartStore from "@features/Cart/Store/CartStore";
 
 export default function UserInfoFilling() {
   const {
@@ -28,9 +29,14 @@ export default function UserInfoFilling() {
 
   const [isloading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { piecesItems, basesItems, increaseProductItem, decreaseProductItem } =
-    useCart();
 
+  const productItems = useCartStore((state) => state.productItems);
+  const increaseProductItem = useCartStore(
+    (state) => state.increaseProductItem
+  );
+  const decreaseProductItem = useCartStore(
+    (state) => state.decreaseProductItem
+  );
   const onSubmit = async (orderInfo: OrderInfo) => {
     setIsLoading(true);
     const createdOrder = await fetch(
@@ -39,8 +45,7 @@ export default function UserInfoFilling() {
         method: "POST",
         body: JSON.stringify({
           ...orderInfo,
-          pieces: piecesItems ?? [],
-          bases: basesItems ?? [],
+          productItems,
         }),
         headers: { "Content-Type": "application/json" },
       }
@@ -227,32 +232,14 @@ export default function UserInfoFilling() {
         </form>
         <div style={{ flexGrow: 1, padding: "40px" }}>
           <h2>Purchased products</h2>
-          {piecesItems && (
+
+          {productItems && (
             <div className="cart-items">
-              {piecesItems?.map((item) => {
+              {productItems?.map((item) => {
                 return (
                   <CartItemMobile
-                    onIncrease={() => increaseProductItem(item.item)}
-                    onDecrease={() => decreaseProductItem(item.item)}
-                    className="cart-item-container cart-item-container-mobile"
-                    quantity={item.quantity}
-                    {...item.item}
-                    totalPrice={parseFloat(
-                      ((item.item.price * item.quantity) / 100).toFixed(2)
-                    )}
-                    key={item.item.id}
-                  ></CartItemMobile>
-                );
-              })}
-            </div>
-          )}
-          {basesItems && (
-            <div className="cart-items">
-              {basesItems?.map((item) => {
-                return (
-                  <CartItemMobile
-                    onIncrease={() => increaseProductItem(item.item)}
-                    onDecrease={() => decreaseProductItem(item.item)}
+                    onIncrease={() => increaseProductItem(item)}
+                    onDecrease={() => decreaseProductItem(item)}
                     className="cart-item-container cart-item-container-mobile"
                     quantity={item.quantity}
                     {...item.item}

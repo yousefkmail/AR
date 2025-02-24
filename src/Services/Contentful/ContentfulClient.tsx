@@ -1,7 +1,7 @@
 import { AboutSectionType } from "../../Lib/Contentful/Types/AboutSectionType";
 import { TeamMemberType } from "../../Lib/Contentful/Types/TeamMemberType";
 import { GlobalSettingsType } from "../../Lib/Contentful/Types/GlobalSettingsType";
-import { ContentfulCleint } from "@lib/Contentful/Client";
+import { ContentfulCleint } from "@lib/Contentful";
 
 export const GetAboutSections = async () => {
   const data =

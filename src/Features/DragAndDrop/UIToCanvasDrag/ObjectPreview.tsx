@@ -8,11 +8,11 @@ import {
 } from "react";
 import { useUIDraggedWigit } from "../Hooks/useDraggedWigit";
 import { GetWigitType } from "@utils/Wigits";
-import { PieceObject, TemplateObject } from "@data/R3F";
 import PngPlane, { PngPlaneRef } from "../../../Components/PngPlane/PngPlane";
 import { Raycaster, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
 import { useMousePosition } from "@hooks/useMousePositiion";
+import { PieceObject, TemplateObject } from "@core/index";
 
 // Define context shape
 interface ObjectPreviewContextProps {

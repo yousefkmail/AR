@@ -1,7 +1,7 @@
 import { useRecordContext } from "react-admin";
 import { OrderItemShow } from "./OrderItemShow";
-import { Piece } from "Core/Models/Piece";
 import { CartItemType } from "@features/Cart/Models/CartItemType";
+import { Piece } from "@core/index";
 
 export function OrderItemsPiecesShow() {
   const record = useRecordContext();
