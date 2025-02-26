@@ -13,8 +13,6 @@ interface CartStore {
   decreaseItem: (item: CartItemType<ProductItem>) => void;
   initializeCart: () => void;
 
-  getFinalProductItems: () => CartItemType<ProductItem>[];
-
   productItems: CartItemType<ProductItem>[];
   removedItems: CartItemType<ProductItem>[];
   increaseProductItem: (productItem: CartItemType<ProductItem>) => void;
@@ -96,19 +94,6 @@ const useCartStore = create<CartStore>((set, get) => {
 
   return {
     items: [],
-    getFinalProductItems: () => {
-      const updatedProductItems: IncrementalArray<CartItemType<ProductItem>> =
-        new IncrementalArray<CartItemType<ProductItem>>(compareFn);
-      for (let productItem of get().productItems) {
-        updatedProductItems.addItem(productItem);
-      }
-
-      for (let removedItem of get().removedItems) {
-        updatedProductItems.removeQuantity(removedItem);
-      }
-
-      return updatedProductItems.getItems();
-    },
     setItems: (items) => {
       set({ items });
     },

@@ -5,17 +5,19 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { OrderInfo } from "../../Data/Customer";
 import { CreateOrderValidationRules } from "../../Validations/ReactHookForm/CreateOrderValidations";
 import InputField from "./Forms/InputField";
 import FormRow from "./Forms/FormRow";
-import { CartItemMobile } from "@features/Cart";
+import { CartItemMobile, CartItemType } from "@features/Cart";
 import { Order } from "@data/Order";
 import PageWidthLayout from "@components/Layout/PageWidthLayout";
 import Button from "@components/Button/Button";
 import useCartStore from "@features/Cart/Store/CartStore";
+import { ProductItem } from "@data/ProductItem";
+import { IncrementalArray } from "@utils/IncrementalArray";
 
 export default function UserInfoFilling() {
   const {
@@ -31,12 +33,35 @@ export default function UserInfoFilling() {
   const navigate = useNavigate();
 
   const productItems = useCartStore((state) => state.productItems);
+  const removedItems = useCartStore((state) => state.removedItems);
+  const finalProductItems = () => {
+    const updatedProductItems: IncrementalArray<CartItemType<ProductItem>> =
+      new IncrementalArray<CartItemType<ProductItem>>(
+        (a, b) => a.item.id === b.item.id
+      );
+    for (let productItem of productItems) {
+      updatedProductItems.addItem(productItem);
+    }
+
+    for (let removedItem of removedItems) {
+      updatedProductItems.removeQuantity(removedItem);
+    }
+
+    return updatedProductItems.getItems();
+  };
+
   const increaseProductItem = useCartStore(
     (state) => state.increaseProductItem
   );
   const decreaseProductItem = useCartStore(
     (state) => state.decreaseProductItem
   );
+  const initializeCart = useCartStore((state) => state.initializeCart);
+
+  useEffect(() => {
+    initializeCart();
+  }, []);
+
   const onSubmit = async (orderInfo: OrderInfo) => {
     setIsLoading(true);
     const createdOrder = await fetch(
@@ -45,7 +70,7 @@ export default function UserInfoFilling() {
         method: "POST",
         body: JSON.stringify({
           ...orderInfo,
-          productItems,
+          productItems: finalProductItems(),
         }),
         headers: { "Content-Type": "application/json" },
       }
@@ -74,8 +99,8 @@ export default function UserInfoFilling() {
     }
   };
 
-  const paymentType = watch("paymentType"); // Subscribe to paymentType changes
-  const shippingType = watch("shippingType"); // Subscribe to paymentType changes
+  const paymentType = watch("paymentType");
+  const shippingType = watch("shippingType");
 
   return (
     <PageWidthLayout maxWidth={1600}>
@@ -233,9 +258,9 @@ export default function UserInfoFilling() {
         <div style={{ flexGrow: 1, padding: "40px" }}>
           <h2>Purchased products</h2>
 
-          {productItems && (
+          {
             <div className="cart-items">
-              {productItems?.map((item) => {
+              {finalProductItems().map((item) => {
                 return (
                   <CartItemMobile
                     onIncrease={() => increaseProductItem(item)}
@@ -251,7 +276,7 @@ export default function UserInfoFilling() {
                 );
               })}
             </div>
-          )}
+          }
         </div>
       </div>
     </PageWidthLayout>

@@ -30,39 +30,37 @@ export default function PremadeTemplates({
   };
 
   return (
-    <CenterLayout horizontal>
-      <div>
-        <GridLayout cellMinWidth={cellMinWidth ?? 250}>
-          {templates ? (
-            templates.map((item) =>
-              item.state === "Loaded" ? (
-                <LoadedTemplate key={item.id} item={item}></LoadedTemplate>
-              ) : (
-                <NotLoadedTemplate
-                  key={item.id}
-                  isLoading={item.state === "Loading"}
-                  OnLoadPresed={() =>
-                    fetchFullTemplate({ id: item.id, page: page })
-                  }
-                  item={item}
-                ></NotLoadedTemplate>
-              )
+    <div>
+      <GridLayout cellMinWidth={cellMinWidth ?? 230}>
+        {templates ? (
+          templates.map((item) =>
+            item.state === "Loaded" ? (
+              <LoadedTemplate key={item.id} item={item}></LoadedTemplate>
+            ) : (
+              <NotLoadedTemplate
+                key={item.id}
+                isLoading={item.state === "Loading"}
+                OnLoadPresed={() =>
+                  fetchFullTemplate({ id: item.id, page: page })
+                }
+                item={item}
+              ></NotLoadedTemplate>
             )
-          ) : (
-            <PremadeTemplatesSkeleton count={5} />
-          )}
-        </GridLayout>
-        <CenterLayout horizontal>
-          <Pagination
-            className="template-pagination"
-            page={page}
-            sx={PaginationCustomStyle}
-            disabled={isLoading}
-            onChange={HandleChange}
-            count={GetPageCount(pageSize, count ?? 0)}
-          />
-        </CenterLayout>
-      </div>
-    </CenterLayout>
+          )
+        ) : (
+          <PremadeTemplatesSkeleton count={5} />
+        )}
+      </GridLayout>
+      <CenterLayout horizontal>
+        <Pagination
+          className="template-pagination"
+          page={page}
+          sx={PaginationCustomStyle}
+          disabled={isLoading}
+          onChange={HandleChange}
+          count={GetPageCount(pageSize, count ?? 0)}
+        />
+      </CenterLayout>
+    </div>
   );
 }

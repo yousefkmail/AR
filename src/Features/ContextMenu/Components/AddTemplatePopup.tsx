@@ -86,10 +86,10 @@ export function AddTemplatePopup({
         />
         <TextField
           type="file"
+          style={{ margin: "10px", minWidth: "200px", flexGrow: 1 }}
           slotProps={{
             input: { inputProps: { accept: ".png, .jpg, .jpeg, .pdf" } },
-          }} // Corrected usage
-          // label="Upload preview image"
+          }}
           {...register("previewImage")}
         />
         <Button
@@ -98,13 +98,13 @@ export function AddTemplatePopup({
             backgroundColor: "black",
             color: "white",
             "&:hover": {
-              backgroundColor: "#333", // Optional hover effect
+              backgroundColor: "#333",
             },
           }}
           style={{ flexGrow: "1", margin: "10px" }}
           variant="outlined"
         >
-          Add to cart
+          Add Template
         </Button>
       </form>
     </div>

@@ -6,17 +6,20 @@ import CartPiecesContainer from "./CartPiecesContainer";
 import CartBottomSection from "./CartBottomSection";
 import useCartStore from "@features/Cart/Store/CartStore";
 import { useEffect } from "react";
+import { IncrementalArray } from "@utils/IncrementalArray";
+import { CartItemType } from "@features/Cart";
+import { ProductItem } from "@data/ProductItem";
 
 export default function Cart() {
   const items = useCartStore((state) => state.items);
   const productItems = useCartStore((state) => state.productItems);
+  const removedItems = useCartStore((state) => state.removedItems);
   const decreaseItem = useCartStore((statusbar) => statusbar.decreaseItem);
   const addItem = useCartStore((statusbar) => statusbar.addItem);
   const initializeCart = useCartStore((statusbar) => statusbar.initializeCart);
-  const finalProductItems = useCartStore((state) => state.getFinalProductItems);
   const resetPieces = useCartStore((state) => state.resetPieces);
   const removeItem = useCartStore((state) => state.removeItem);
-  const removedItems = useCartStore((state) => state.removedItems);
+
   const increaseProductItem = useCartStore(
     (state) => state.increaseProductItem
   );
@@ -24,8 +27,6 @@ export default function Cart() {
     (state) => state.decreaseProductItem
   );
 
-  console.log(productItems);
-  console.log(removedItems);
   const navigate = useNavigate();
   useEffect(() => {
     initializeCart();
@@ -33,6 +34,22 @@ export default function Cart() {
 
   const GoToInfoFilling = () => {
     navigate("/info-filling");
+  };
+
+  const finalProductItems = () => {
+    const updatedProductItems: IncrementalArray<CartItemType<ProductItem>> =
+      new IncrementalArray<CartItemType<ProductItem>>(
+        (a, b) => a.item.id === b.item.id
+      );
+    for (let productItem of productItems) {
+      updatedProductItems.addItem(productItem);
+    }
+
+    for (let removedItem of removedItems) {
+      updatedProductItems.removeQuantity(removedItem);
+    }
+
+    return updatedProductItems.getItems();
   };
 
   return (
@@ -61,7 +78,7 @@ export default function Cart() {
             />
 
             <CartBottomSection
-              productItems={productItems}
+              productItems={finalProductItems()}
               onContinuePressed={GoToInfoFilling}
             />
           </>

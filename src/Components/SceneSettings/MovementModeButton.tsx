@@ -1,9 +1,10 @@
 import { ReactNode } from "react";
 import { ClassnameMerge } from "../../Utils/CssUtils";
-import { useSceneSettings } from "../../Hooks/useSceneSettings";
 import Button from "../Button/Button";
-import { MovementMode } from "@core/index";
-import Spacer from "@components/Layout/Spacer";
+import {
+  MovementMode,
+  useSceneSettingsStore,
+} from "@core/Store/SceneSettingsStore";
 
 interface MovementModeButtonProps {
   children: ReactNode;
@@ -13,7 +14,8 @@ export default function MovementModeButton({
   children,
   OnClickMovementMode,
 }: MovementModeButtonProps) {
-  const { movementMode, SetMovementMode } = useSceneSettings();
+  const { movementMode, setMovementMode } = useSceneSettingsStore();
+
   return (
     <Button
       className={ClassnameMerge(
@@ -22,9 +24,9 @@ export default function MovementModeButton({
           ? "settings-movemode-button-active"
           : ""
       )}
-      onClick={() => SetMovementMode(OnClickMovementMode)}
+      onClick={() => setMovementMode(OnClickMovementMode)}
     >
-      <Spacer padding={7}>{children}</Spacer>
+      {children}
     </Button>
   );
 }

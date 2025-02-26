@@ -8,17 +8,15 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { EnvironmentContextProvider } from "./Features/Screenshot/Context/EnvironmentContext.tsx";
 import { HelmetProvider } from "react-helmet-async";
-import {
-  PlanesContainerContextProvider,
-  SceneSettingsContextProvider,
-} from "@core";
+import { PlanesContainerContextProvider } from "@core";
 import { queryClient } from "./Lib/ReactQuery/Client.tsx";
+import { CanvasContextProvider } from "./Context/CanvasContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <HelmetProvider>
-      <EnvironmentContextProvider>
-        <SceneSettingsContextProvider>
+      <CanvasContextProvider>
+        <EnvironmentContextProvider>
           <QueryClientProvider client={queryClient}>
             <PlanesContainerContextProvider>
               <PiecesContextProvider>
@@ -34,8 +32,8 @@ createRoot(document.getElementById("root")!).render(
               </PiecesContextProvider>
             </PlanesContainerContextProvider>
           </QueryClientProvider>
-        </SceneSettingsContextProvider>
-      </EnvironmentContextProvider>
+        </EnvironmentContextProvider>
+      </CanvasContextProvider>
     </HelmetProvider>
   </StrictMode>
 );

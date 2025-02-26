@@ -128,7 +128,6 @@ body {
 
 .drag-image-inner {
     scale: 1;
-    padding: 10px;
     transition: all 0.1s ease-out;
 
 }
@@ -234,8 +233,6 @@ body {
     width: 100%;
     aspect-ratio: 2/1;
     object-fit: contain;
-    object-position: bottom;
-    filter: drop-shadow(-16px -5px 2px var(--hover-primary));
 }
 
 .template-name {
@@ -325,7 +322,7 @@ body {
 .settings-movemode-buttons {
     display: flex;
     border-radius: 7px;
-    border: var(--default-border);
+    border: var(--secondary-border);
     overflow: hidden;
 }
 

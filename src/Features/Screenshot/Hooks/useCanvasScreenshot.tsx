@@ -5,6 +5,7 @@ import { useThree } from "@react-three/fiber";
 
 export const useCanvasScreenshot = () => {
   const { environment } = useContext(EnvironmentContext);
+
   const { gl, scene, camera } = useThree();
   const { anchorRef } = useContext(CanvasScreneshotContext);
 

@@ -3,11 +3,7 @@ export {
   PlanesContainerContext,
   PlanesContainerContextProvider,
 } from "./Context/PlanesContainerContext";
-export {
-  MovementMode,
-  SceneSettingsContext,
-  SceneSettingsContextProvider,
-} from "./Context/SceneSettingsContext";
+
 export { useFullPieces } from "./Hooks/useFullPieces";
 export { usePieces } from "./Hooks/usePieces";
 export type { CreatedPiecesAction } from "./Hooks/usePieces";

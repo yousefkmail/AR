@@ -2,7 +2,7 @@ import PngPlane, { PngPlaneRef } from "../PngPlane/PngPlane";
 
 import { Suspense, useContext, useRef } from "react";
 import { Template3DObjectContext } from "./Template3DObjectContext";
-import { MovementMode, PieceChild, TemplateObject } from "@core";
+import { PieceChild, TemplateObject } from "@core";
 import {
   MathUtils,
   Object3D,
@@ -13,7 +13,7 @@ import {
 import { useThree } from "@react-three/fiber";
 import { useMousePosition } from "@hooks/useMousePositiion";
 import { NDCToObjectWorld, SetObjectLayerTraverse } from "@utils/ThreeUtils";
-import { useFullPieces, useSceneSettings } from "@hooks/index";
+import { useFullPieces } from "@hooks/index";
 import { useObjectContextMenu } from "@features/ContextMenu/Hooks/useObjectContextMenu";
 import { ArrayToVector3 } from "@utils/Math";
 import {
@@ -25,6 +25,10 @@ import {
 } from "@utils/Wigits";
 import BasisContextMenuHandler from "../../Features/ContextMenu/Components/ContextMenuhandlers/BasisContextMenuHandler";
 import PieceChildContextMenuHandler from "../../Features/ContextMenu/Components/ContextMenuhandlers/PieceChildContextMenuHandler";
+import {
+  MovementMode,
+  useSceneSettingsStore,
+} from "@core/Store/SceneSettingsStore";
 
 export default function Template3DObject() {
   const { templateObject } = useContext(Template3DObjectContext);
@@ -70,7 +74,7 @@ export default function Template3DObject() {
     const offsetY = event.clientY - gl.domElement.getBoundingClientRect().top;
     setMenuPosition(offsetX, offsetY);
   };
-  const { movementMode } = useSceneSettings();
+  const { movementMode } = useSceneSettingsStore();
 
   const handleChildPieceDrag = (
     _object: Object3D<Object3DEventMap>,
@@ -157,11 +161,16 @@ export default function Template3DObject() {
     }
   };
 
+  const setCameraRotation = useSceneSettingsStore(
+    (state) => state.setCameraRotation
+  );
+
   return (
     <Suspense>
       <PngPlane
         onDrag={() => {
           handleTemplateDrag(ref.current, templateObject);
+          setCameraRotation(false);
         }}
         onDrop={(event) => {
           PlaceMenuAtMouseposition(event);
@@ -171,6 +180,7 @@ export default function Template3DObject() {
             ></BasisContextMenuHandler>
           );
           openMenu();
+          setCameraRotation(true);
         }}
         key={templateObject.id}
         ref={ref}
@@ -182,14 +192,15 @@ export default function Template3DObject() {
       >
         {templateObject.templateModel.children.map((child, childIndex) => (
           <PngPlane
-            onDrag={() =>
+            onDrag={() => {
               handleChildPieceDrag(
                 ref.current.container.children[childIndex],
                 child,
                 ref.current.container,
                 templateObject
-              )
-            }
+              );
+              setCameraRotation(false);
+            }}
             onDrop={(event) => {
               PlaceMenuAtMouseposition(event);
               setMenu(
@@ -199,6 +210,7 @@ export default function Template3DObject() {
                 ></PieceChildContextMenuHandler>
               );
               openMenu();
+              setCameraRotation(true);
             }}
             key={child.id}
             {...child.piece}

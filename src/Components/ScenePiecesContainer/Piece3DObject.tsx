@@ -10,6 +10,7 @@ import { useThree } from "@react-three/fiber";
 import { useFullPieces, useMousePosition } from "@hooks/index";
 import { NDCToObjectWorld } from "@utils/ThreeUtils";
 import PieceContextMenuHandler from "../../Features/ContextMenu/Components/ContextMenuhandlers/PieceContextMenuHandler";
+import { useSceneSettingsStore } from "@core/Store/SceneSettingsStore";
 const PngPlane = React.lazy(() => import("../PngPlane/PngPlane"));
 
 export default function Piece3DObject() {
@@ -83,13 +84,23 @@ export default function Piece3DObject() {
     setMenuPosition(offsetX, offsetY);
   };
 
+  const setCameraRotation = useSceneSettingsStore(
+    (state) => state.setCameraRotation
+  );
   return (
     <Suspense>
       <PngPlane
         key={pieceObject.id}
         ref={ref}
-        onDrag={() => handlePieceDrag(ref.current, pieceObject)}
+        onDrag={() => {
+          console.log("Draagging");
+          setCameraRotation(false);
+
+          handlePieceDrag(ref.current, pieceObject);
+        }}
         onDrop={(event: MouseEvent) => {
+          setCameraRotation(true);
+          console.log("Dropped");
           handlePieceDropped(pieceObject, ref.current);
           PlaceMenuAtMouseposition(event);
         }}

@@ -1,13 +1,12 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as FaSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { DragEvent, useState } from "react";
-import IconButton from "../Button/IconButton";
 import DraggableItem from "../DragableItem";
 import { CircularProgress } from "@mui/material";
 import { UnresolvedTemplateModel } from "../../Core/Models/TemplateModel";
-import Spacer from "@components/Layout/Spacer";
 import { useAddNotification } from "@features/NotificationService/useAddNotification";
+import WigitCardImage from "@components/WigitCardUI/WigitCardImage";
+import Button from "@components/Button/Button";
+import WigitLikeButton from "@components/WigitCardUI/WigitLikeButton";
+import { CalculatePrice, GetCurrencyFormat } from "@utils/CurrencyUtils";
 interface TemplateProps {
   item: UnresolvedTemplateModel;
   isLoading: boolean;
@@ -38,32 +37,25 @@ export default function NotLoadedTemplate({
         handleDragStart();
       }}
     >
-      <div className="template" style={{ padding: "10px" }}>
-        <img
-          draggable={false}
-          className="template-img"
-          src={item.previewImage}
-          alt=""
-        />
-        <Spacer padding={4}>
-          <div className="template-name">{item.name}</div>
-        </Spacer>
-
-        <Spacer padding={4}>
-          <div style={{ fontWeight: "bolder", fontSize: "1.25rem" }}>
-            {item.price / 100}$
+      <div
+        className="template"
+        style={{
+          marginBottom: "20px",
+          border: "1px solid rgb(238, 238, 238)",
+          borderRadius: "7px",
+          overflow: "hidden",
+        }}
+      >
+        <WigitCardImage src={item.previewImage} />
+        <div style={{ padding: "10px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span style={{ fontWeight: "bolder" }}>{item.name}</span>
+            <span style={{ color: "#555" }}>
+              {GetCurrencyFormat(CalculatePrice(item.price))}
+            </span>
           </div>
-        </Spacer>
-
-        {/* <Spacer padding={4}>
-          {item?.template.tags?.map((item) => (
-            <CategoryTag>{item}</CategoryTag>
-          ))}
-        </Spacer> */}
-
-        <Spacer padding={4}>
-          <div style={{ display: "flex" }}>
-            <button
+          <div style={{ padding: "10px 0" }}>
+            <WigitLikeButton
               onClick={() => {
                 addNotification(
                   isLiked
@@ -74,43 +66,41 @@ export default function NotLoadedTemplate({
 
                 setIsLiked(!isLiked);
               }}
-              className="template-like"
-            >
-              <FontAwesomeIcon
-                color={isLiked ? "red" : "black"}
-                size="xl"
-                className={
-                  (isLiked === true ? "template-like-pressed" : "") +
-                  " template-like-icon "
-                }
-                style={{ filter: "none" }}
-                icon={isLiked ? FaSolidHeart : faHeart}
-              />
-            </button>
+              isLiked={isLiked}
+            />
           </div>
-        </Spacer>
-        <Spacer padding={4}>
-          <IconButton
-            draggable={false}
-            style={{
-              border: "var(--default-border)",
-              backgroundColor: "black",
-              color: "white",
-            }}
-            disabled={isLoading}
-            onClick={() => OnLoadPresed?.()}
-            isActive={false}
-          >
-            {isLoading ? (
-              <CircularProgress
-                size={"10px"}
-                sx={{ color: "white" }}
-              ></CircularProgress>
-            ) : (
-              "Load template"
-            )}
-          </IconButton>
-        </Spacer>
+          <div style={{ display: "flex" }}>
+            <Button
+              style={{
+                backgroundColor: "rgb(238, 238, 238)",
+                border: "none",
+                flexGrow: "1",
+              }}
+              disabled={isLoading}
+              onClick={() => OnLoadPresed?.()}
+            >
+              {isLoading ? (
+                <CircularProgress
+                  size={"10px"}
+                  sx={{ color: "black" }}
+                ></CircularProgress>
+              ) : (
+                "Load template"
+              )}
+            </Button>
+          </div>
+          <div style={{ display: "flex", marginTop: "16px" }}>
+            <Button
+              style={{
+                backgroundColor: "rgb(238, 238, 238)",
+                border: "none",
+                flexGrow: "1",
+              }}
+            >
+              {"Add to cart"}
+            </Button>
+          </div>
+        </div>
       </div>
     </DraggableItem>
   );

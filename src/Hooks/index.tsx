@@ -8,7 +8,6 @@ export { usePieces } from "../Core/Hooks/usePieces";
 export type { CreatedPiecesAction } from "../Core/Hooks/usePieces";
 export { usePlanesQuery } from "./usePlanesQuery";
 export type { OptionType } from "./usePlanesQuery";
-export { useSceneSettings } from "./useSceneSettings";
 export { useTemplateObjects } from "../Core/Hooks/useTemplateObjects";
 export type { createdTemplatesAction } from "../Core/Hooks/useTemplateObjects";
 export { useIncrementalArray } from "./useIncrementalArray";

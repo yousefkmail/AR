@@ -5,6 +5,7 @@ interface DragableItemProps extends HTMLAttributes<HTMLDivElement> {
 }
 export default function DraggableItem({
   children,
+  style,
   ...rest
 }: DragableItemProps) {
   return (
@@ -13,9 +14,9 @@ export default function DraggableItem({
       {...rest}
       style={{
         backgroundColor: "white",
-        padding: "10px",
         cursor: "pointer",
         overflow: "hidden",
+        ...style,
       }}
     >
       {children}

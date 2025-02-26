@@ -3,7 +3,7 @@ import { UnresolvedTemplateModel } from "@core";
 import { collection, doc, addDoc, getFirestore } from "firebase/firestore";
 import { AddTemplatePopup } from "@features/ContextMenu";
 import { useTemplateStore } from "./AddTemplateStore";
-
+import { v4 as uuidv4 } from "uuid";
 export default function AddTemplateWindow() {
   const item = useTemplateStore((state) => state.item);
   const isOpen = useTemplateStore((state) => state.isOpen);
@@ -16,7 +16,7 @@ export default function AddTemplateWindow() {
     if (!file || !item) return;
 
     const storage = getStorage(); // Ensure Firebase is initialized in your project
-    const storageRef = ref(storage, `templates/${file.name}`);
+    const storageRef = ref(storage, `templates/${uuidv4()}`);
     const uploadTask = await uploadBytes(storageRef, file);
     const url = await getDownloadURL(uploadTask.ref);
 

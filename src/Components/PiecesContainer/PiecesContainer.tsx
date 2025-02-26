@@ -29,22 +29,20 @@ export const PiecesContainer = () => {
 
   return (
     <div>
-      <div style={{ padding: " 5px 20px" }}>
+      <div style={{ padding: "5px 0px" }}>
         <label className="pieces-container-select-label">Pieces Category</label>
       </div>
 
-      <div style={{ padding: "0 20px" }}>
-        <Select
-          options={categories}
-          placeholder="Select the piece type"
-          onChange={handleChange}
-          defaultValue={{ label: "Base", value: "Base" }}
-          isSearchable
-          styles={PiecesSelectStyle}
-        />
-      </div>
+      <Select
+        options={categories}
+        placeholder="Select the piece type"
+        onChange={handleChange}
+        defaultValue={{ label: "Base", value: "Base" }}
+        isSearchable
+        styles={PiecesSelectStyle}
+      />
 
-      <GridLayout cellMinWidth={250}>
+      <GridLayout cellMinWidth={230}>
         {selectedOption?.value === "Base"
           ? basis?.map(({ ...item }) => (
               <DraggableBasis

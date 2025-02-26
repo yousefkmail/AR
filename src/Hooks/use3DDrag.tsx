@@ -13,6 +13,8 @@ export const use3DDrag = (onDrag?: DragHandler, onDrop?: DropHandler) => {
   };
 
   const endDrag = (event: MouseEvent) => {
+    document.removeEventListener("mousemove", handlePointerMove);
+    document.removeEventListener("mouseup", endDrag);
     setIsDragging(false);
     onDrop?.(event);
   };
@@ -32,9 +34,6 @@ export const use3DDrag = (onDrag?: DragHandler, onDrop?: DropHandler) => {
     if (isDragging) {
       document.addEventListener("mousemove", handlePointerMove);
       document.addEventListener("mouseup", endDrag);
-    } else {
-      document.removeEventListener("mousemove", handlePointerMove);
-      document.removeEventListener("mouseup", endDrag);
     }
 
     return () => {

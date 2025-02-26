@@ -1,6 +1,10 @@
 import { HTMLAttributes } from "react";
 import DraggableItem from "./DragableItem";
 import { Plane } from "@core/index";
+import WigitCardImage from "./WigitCardUI/WigitCardImage";
+import WigitCardTextField from "./WigitCardUI/WigitCardTextField";
+import WigitCartPriceField from "./WigitCardUI/WigitCartPriceField";
+import WigitsCardDimentionsField from "./WigitCardUI/WigitsCardDimentionsField";
 interface DraggablebasisProps extends HTMLAttributes<HTMLDivElement> {
   plane: Plane;
 }
@@ -12,90 +16,27 @@ export default function DraggableBasis({
   const { previewImage, width, height, stock, price, name } = plane;
   return (
     <DraggableItem {...rest}>
-      <div className="drag-image-inner">
-        <div style={{ width: "100%", height: "120px" }}>
-          <img
-            loading="lazy"
-            draggable={false}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              backgroundColor: "#eee",
-              borderRadius: "10px",
-              padding: "5px",
-            }}
-            src={previewImage}
-            alt=""
-          />
-        </div>
+      <div
+        style={{
+          paddingBottom: "10px",
+          marginTop: "10px",
+          lineHeight: "1.5rem",
+          border: "1px solid rgb(238, 238, 238)",
+          borderRadius: "7px",
+          overflow: "hidden",
+        }}
+      >
+        <WigitCardImage className="drag-image-inner" src={previewImage} />
 
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            paddingTop: "10px",
-            fontSize: "0.875em",
+            padding: "10px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              margin: "7px 0",
-            }}
-          >
-            <div style={{ fontWeight: "bolder" }}>name</div>
-            <div>
-              <span>{name}</span>
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              margin: "7px 0",
-            }}
-          >
-            <div style={{ fontWeight: "bolder" }}>Price</div>
-            <div style={{ fontSize: "1em", fontWeight: "bolder" }}>
-              {price / 100}$
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              margin: "7px 0",
-            }}
-          >
-            <div style={{ fontWeight: "bolder" }}>Size</div>
-            <div>
-              <div>
-                <span> {width} </span>
-                <span> X </span>
-                <span> {height} </span>
-                <span
-                  style={{
-                    borderRadius: "3px",
-                    marginLeft: "3px",
-                  }}
-                >
-                  cm
-                </span>
-              </div>
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              margin: "7px 0",
-            }}
-          >
-            <div style={{ fontWeight: "bolder" }}>Stock</div>
-            <div>{stock}</div>
-          </div>
+          <WigitCardTextField label="Name" text={name} />
+          <WigitCartPriceField price={price} />
+          <WigitsCardDimentionsField height={height} width={width} />
+          <WigitCardTextField label="Stock" text={stock.toString()} />
         </div>
       </div>
     </DraggableItem>
