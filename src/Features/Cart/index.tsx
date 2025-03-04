@@ -9,4 +9,3 @@ export { default as CartItemMobile } from "./Components/CartItemMobile";
 export { default as CartItemsHeader } from "./Components/CartItemsHeader";
 export { default as QuantityChange } from "./Components/QuantityChange";
 export { CartContext } from "./Contexts/CartContext";
-export { CartContextProvider } from "./Contexts/Providers/CartContextProvider";
