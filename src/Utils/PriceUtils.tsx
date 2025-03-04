@@ -5,7 +5,7 @@ export const CalculateTemplatePrice = (template: TemplateModel) => {
 
   price += template.base.price;
 
-  template.children.forEach((child) => {
+  template.pieces.forEach((child) => {
     price += child.piece.price;
   });
 

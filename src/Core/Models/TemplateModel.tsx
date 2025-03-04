@@ -19,7 +19,7 @@ interface UnresolvedPieceChild {
 
 export interface TemplateModel extends ProductItem {
   base: Basis;
-  children: PieceChild[];
+  pieces: PieceChild[];
 }
 
 export interface ResolvedTemplateModel extends TemplateModel {

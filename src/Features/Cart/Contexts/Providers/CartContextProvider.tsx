@@ -108,7 +108,7 @@ export function CartContextProvider({ children }: any) {
 
         //now we handle the rest of the children for each template, and do the same operation as bases, but this time iterating over all children.
 
-        templateModel.children.forEach((PieceChild) => {
+        templateModel.pieces.forEach((PieceChild) => {
           updatedProductItems.addItem({
             item: PieceChild.piece,
             quantity: cartItem.quantity,

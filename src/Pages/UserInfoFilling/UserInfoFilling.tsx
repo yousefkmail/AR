@@ -11,13 +11,12 @@ import { OrderInfo } from "../../Data/Customer";
 import { CreateOrderValidationRules } from "../../Validations/ReactHookForm/CreateOrderValidations";
 import InputField from "./Forms/InputField";
 import FormRow from "./Forms/FormRow";
-import { CartItemMobile, CartItemType } from "@features/Cart";
+import { CartItemMobile } from "@features/Cart";
 import { Order } from "@data/Order";
 import PageWidthLayout from "@components/Layout/PageWidthLayout";
 import Button from "@components/Button/Button";
 import useCartStore from "@features/Cart/Store/CartStore";
-import { ProductItem } from "@data/ProductItem";
-import { IncrementalArray } from "@utils/IncrementalArray";
+import { CalculatePrice } from "@utils/CurrencyUtils";
 
 export default function UserInfoFilling() {
   const {
@@ -32,31 +31,11 @@ export default function UserInfoFilling() {
   const [isloading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const productItems = useCartStore((state) => state.productItems);
-  const removedItems = useCartStore((state) => state.removedItems);
-  const finalProductItems = () => {
-    const updatedProductItems: IncrementalArray<CartItemType<ProductItem>> =
-      new IncrementalArray<CartItemType<ProductItem>>(
-        (a, b) => a.item.id === b.item.id
-      );
-    for (let productItem of productItems) {
-      updatedProductItems.addItem(productItem);
-    }
-
-    for (let removedItem of removedItems) {
-      updatedProductItems.removeQuantity(removedItem);
-    }
-
-    return updatedProductItems.getItems();
-  };
-
-  const increaseProductItem = useCartStore(
-    (state) => state.increaseProductItem
-  );
-  const decreaseProductItem = useCartStore(
-    (state) => state.decreaseProductItem
-  );
   const initializeCart = useCartStore((state) => state.initializeCart);
+  const products = useCartStore((state) => state.items);
+  const addItem = useCartStore((state) => state.addItem);
+  const decreaseItem = useCartStore((state) => state.decreaseItem);
+  const productItems = useCartStore((state) => state.productItems);
 
   useEffect(() => {
     initializeCart();
@@ -70,15 +49,15 @@ export default function UserInfoFilling() {
         method: "POST",
         body: JSON.stringify({
           ...orderInfo,
-          productItems: finalProductItems(),
+          pieces: productItems.filter((item) => item.type === "piece"),
+          bases: productItems.filter((item) => item.type === "base"),
+          collectons: products.filter((item) => item.type === "collection"),
         }),
         headers: { "Content-Type": "application/json" },
       }
     );
-
     if (createdOrder.status === 400) {
       const errors = await createdOrder.json();
-
       Object.entries(errors.errors).forEach(([field, error]) => {
         setError(field as any, {
           type: "manual",
@@ -88,9 +67,7 @@ export default function UserInfoFilling() {
       setIsLoading(false);
       return;
     }
-
     const responseJson = await createdOrder.json();
-
     setIsLoading(false);
     if (createdOrder.ok) {
       if ((responseJson.data.order as Order).paymentType === "Online")
@@ -260,17 +237,24 @@ export default function UserInfoFilling() {
 
           {
             <div className="cart-items">
-              {finalProductItems().map((item) => {
+              {products.map((item) => {
                 return (
                   <CartItemMobile
-                    onIncrease={() => increaseProductItem(item)}
-                    onDecrease={() => decreaseProductItem(item)}
+                    onIncrease={() =>
+                      addItem({ item: item.item, quantity: 1, type: "base" })
+                    }
+                    onDecrease={() =>
+                      decreaseItem({
+                        item: item.item,
+                        quantity: 1,
+                        type: "base",
+                      })
+                    }
                     className="cart-item-container cart-item-container-mobile"
                     quantity={item.quantity}
                     {...item.item}
-                    totalPrice={parseFloat(
-                      ((item.item.price * item.quantity) / 100).toFixed(2)
-                    )}
+                    price={CalculatePrice(item.item.price)}
+                    totalPrice={CalculatePrice(item.item.price, item.quantity)}
                     key={item.item.id}
                   ></CartItemMobile>
                 );

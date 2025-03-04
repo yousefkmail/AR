@@ -26,7 +26,7 @@ export default function AddTemplateWindow() {
       base: doc(collectionRef, item.base.id),
       name,
       state: "NotLoaded",
-      children: item.children.map((item) => ({
+      children: item.pieces.map((item) => ({
         piece: doc(collection(getFirestore(), "pieces"), item.piece.id),
         id: item.id,
         layer: item.layer,
@@ -35,7 +35,7 @@ export default function AddTemplateWindow() {
       description,
       previewImage: url,
       price:
-        item.children.reduce((prev, next) => prev + next.piece.price, 0) +
+        item.pieces.reduce((prev, next) => prev + next.piece.price, 0) +
         item.base.price,
       createdAt: new Date(),
       updatedAt: new Date(),

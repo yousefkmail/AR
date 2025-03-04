@@ -14,7 +14,6 @@ import NotificationList from "./Features/NotificationService/Notification";
 import SiteMetadata from "./Site/SiteMetadata";
 
 function App() {
-  console.log("refreshed");
   return (
     <div className="app-root">
       <SiteMetadata />

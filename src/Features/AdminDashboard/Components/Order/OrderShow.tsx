@@ -4,6 +4,7 @@ import { OrderCustomerShow } from "./OrderCustomerShow";
 import { OrderInformationShow } from "./OrderInformationShow";
 import { OrderItemsShow } from "./OrderItemsShow";
 import { OrderPricingShow } from "./OrderPricingShow";
+import OrderCollectionsShow from "./OrderCollectionsShow";
 
 export const OrderShow = () => (
   <Show actions={false}>
@@ -11,6 +12,7 @@ export const OrderShow = () => (
       <OrderShowHeader />
       <OrderCustomerShow />
       <OrderInformationShow />
+      <OrderCollectionsShow />
       <OrderItemsShow />
       <OrderPricingShow />
     </div>

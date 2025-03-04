@@ -4,20 +4,17 @@ import { CartItemType } from "../Models/CartItemType";
 import { IncrementalArray } from "@utils/IncrementalArray";
 import { TemplateModel } from "@core/index";
 import { pieceService } from "@services/Services";
+import { IncrementalStore } from "./IncrementalStore";
 
-interface CartStore {
+export interface CartStore {
   items: CartItemType<ProductItem>[];
   setItems: (items: CartItemType<ProductItem>[]) => void;
   addItem: (item: CartItemType<ProductItem>) => void;
   removeItem: (item: CartItemType<ProductItem>) => void;
   decreaseItem: (item: CartItemType<ProductItem>) => void;
-  initializeCart: () => void;
 
+  initializeCart: () => void;
   productItems: CartItemType<ProductItem>[];
-  removedItems: CartItemType<ProductItem>[];
-  increaseProductItem: (productItem: CartItemType<ProductItem>) => void;
-  decreaseProductItem: (productItem: CartItemType<ProductItem>) => void;
-  resetPieces: () => void;
 }
 
 const compareFn: (
@@ -35,26 +32,6 @@ const StoreCart = (items: CartItemType<ProductItem>[]) => {
 };
 
 const useCartStore = create<CartStore>((set, get) => {
-  const updateRemovedItems = () => {
-    let updatedItems: CartItemType<ProductItem>[] = [];
-    for (let removedItem of get().removedItems) {
-      const item = get().productItems.find(
-        (productItem) => productItem.item.id === removedItem.item.id
-      );
-      if (item) {
-        if (removedItem.quantity > item.quantity) {
-          updatedItems.push({
-            ...removedItem,
-            quantity: item.quantity,
-          });
-        } else {
-          updatedItems.push(removedItem);
-        }
-      }
-    }
-    set({ removedItems: updatedItems });
-  };
-
   const computerProductItems = () => {
     const updatedProductItems: IncrementalArray<CartItemType<ProductItem>> =
       new IncrementalArray<CartItemType<ProductItem>>(
@@ -62,104 +39,63 @@ const useCartStore = create<CartStore>((set, get) => {
       );
 
     get().items.forEach((cartItem) => {
-      if ("children" in cartItem.item) {
+      if ("pieces" in cartItem.item) {
         const templateModel = cartItem.item as TemplateModel;
 
         updatedProductItems.addItem({
           item: templateModel.base,
           quantity: cartItem.quantity,
+          type: "base",
         });
 
-        templateModel.children.forEach((PieceChild) => {
+        templateModel.pieces.forEach((PieceChild) => {
           updatedProductItems.addItem({
             item: PieceChild.piece,
             quantity: cartItem.quantity,
+            type: "piece",
           });
         });
       } else {
-        if ("layers" in cartItem) {
-          updatedProductItems.addItem({
-            ...cartItem,
-          });
-        } else {
-          updatedProductItems.addItem({
-            ...cartItem,
-          });
-        }
+        updatedProductItems.addItem({
+          ...cartItem,
+        });
       }
     });
 
     set({ productItems: updatedProductItems.getItems() });
   };
 
+  const {
+    add: addItems,
+    items,
+    remove: removeItem,
+    set: setItems,
+    decrease: decreaseItem,
+  } = IncrementalStore<CartItemType<ProductItem>, CartStore>(
+    set,
+    compareFn,
+    "items"
+  );
+
   return {
-    items: [],
-    setItems: (items) => {
-      set({ items });
-    },
+    items: items as CartItemType<ProductItem>[],
+    setItems: setItems,
     addItem: (item) => {
-      set((state) => {
-        const existingItem = state.items.find((entry) =>
-          compareFn(entry, item)
-        );
-        let items = [];
-        if (existingItem) {
-          items = state.items.map((entry) =>
-            compareFn(entry, item)
-              ? { ...entry, quantity: entry.quantity + item.quantity }
-              : entry
-          );
-        } else {
-          items = [...state.items, { ...item }];
-        }
-
-        return {
-          items,
-        };
-      });
-
+      addItems(item);
       StoreCart(get().items);
       computerProductItems();
-      updateRemovedItems();
     },
 
     removeItem: (item) => {
-      set((state) => ({
-        items: state.items.filter(
-          (cartItem) => cartItem.item.id !== item.item.id
-        ),
-      }));
+      removeItem(item);
       StoreCart(get().items);
       computerProductItems();
-      updateRemovedItems();
     },
 
     decreaseItem: (item) => {
-      set((state) => {
-        const existingItem = state.items.find((entry) =>
-          compareFn(entry, item)
-        );
-        if (!existingItem) {
-          return {};
-        }
-
-        const newItems = state.items.map((entry) =>
-          compareFn(entry, item)
-            ? {
-                ...entry,
-                quantity: Math.max(0, entry.quantity - 1),
-              }
-            : entry
-        );
-
-        return {
-          items: newItems,
-        };
-      });
+      decreaseItem(item);
       StoreCart(get().items);
       computerProductItems();
-
-      updateRemovedItems();
     },
 
     initializeCart: async () => {
@@ -174,86 +110,29 @@ const useCartStore = create<CartStore>((set, get) => {
         )
       );
       const items = (JSON.parse(ids) as CartItemType<ProductItem>[]).map(
-        ({ ...item }) => ({
-          quantity: item.quantity,
-          item: {
-            ...item.item,
-            price:
-              data?.find((itemm) => itemm.id === item.item.id)?.price ??
-              item.item.price,
-            previewImage:
-              data?.find((itemm) => itemm.id === item.item.id)?.previewImage ??
-              item.item.previewImage,
-          },
-        })
+        ({ ...item }) =>
+          ({
+            quantity: item.quantity,
+            type: item.type,
+            item: {
+              ...item.item,
+              price:
+                data?.find((itemm) => itemm.id === item.item.id)?.price ??
+                item.item.price,
+              previewImage:
+                data?.find((itemm) => itemm.id === item.item.id)
+                  ?.previewImage ?? item.item.previewImage,
+            },
+          } as CartItemType<ProductItem>)
       );
 
       set({ items });
       StoreCart(get().items);
       computerProductItems();
-
-      updateRemovedItems();
     },
 
-    removedItems: [],
     productItems: [],
     finalProductItems: [],
-
-    increaseProductItem: (productItem) => {
-      const { removedItems } = get();
-
-      const existingItem = get().removedItems.find((entry) =>
-        compareFn(entry, productItem)
-      );
-
-      if (!existingItem) {
-        set({
-          removedItems: [
-            ...get().removedItems,
-            { ...productItem, quantity: -productItem.quantity },
-          ],
-        });
-
-        return;
-      }
-
-      const updatedRemovedItems = removedItems.map((item) =>
-        item.item.id === productItem.item.id
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      );
-      set({ removedItems: updatedRemovedItems });
-    },
-
-    decreaseProductItem: (productItem) => {
-      const { removedItems } = get();
-
-      const existingItem = get().removedItems.find((entry) =>
-        compareFn(entry, productItem)
-      );
-
-      if (!existingItem) {
-        set({
-          removedItems: [
-            ...get().removedItems,
-            { ...productItem, quantity: productItem.quantity },
-          ],
-        });
-
-        return;
-      }
-
-      const updatedRemovedItems = removedItems.map((item) =>
-        item.item.id === productItem.item.id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
-      set({ removedItems: updatedRemovedItems });
-    },
-
-    resetPieces: () => {
-      set({ removedItems: [] });
-    },
   };
 });
 

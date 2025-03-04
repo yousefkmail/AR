@@ -1,7 +1,7 @@
 import { CartItemListProps } from "./CartItemList";
 import CartItemsHeader from "./CartItemsHeader";
 import { CartItem } from "./CartItem";
-import { CalculatePrice, MinimumPriceUnitToUSD } from "@utils/CurrencyUtils";
+import { CalculatePrice } from "@utils/CurrencyUtils";
 
 export default function DesktopCartItemList({
   items,
@@ -18,7 +18,7 @@ export default function DesktopCartItemList({
           className="cart-item-container"
           quantity={item.quantity}
           {...item.item}
-          price={MinimumPriceUnitToUSD(item.item.price)}
+          price={CalculatePrice(item.item.price)}
           totalPrice={CalculatePrice(item.quantity, item.item.price)}
           onIncrease={() => onIncrease?.(item.item)}
           onDecrease={() => onDecrease?.(item.item)}

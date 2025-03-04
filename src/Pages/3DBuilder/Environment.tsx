@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef } from "react";
 import { EnvironmentContext } from "../../Features/Screenshot/Context/EnvironmentContext";
 
 export default function Environment() {
-  const { scene } = useGLTF("../Room/scene.gltf");
+  const { scene } = useGLTF("/Room/scene.gltf");
 
   const ref = useRef(scene);
 

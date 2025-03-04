@@ -29,6 +29,7 @@ import {
   MovementMode,
   useSceneSettingsStore,
 } from "@core/Store/SceneSettingsStore";
+import { useCameraControlStore } from "../../Pages/3DBuilder/CameraControlStore";
 
 export default function Template3DObject() {
   const { templateObject } = useContext(Template3DObjectContext);
@@ -161,8 +162,8 @@ export default function Template3DObject() {
     }
   };
 
-  const setCameraRotation = useSceneSettingsStore(
-    (state) => state.setCameraRotation
+  const setCameraControl = useCameraControlStore(
+    (state) => state.setCameraControl
   );
 
   return (
@@ -170,7 +171,7 @@ export default function Template3DObject() {
       <PngPlane
         onDrag={() => {
           handleTemplateDrag(ref.current, templateObject);
-          setCameraRotation(false);
+          setCameraControl(false);
         }}
         onDrop={(event) => {
           PlaceMenuAtMouseposition(event);
@@ -180,7 +181,7 @@ export default function Template3DObject() {
             ></BasisContextMenuHandler>
           );
           openMenu();
-          setCameraRotation(true);
+          setCameraControl(true);
         }}
         key={templateObject.id}
         ref={ref}
@@ -190,7 +191,7 @@ export default function Template3DObject() {
         scale={ArrayToVector3(templateObject.scale)}
         id={templateObject.id}
       >
-        {templateObject.templateModel.children.map((child, childIndex) => (
+        {templateObject.templateModel.pieces.map((child, childIndex) => (
           <PngPlane
             onDrag={() => {
               handleChildPieceDrag(
@@ -199,7 +200,7 @@ export default function Template3DObject() {
                 ref.current.container,
                 templateObject
               );
-              setCameraRotation(false);
+              setCameraControl(false);
             }}
             onDrop={(event) => {
               PlaceMenuAtMouseposition(event);
@@ -210,7 +211,7 @@ export default function Template3DObject() {
                 ></PieceChildContextMenuHandler>
               );
               openMenu();
-              setCameraRotation(true);
+              setCameraControl(true);
             }}
             key={child.id}
             {...child.piece}

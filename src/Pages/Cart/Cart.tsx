@@ -2,7 +2,6 @@ import PageWidthLayout from "@components/Layout/PageWidthLayout";
 import { CartItemList } from "@features/Cart/Components/CartItemList";
 import { EmptyCartMessage } from "@features/Cart/Components/EmptyCart";
 import { useNavigate } from "react-router-dom";
-import CartPiecesContainer from "./CartPiecesContainer";
 import CartBottomSection from "./CartBottomSection";
 import useCartStore from "@features/Cart/Store/CartStore";
 import { useEffect } from "react";
@@ -13,19 +12,10 @@ import { ProductItem } from "@data/ProductItem";
 export default function Cart() {
   const items = useCartStore((state) => state.items);
   const productItems = useCartStore((state) => state.productItems);
-  const removedItems = useCartStore((state) => state.removedItems);
   const decreaseItem = useCartStore((statusbar) => statusbar.decreaseItem);
   const addItem = useCartStore((statusbar) => statusbar.addItem);
   const initializeCart = useCartStore((statusbar) => statusbar.initializeCart);
-  const resetPieces = useCartStore((state) => state.resetPieces);
   const removeItem = useCartStore((state) => state.removeItem);
-
-  const increaseProductItem = useCartStore(
-    (state) => state.increaseProductItem
-  );
-  const decreaseProductItem = useCartStore(
-    (state) => state.decreaseProductItem
-  );
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -36,6 +26,8 @@ export default function Cart() {
     navigate("/info-filling");
   };
 
+  console.log(items);
+
   const finalProductItems = () => {
     const updatedProductItems: IncrementalArray<CartItemType<ProductItem>> =
       new IncrementalArray<CartItemType<ProductItem>>(
@@ -43,10 +35,6 @@ export default function Cart() {
       );
     for (let productItem of productItems) {
       updatedProductItems.addItem(productItem);
-    }
-
-    for (let removedItem of removedItems) {
-      updatedProductItems.removeQuantity(removedItem);
     }
 
     return updatedProductItems.getItems();
@@ -62,19 +50,14 @@ export default function Cart() {
             <CartItemList
               items={items}
               onDecrease={(item) => {
-                decreaseItem({ item, quantity: 1 });
+                decreaseItem({ item, quantity: 1, type: "base" });
               }}
               onIncrease={(item) => {
-                addItem({ item, quantity: 1 });
+                addItem({ item, quantity: 1, type: "base" });
               }}
-              onRemove={(item) => removeItem({ item, quantity: 0 })}
-            />
-
-            <CartPiecesContainer
-              items={finalProductItems()}
-              onDecrease={(item) => decreaseProductItem({ item, quantity: 1 })}
-              onIncrease={(item) => increaseProductItem({ item, quantity: 1 })}
-              onResetPieces={() => resetPieces()}
+              onRemove={(item) =>
+                removeItem({ item, quantity: 0, type: "base" })
+              }
             />
 
             <CartBottomSection

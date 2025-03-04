@@ -10,7 +10,7 @@ import { useThree } from "@react-three/fiber";
 import { useFullPieces, useMousePosition } from "@hooks/index";
 import { NDCToObjectWorld } from "@utils/ThreeUtils";
 import PieceContextMenuHandler from "../../Features/ContextMenu/Components/ContextMenuhandlers/PieceContextMenuHandler";
-import { useSceneSettingsStore } from "@core/Store/SceneSettingsStore";
+import { useCameraControlStore } from "../../Pages/3DBuilder/CameraControlStore";
 const PngPlane = React.lazy(() => import("../PngPlane/PngPlane"));
 
 export default function Piece3DObject() {
@@ -20,6 +20,10 @@ export default function Piece3DObject() {
   const { open: openMenu, setMenuPosition, setMenu } = useObjectContextMenu();
 
   const { getFirstObject, setIgnoredArray } = useMouseRaycaster(camera, scene);
+
+  const setCameraControl = useCameraControlStore(
+    (state) => state.setCameraControl
+  );
 
   const { DispatchCreatedPieces } = useFullPieces();
   const ref = useRef<PngPlaneRef>(null!);
@@ -84,23 +88,18 @@ export default function Piece3DObject() {
     setMenuPosition(offsetX, offsetY);
   };
 
-  const setCameraRotation = useSceneSettingsStore(
-    (state) => state.setCameraRotation
-  );
   return (
     <Suspense>
       <PngPlane
         key={pieceObject.id}
         ref={ref}
         onDrag={() => {
-          console.log("Draagging");
-          setCameraRotation(false);
-
+          setCameraControl(false);
           handlePieceDrag(ref.current, pieceObject);
         }}
         onDrop={(event: MouseEvent) => {
-          setCameraRotation(true);
-          console.log("Dropped");
+          setCameraControl(true);
+
           handlePieceDropped(pieceObject, ref.current);
           PlaceMenuAtMouseposition(event);
         }}

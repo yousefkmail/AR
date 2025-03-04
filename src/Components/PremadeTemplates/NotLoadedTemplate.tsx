@@ -1,11 +1,10 @@
-import { DragEvent, useState } from "react";
+import { DragEvent } from "react";
 import DraggableItem from "../DragableItem";
 import { CircularProgress } from "@mui/material";
 import { UnresolvedTemplateModel } from "../../Core/Models/TemplateModel";
 import { useAddNotification } from "@features/NotificationService/useAddNotification";
 import WigitCardImage from "@components/WigitCardUI/WigitCardImage";
 import Button from "@components/Button/Button";
-import WigitLikeButton from "@components/WigitCardUI/WigitLikeButton";
 import { CalculatePrice, GetCurrencyFormat } from "@utils/CurrencyUtils";
 interface TemplateProps {
   item: UnresolvedTemplateModel;
@@ -18,14 +17,12 @@ export default function NotLoadedTemplate({
   OnLoadPresed,
   isLoading,
 }: TemplateProps) {
-  const [isLiked, setIsLiked] = useState<boolean>(false);
   const addNotification = useAddNotification();
   const handleDragStart = () => {
     addNotification(
       `you need to load template ${item.name} before dragging it.`,
       "warning"
     );
-
     return;
   };
   return (
@@ -54,21 +51,7 @@ export default function NotLoadedTemplate({
               {GetCurrencyFormat(CalculatePrice(item.price))}
             </span>
           </div>
-          <div style={{ padding: "10px 0" }}>
-            <WigitLikeButton
-              onClick={() => {
-                addNotification(
-                  isLiked
-                    ? "Item has been removed from your favorite"
-                    : "Item has been added from your favorite",
-                  "info"
-                );
-
-                setIsLiked(!isLiked);
-              }}
-              isLiked={isLiked}
-            />
-          </div>
+          <div style={{ padding: "10px 0" }}></div>
           <div style={{ display: "flex" }}>
             <Button
               style={{

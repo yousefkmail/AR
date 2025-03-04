@@ -3,7 +3,6 @@ import { DragEvent } from "react";
 import { useProgress } from "@react-three/drei";
 import { CircularProgress } from "@mui/material";
 import BuilderCanvasContent from "./BuilderCanvasContent";
-import { CanvasScreneshotContextProvider } from "@features/Screenshot/Context/CanvasScreenshotContext";
 import { ObjectPreviewContextProvider } from "@features/DragAndDrop/UIToCanvasDrag/ObjectPreview";
 export default function BuilderCanvas() {
   const handleDragEnter = (_event: DragEvent) => {
@@ -22,11 +21,9 @@ export default function BuilderCanvas() {
         onDragEnter={handleDragEnter}
         onDragOver={HandleDragOver}
       >
-        <CanvasScreneshotContextProvider>
-          <ObjectPreviewContextProvider>
-            <BuilderCanvasContent />
-          </ObjectPreviewContextProvider>
-        </CanvasScreneshotContextProvider>
+        <ObjectPreviewContextProvider>
+          <BuilderCanvasContent />
+        </ObjectPreviewContextProvider>
       </Canvas>
       {progress < 100 && (
         <div

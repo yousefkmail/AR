@@ -51,7 +51,7 @@ export const FirebaseTemplateService: ITemplateService = {
     const resolvedTemplate: TemplateModel = {
       id: unresolvedTemplate.id,
       base: base.data() as Basis,
-      children: results,
+      pieces: results,
       price: unresolvedTemplate.price,
       description: unresolvedTemplate.description,
       name: unresolvedTemplate.name,

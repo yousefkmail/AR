@@ -65,15 +65,13 @@ export const useTemplateObjects = () => {
           ...templateObject,
           templateModel: {
             ...templateObject.templateModel,
-            children: templateObject.templateModel.children.map(
-              (pieceChild) => ({
-                ...pieceChild,
-                layer:
-                  pieceChild.id === action.payload.piece.id
-                    ? action.payload.layer
-                    : pieceChild.layer,
-              })
-            ),
+            children: templateObject.templateModel.pieces.map((pieceChild) => ({
+              ...pieceChild,
+              layer:
+                pieceChild.id === action.payload.piece.id
+                  ? action.payload.layer
+                  : pieceChild.layer,
+            })),
           },
         }));
       }
@@ -99,7 +97,7 @@ export const useTemplateObjects = () => {
               ...item,
               templateModel: {
                 ...item.templateModel,
-                children: [...item.templateModel.children, pieceChild],
+                pieces: [...item.templateModel.pieces, pieceChild],
               },
             };
           }
@@ -108,7 +106,7 @@ export const useTemplateObjects = () => {
       }
       case "deattach_piece": {
         return state.map((item) => {
-          item.templateModel.children = item.templateModel.children.filter(
+          item.templateModel.pieces = item.templateModel.pieces.filter(
             (child) => child.id !== action.payload.id
           );
           return item;
@@ -126,21 +124,21 @@ export const useTemplateObjects = () => {
 
       case "move_child": {
         return state.map((item) => {
-          let result = item.templateModel.children.map((child) => {
+          let result = item.templateModel.pieces.map((child) => {
             if (child.id === action.payload.piece.id) {
               child.position = action.payload.position;
               return child;
             } else return child;
           });
 
-          item.templateModel.children = result;
+          item.templateModel.pieces = result;
           return item;
         });
       }
 
       case "delete_child": {
         return state.map((item) => {
-          item.templateModel.children = item.templateModel.children.filter(
+          item.templateModel.pieces = item.templateModel.pieces.filter(
             (child) => child.id !== action.payload.piece.id
           );
           return item;
@@ -152,7 +150,7 @@ export const useTemplateObjects = () => {
           ...item,
           templateModel: {
             ...item.templateModel,
-            children: item.templateModel.children.map((item) =>
+            children: item.templateModel.pieces.map((item) =>
               item.id === action.payload.piece.id
                 ? {
                     ...item,

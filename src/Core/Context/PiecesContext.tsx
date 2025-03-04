@@ -94,7 +94,7 @@ export const PiecesContextProvider = ({
     }
 
     for (const base of createdTemplates) {
-      for (const child of base.templateModel.children) {
+      for (const child of base.templateModel.pieces) {
         if (child.id === id) return child;
       }
     }
@@ -109,7 +109,7 @@ export const PiecesContextProvider = ({
     for (let i = 0; i < basis.templateModel.base.layers.length; i++) {
       const space =
         basis.templateModel.base.layers[i].width -
-        basis.templateModel.children.reduce(
+        basis.templateModel.pieces.reduce(
           (prev, next) => prev + (next.layer === i ? next.piece.width : 0),
           0
         );
@@ -140,7 +140,7 @@ export const PiecesContextProvider = ({
 
   const FindParent = (piece: PieceChild) => {
     const parentTemplate = createdTemplates.find((template) =>
-      template.templateModel.children.some((child) => child.id === piece.id)
+      template.templateModel.pieces.some((child) => child.id === piece.id)
     );
     return parentTemplate;
   };

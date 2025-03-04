@@ -56,7 +56,7 @@ export const PiecesContainer = () => {
                     rotation: [90, 0, 0],
                     scale: [1, 1, 1],
                     templateModel: {
-                      children: [],
+                      pieces: [],
                       description: "",
                       base: item,
                       id: uuidv4(),
@@ -76,7 +76,7 @@ export const PiecesContainer = () => {
                     rotation: [90, 0, 0],
                     scale: [1, 1, 1],
                     templateModel: {
-                      children: [],
+                      pieces: [],
                       description: "",
                       base: item,
                       id: uuidv4(),

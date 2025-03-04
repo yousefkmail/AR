@@ -95,6 +95,14 @@ export const AppRouter = createBrowserRouter(
         </Suspense>
       ),
     },
+    {
+      path: "3d_builder/:id/:index",
+      element: (
+        <Suspense fallback={<div></div>}>
+          <Builder />
+        </Suspense>
+      ),
+    },
 
     {
       path: "*",
