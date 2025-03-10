@@ -19,7 +19,7 @@ export default function PieceChildContextMenuHandler({
   const { DispatchCreatedTemplates, Deattach_Piece } = useFullPieces();
   const [layerOptions, setLayerOptions] = useState<LayerOption[]>([]);
 
-  const { setMenu } = useObjectContextMenu();
+  const { setMenu, close } = useObjectContextMenu();
 
   const DeleteActivePiece = () => {
     DispatchCreatedTemplates({
@@ -34,6 +34,7 @@ export default function PieceChildContextMenuHandler({
       type: "changeLayer",
       payload: { layer, piece: piece },
     });
+
     setLayer({
       label: template.templateModel.base.layers[layer].name,
       value: layer,
