@@ -1,4 +1,4 @@
-import QuantityChange from "./QuantityChange";
+import QuantityChange from "../../../Components/atoms/QuantityChange";
 
 interface MobileCartItemQuantityChangerProps {
   label?: string;

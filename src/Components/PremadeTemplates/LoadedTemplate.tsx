@@ -1,12 +1,15 @@
 import { DragEvent } from "react";
-import DraggableItem from "../DragableItem";
 import { TemplateModel } from "../../Core/Models/TemplateModel";
 import { v4 as uuidv4 } from "uuid";
 import { useUIDraggedWigit } from "@features/DragAndDrop";
 import { TemplateObject } from "@core/index";
 import WigitCardImage from "@components/WigitCardUI/WigitCardImage";
-import Button from "@components/Button/Button";
+import { Button, Typography } from "@mui/material";
+
 import { CalculatePrice, GetCurrencyFormat } from "@utils/CurrencyUtils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { QuantityChange } from "@features/Cart";
 interface TemplateProps {
   item: TemplateModel;
 }
@@ -31,14 +34,7 @@ export default function LoadedTemplate({ item }: TemplateProps) {
     setDraggedItem(template);
   };
   return (
-    <DraggableItem
-      onDragStart={(event: DragEvent) => {
-        const img = new Image();
-        img.src = "";
-        event.dataTransfer.setDragImage(img, 0, 0);
-        handleDragStart();
-      }}
-    >
+    <div>
       <div
         className="template"
         style={{
@@ -48,7 +44,17 @@ export default function LoadedTemplate({ item }: TemplateProps) {
           overflow: "hidden",
         }}
       >
-        <WigitCardImage src={item.previewImage} />
+        <div
+          draggable
+          onDragStart={(event: DragEvent) => {
+            const img = new Image();
+            img.src = "";
+            event.dataTransfer.setDragImage(img, 0, 0);
+            handleDragStart();
+          }}
+        >
+          <WigitCardImage src={item.previewImage} />
+        </div>
         <div style={{ padding: "10px" }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span style={{ fontWeight: "bolder" }}>{item.name}</span>
@@ -57,22 +63,36 @@ export default function LoadedTemplate({ item }: TemplateProps) {
             </span>
           </div>
           <div style={{ padding: "10px 0" }}></div>
-          <Button style={{ border: "none" }} disabled={true}>
-            Loaded
-          </Button>
+
+          <Typography color="success">
+            {"Loaded "}
+            <FontAwesomeIcon icon={faCheck} />
+          </Typography>
+
+          <QuantityChange>
+            <div
+              style={{
+                minWidth: "20px",
+                display: "inline-block",
+                textAlign: "center",
+              }}
+            >
+              1
+            </div>
+          </QuantityChange>
+
           <div style={{ display: "flex", marginTop: "16px" }}>
             <Button
               style={{
-                backgroundColor: "rgb(238, 238, 238)",
-                border: "none",
                 flexGrow: "1",
               }}
+              variant="contained"
             >
               {"Add to cart"}
             </Button>
           </div>
         </div>
       </div>
-    </DraggableItem>
+    </div>
   );
 }

@@ -7,5 +7,5 @@ export { CartItem } from "./Components/CartItem";
 export { default as CartItemLayout } from "./Components/CartItemLayout";
 export { default as CartItemMobile } from "./Components/CartItemMobile";
 export { default as CartItemsHeader } from "./Components/CartItemsHeader";
-export { default as QuantityChange } from "./Components/QuantityChange";
+export { default as QuantityChange } from "../../Components/atoms/QuantityChange";
 export { CartContext } from "./Contexts/CartContext";

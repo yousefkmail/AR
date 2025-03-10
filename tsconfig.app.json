@@ -38,5 +38,5 @@
       "@pages": ["src/Pages"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "src/Components/Layout"]
 }

@@ -1,13 +1,18 @@
 :root {
 
-    --color-primary: white;
-    --color-secondary: #ffffff;
-    --text-primary: black;
-    --text-secondary: rgb(0, 0, 0);
-    --hover-primary: rgb(228, 227, 227);
-    --hover-secondary: #cecccc;
-    --active-primary: rgb(196, 196, 196);
-    --active-secondary: #bdbdbd;
+    --background-color: white;
+    --text-color: black;
+    --accent-color: rgb(128, 9, 9);
+
+    --color-primary: #ffae00;
+    --hover-primary: #bb8104;
+    --active-primary: #8b6001;
+    --text-primary: white;
+
+    --color-secondary: #EEEEEE;
+    --hover-secondary: #c4c2c2;
+    --active-secondary: #c2c2c2;
+    --text-secondary: black;
 
     --disabled-primary: rgb(196, 196, 196);
     --disabled-secondary: #969696;
@@ -43,6 +48,13 @@
 
 
     font-family: "Montserrat", serif;
+
+
+    --animation-duration-fast: 0.1s;
+    --animation-duration-medium: 0.2s;
+    --animation-duration-medium-slow: 0.4s;
+    --animation-duration-slow: 1s;
+
 }
 
 * {
@@ -51,7 +63,8 @@
 
 body {
     margin: 0;
-    color: var(--text-primary);
+    color: var(--text-color);
+    background-color: var(--background-color);
 }
 
 
@@ -60,8 +73,8 @@ body {
 }
 
 .btn-color {
-    background-color: var(--color-primary);
-    color: var(--text-primary);
+    background-color: var(--background-color);
+    color: var(--text-color);
     cursor: pointer;
     border: var(--secondary-border);
     transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -141,7 +154,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 10;
-    background-color: var(--color-primary);
+    background-color: var(--background-color);
 }
 
 .mobile-nav {
@@ -288,7 +301,7 @@ body {
     display: flex;
     flex-direction: column;
     z-index: var(--z-index-modal);
-    background-color: var(--color-primary);
+    background-color: var(--background-color);
     margin: 0;
     padding: 0;
     padding-right: 10px;
@@ -301,7 +314,7 @@ body {
 }
 
 .pieces-container-select-label {
-    color: var(--text-primary);
+    color: var(--text-color);
 }
 
 .flex {
@@ -322,14 +335,15 @@ body {
 .settings-movemode-buttons {
     display: flex;
     border-radius: 7px;
-    border: var(--secondary-border);
     overflow: hidden;
 }
 
-.settings-movemode-button {
+
+.movemntmode-button {
     flex-grow: 1;
     border: none;
     border-radius: 0;
+
 }
 
 .settings-movemode-button:hover {
@@ -337,7 +351,7 @@ body {
 }
 
 .settings-movemode-button-active {
-    background-color: var(--active-primary);
+    background-color: var(--active-secondary);
     color: var(--text-secondary);
 }
 
@@ -361,10 +375,16 @@ body {
     border-radius: 7px;
     pointer-events: all;
     margin: 2px;
+    background-color: var(--background-color);
+    transition: background-color var(--animation-duration-medium) ease-in-out;
+}
+
+.windowsbar-button:hover {
+    background-color: var(--hover-secondary);
 }
 
 .windowsbar-button-active {
-    background-color: var(--active-primary);
+    background-color: var(--active-secondary);
 }
 
 .contextmenu-button {
@@ -581,7 +601,7 @@ body {
 }
 
 .color-primary {
-    background-color: var(--color-primary);
+    background-color: var(--background-color);
 }
 
 
@@ -648,7 +668,7 @@ body {
 }
 
 .add-to-cart-conatiner {
-    background-color: var(--color-primary);
+    background-color: var(--background-color);
     max-width: 350px;
     width: 100%;
     padding: var(--space-sm);

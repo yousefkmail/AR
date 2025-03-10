@@ -1,4 +1,4 @@
-import FloatingContainer from "@components/FloatingContainer/FloatingContainer";
+import FloatingContainer from "@components/Layout/FloatingContainer";
 import { useObjectContextMenu } from "./Hooks/useObjectContextMenu";
 import { useEffect } from "react";
 

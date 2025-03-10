@@ -1,4 +1,4 @@
-import Button from "@components/Button/Button";
+import { Button } from "@components/atoms";
 import { TemplateModel } from "@core/index";
 import { CartItemType } from "@features/Cart";
 import { fa42Group } from "@fortawesome/free-brands-svg-icons";

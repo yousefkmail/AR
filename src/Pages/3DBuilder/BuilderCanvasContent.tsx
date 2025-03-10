@@ -1,7 +1,7 @@
 import { Suspense, useContext, useEffect, useRef } from "react";
 import CanvasSetup from "./CanvasSetup";
 import React from "react";
-import { ScenePiecesContainer } from "../../Components/ScenePiecesContainer/ScenePiecesContainer";
+import { ScenePiecesContainer } from "../../Components/Three/ScenePiecesContainer/ScenePiecesContainer";
 import { PlanesContainerContext, ScenePiecesContainerRef } from "@core";
 import { CanvasContext } from "../../Context/CanvasContext";
 import { useThree } from "@react-three/fiber";

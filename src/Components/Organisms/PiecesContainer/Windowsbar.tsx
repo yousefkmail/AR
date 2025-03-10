@@ -1,0 +1,47 @@
+import { WindowData } from "../WindowsContainer/WindowsContainer";
+import FontawesomeIconButton from "@components/atoms/Buttons/FontawesomeIconButton";
+interface WindowsBarProps {
+  windowsData?: (WindowData | null)[];
+  activeWindow: WindowData;
+  onToggle?: (index: number) => void;
+  OnScreenshotPressed?: () => void;
+}
+
+export default function Windowsbar({
+  windowsData,
+  onToggle,
+  activeWindow,
+}: WindowsBarProps) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        width: "100%",
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        style={{
+          width: "max-content",
+          padding: "10px",
+          display: "flex",
+          borderRadius: "7px",
+          justifyContent: "center",
+        }}
+      >
+        {windowsData?.map(
+          (item, index) =>
+            item && (
+              <FontawesomeIconButton
+                onClick={() => onToggle?.(index)}
+                key={index}
+                isActive={item.name === activeWindow.name}
+                icon={item.icon}
+              />
+            )
+        )}
+      </div>
+    </div>
+  );
+}

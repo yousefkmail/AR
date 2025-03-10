@@ -1,4 +1,4 @@
-import FontawesomeIconButton from "@components/Button/FontawesomeIconButton";
+import FontawesomeIconButton from "@components/atoms/Buttons/FontawesomeIconButton";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import InputField from "../../../Pages/UserInfoFilling/Forms/InputField";

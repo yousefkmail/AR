@@ -8,7 +8,9 @@ import {
 } from "react";
 import { useUIDraggedWigit } from "../Hooks/useDraggedWigit";
 import { GetWigitType } from "@utils/Wigits";
-import PngPlane, { PngPlaneRef } from "../../../Components/PngPlane/PngPlane";
+import PngPlane, {
+  PngPlaneRef,
+} from "../../../Components/Three/PngPlane/PngPlane";
 import { Raycaster, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
 import { useMousePosition } from "@hooks/useMousePositiion";

@@ -17,6 +17,7 @@ export default function HomeAboutSection({
 }: HomeAboutSectionProps) {
   const { ref, inView } = useInView({
     threshold: 0.3,
+    triggerOnce: true,
   });
 
   return (

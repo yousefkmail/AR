@@ -20,25 +20,25 @@ export const PiecesSelectStyle: StylesConfig<
   }),
   singleValue: (provided: CSSObjectWithLabel) => ({
     ...provided,
-    color: "var(--text-primary)",
+    color: "var(--text-color)",
   }),
 
   container: (provided: CSSObjectWithLabel) => ({
     ...provided,
     cursor: "pointer",
     maxWidth: "500px",
-    color: "var(--color-primary)",
+    color: "var(--color-secondary)",
   }),
 
   option: (provided: CSSObjectWithLabel, state) => ({
     ...provided,
-    color: "var(--text-primary)",
+    color: "var(--text-color)",
     backgroundColor: state.isSelected
-      ? "var(--active-primary)"
-      : "var(--color-primary)",
+      ? "var(--active-secondary)"
+      : "var(--color-secondary)",
 
     ":hover": {
-      backgroundColor: "var(--hover-primary)",
+      backgroundColor: "var(--hover-secondary)",
     },
   }),
 };

@@ -1,7 +1,7 @@
 import { HTMLAttributes } from "react";
 import CartItemLayout from "./CartItemLayout";
-import QuantityChange from "./QuantityChange";
-import FontawesomeIconButton from "@components/Button/FontawesomeIconButton";
+import QuantityChange from "../../../Components/atoms/QuantityChange";
+import FontawesomeIconButton from "@components/atoms/Buttons/FontawesomeIconButton";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export interface CartItemProps extends HTMLAttributes<HTMLDivElement> {

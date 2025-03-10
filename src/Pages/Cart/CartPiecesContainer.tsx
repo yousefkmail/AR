@@ -1,7 +1,7 @@
+import { Button } from "@components/atoms";
 import { ProductItem } from "@data/ProductItem";
 import { CartItemType } from "@features/Cart";
 import { CartItemList } from "@features/Cart/Components/CartItemList";
-import Button from "@components/Button/Button";
 
 interface CartPiecesContainerProps {
   onIncrease?: (item: ProductItem) => void;

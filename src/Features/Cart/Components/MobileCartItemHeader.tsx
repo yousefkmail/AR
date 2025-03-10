@@ -1,4 +1,4 @@
-import FontawesomeIconButton from "@components/Button/FontawesomeIconButton";
+import FontawesomeIconButton from "@components/atoms/Buttons/FontawesomeIconButton";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 interface MobileCartItemHeaderProps {

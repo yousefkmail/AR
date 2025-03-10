@@ -1,6 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import InputField from "../../../Pages/UserInfoFilling/Forms/InputField";
-import FontawesomeIconButton from "@components/Button/FontawesomeIconButton";
+import FontawesomeIconButton from "@components/atoms/Buttons/FontawesomeIconButton";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import { HTMLAttributes } from "react";

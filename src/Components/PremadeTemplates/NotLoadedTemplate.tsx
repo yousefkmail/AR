@@ -1,11 +1,11 @@
 import { DragEvent } from "react";
-import DraggableItem from "../DragableItem";
 import { CircularProgress } from "@mui/material";
 import { UnresolvedTemplateModel } from "../../Core/Models/TemplateModel";
 import { useAddNotification } from "@features/NotificationService/useAddNotification";
 import WigitCardImage from "@components/WigitCardUI/WigitCardImage";
-import Button from "@components/Button/Button";
 import { CalculatePrice, GetCurrencyFormat } from "@utils/CurrencyUtils";
+import { Button } from "@mui/material";
+import { QuantityChange } from "@features/Cart";
 interface TemplateProps {
   item: UnresolvedTemplateModel;
   isLoading: boolean;
@@ -26,14 +26,7 @@ export default function NotLoadedTemplate({
     return;
   };
   return (
-    <DraggableItem
-      onDragStart={(event: DragEvent) => {
-        const img = new Image();
-        img.src = "";
-        event.dataTransfer.setDragImage(img, 0, 0);
-        handleDragStart();
-      }}
-    >
+    <div>
       <div
         className="template"
         style={{
@@ -43,7 +36,18 @@ export default function NotLoadedTemplate({
           overflow: "hidden",
         }}
       >
-        <WigitCardImage src={item.previewImage} />
+        <div
+          draggable
+          onDragStart={(event: DragEvent) => {
+            const img = new Image();
+            img.src = "";
+            event.dataTransfer.setDragImage(img, 0, 0);
+            handleDragStart();
+          }}
+        >
+          <WigitCardImage src={item.previewImage} />
+        </div>
+
         <div style={{ padding: "10px" }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span style={{ fontWeight: "bolder" }}>{item.name}</span>
@@ -55,16 +59,16 @@ export default function NotLoadedTemplate({
           <div style={{ display: "flex" }}>
             <Button
               style={{
-                backgroundColor: "rgb(238, 238, 238)",
-                border: "none",
                 flexGrow: "1",
               }}
+              variant="contained"
+              color="secondary"
               disabled={isLoading}
               onClick={() => OnLoadPresed?.()}
             >
               {isLoading ? (
                 <CircularProgress
-                  size={"10px"}
+                  size={"24px"}
                   sx={{ color: "black" }}
                 ></CircularProgress>
               ) : (
@@ -72,11 +76,24 @@ export default function NotLoadedTemplate({
               )}
             </Button>
           </div>
+          <div style={{ marginTop: "16px" }}>
+            <QuantityChange>
+              <div
+                style={{
+                  minWidth: "20px",
+                  display: "inline-block",
+                  textAlign: "center",
+                }}
+              >
+                1
+              </div>
+            </QuantityChange>
+          </div>
+
           <div style={{ display: "flex", marginTop: "16px" }}>
             <Button
+              variant="contained"
               style={{
-                backgroundColor: "rgb(238, 238, 238)",
-                border: "none",
                 flexGrow: "1",
               }}
             >
@@ -85,6 +102,6 @@ export default function NotLoadedTemplate({
           </div>
         </div>
       </div>
-    </DraggableItem>
+    </div>
   );
 }

@@ -13,10 +13,10 @@ import InputField from "./Forms/InputField";
 import FormRow from "./Forms/FormRow";
 import { CartItemMobile } from "@features/Cart";
 import { Order } from "@data/Order";
-import PageWidthLayout from "@components/Layout/PageWidthLayout";
-import Button from "@components/Button/Button";
 import useCartStore from "@features/Cart/Store/CartStore";
 import { CalculatePrice } from "@utils/CurrencyUtils";
+import Button from "@components/atoms/Buttons/Button";
+import PageWidthLayout from "../../Components/Layout/PageWidthLayout";
 
 export default function UserInfoFilling() {
   const {
