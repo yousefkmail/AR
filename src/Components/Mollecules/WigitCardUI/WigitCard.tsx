@@ -5,17 +5,21 @@ import { CalculatePrice, GetCurrencyFormat } from "@utils/CurrencyUtils";
 import Size from "./Size";
 import Stock from "./Stock";
 import CartController from "@components/Mollecules/CartController";
+
 interface DraggablebasisProps extends HTMLAttributes<HTMLDivElement> {
   plane: Plane;
+  onAddToCart?: (count: number) => void;
 }
 
 export default function WigitCard({
   plane,
   onDragStart,
+  onAddToCart,
   onClick,
   ...rest
 }: DraggablebasisProps) {
   const { previewImage, width, height, stock, price, name } = plane;
+
   return (
     <div {...rest}>
       <div
@@ -47,8 +51,9 @@ export default function WigitCard({
 
           <Size height={height} width={width} />
           <Stock stock={stock} />
-
-          <CartController></CartController>
+          <div style={{ paddingTop: "8px" }}>
+            <CartController onAddToCart={onAddToCart}></CartController>
+          </div>
         </div>
       </div>
     </div>

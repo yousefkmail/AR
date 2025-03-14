@@ -12,7 +12,7 @@ import { DateField } from "../Shared/DateField";
 
 export const PieceList = () => (
   <List>
-    <Datagrid>
+    <Datagrid bulkActionButtons={false}>
       <TextField source="name" />
       <ImageField source="previewImage" />
       <TextField source="description" />

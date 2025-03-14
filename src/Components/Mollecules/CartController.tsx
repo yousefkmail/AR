@@ -35,7 +35,7 @@ export default function CartController({
           {quantity}
         </div>
       </QuantityChange>
-      <div style={{ display: "flex", marginTop: "16px" }}>
+      <div style={{ display: "flex", marginTop: "8px" }}>
         <Button
           variant="contained"
           style={{

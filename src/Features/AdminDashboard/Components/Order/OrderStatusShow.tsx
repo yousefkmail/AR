@@ -22,7 +22,7 @@ export function OrderStatusShow() {
   };
   const statusColor = {
     Pending: "orange",
-    Processing: "yellow",
+    Processing: "purple",
     Shipped: "blue",
     Delivered: "green",
     Cancelled: "red",
@@ -30,7 +30,12 @@ export function OrderStatusShow() {
   };
 
   return (
-    <div style={{ color: statusColor[record?.["status"] as OrderStatus] }}>
+    <div
+      style={{
+        color: statusColor[record?.["status"] as OrderStatus],
+        padding: "5px 4px",
+      }}
+    >
       <FontAwesomeIcon icon={statusIcon[record?.["status"] as OrderStatus]} />
       <span> {record?.["status"]}</span>
     </div>

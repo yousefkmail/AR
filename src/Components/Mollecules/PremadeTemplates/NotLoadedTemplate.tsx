@@ -1,11 +1,11 @@
 import { DragEvent } from "react";
 import { CircularProgress } from "@mui/material";
-import { UnresolvedTemplateModel } from "../../Core/Models/TemplateModel";
+import { UnresolvedTemplateModel } from "../../../Core/Models/TemplateModel";
 import { useAddNotification } from "@features/NotificationService/useAddNotification";
-import WigitCardImage from "@components/WigitCardUI/WigitCardImage";
+import WigitCardImage from "@components/Mollecules/WigitCardUI/WigitCardImage";
 import { CalculatePrice, GetCurrencyFormat } from "@utils/CurrencyUtils";
 import { Button } from "@mui/material";
-import { QuantityChange } from "@features/Cart";
+import CartController from "../CartController";
 interface TemplateProps {
   item: UnresolvedTemplateModel;
   isLoading: boolean;
@@ -76,29 +76,8 @@ export default function NotLoadedTemplate({
               )}
             </Button>
           </div>
-          <div style={{ marginTop: "16px" }}>
-            <QuantityChange>
-              <div
-                style={{
-                  minWidth: "20px",
-                  display: "inline-block",
-                  textAlign: "center",
-                }}
-              >
-                1
-              </div>
-            </QuantityChange>
-          </div>
-
-          <div style={{ display: "flex", marginTop: "16px" }}>
-            <Button
-              variant="contained"
-              style={{
-                flexGrow: "1",
-              }}
-            >
-              {"Add to cart"}
-            </Button>
+          <div style={{ paddingTop: "8px" }}>
+            <CartController></CartController>
           </div>
         </div>
       </div>

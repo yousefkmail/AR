@@ -1,9 +1,12 @@
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faPhone, faSignIn } from "@fortawesome/free-solid-svg-icons";
 import FooterSocialLink from "./FooterSocialLink";
 import { useGlobalSettings } from "../../../Hooks/useGlobalSettings";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function Footer() {
   const { data, isLoading } = useGlobalSettings();
+
+  const year = new Date().getFullYear();
 
   return (
     !isLoading &&
@@ -15,9 +18,12 @@ export default function Footer() {
             link="https://wa.me/+970568550124"
           />
           <FooterSocialLink icon={faPhone} link="tel:+970568550124" />
+          <a className="footer-link" href="/admin-login">
+            <FontAwesomeIcon size="lg" icon={faSignIn} />
+          </a>
         </div>
         <div className="footer_bottom">
-          <p>© 2024 Wigitsco. All rights reserved.</p>
+          <p>{`© ${year} Wigitsco. All rights reserved.`}</p>
         </div>
       </div>
     )

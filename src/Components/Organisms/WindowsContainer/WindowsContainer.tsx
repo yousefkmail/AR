@@ -2,6 +2,7 @@ import { ReactNode, useState } from "react";
 import Windowsbar from "../PiecesContainer/Windowsbar";
 import {
   faGear,
+  faPlus,
   faPuzzlePiece,
   faXmark,
   IconDefinition,
@@ -9,7 +10,7 @@ import {
 import { faNewspaper } from "@fortawesome/free-regular-svg-icons";
 import { PiecesContainer } from "../PiecesContainer/PiecesContainer";
 import { SceneSettings } from "../SceneSettings/SceneSettings";
-import PremadeTemplates from "../../PremadeTemplates/PremadeTemplates";
+import PremadeTemplates from "../../Mollecules/PremadeTemplates/PremadeTemplates";
 import FontawesomeIconButton from "@components/atoms/Buttons/FontawesomeIconButton";
 
 export interface WindowData {
@@ -59,7 +60,7 @@ export default function WindowsContainer() {
         <FontawesomeIconButton
           size="xl"
           onClick={() => setMinimized(!minimized)}
-          icon={faXmark}
+          icon={minimized ? faPlus : faXmark}
           isActive={false}
         />
         <Windowsbar

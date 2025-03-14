@@ -1,14 +1,9 @@
-import { ClassnameMerge } from "@utils/CssUtils";
-import { ButtonHTMLAttributes } from "react";
+import {
+  ButtonProps as MUIButtonProps,
+  Button as MUIButton,
+} from "@mui/material";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
-export default function Button({ className, children, ...rest }: ButtonProps) {
-  return (
-    <button
-      className={ClassnameMerge("btn-color", "btn-shape", className)}
-      {...rest}
-    >
-      {children}
-    </button>
-  );
+interface ButtonProps extends MUIButtonProps {}
+export default function Button({ children, ...rest }: ButtonProps) {
+  return <MUIButton {...rest}>{children}</MUIButton>;
 }

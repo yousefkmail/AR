@@ -61,11 +61,12 @@ export const useTemplateObjects = () => {
       }
 
       case "changeLayer": {
+        console.log(state);
         return state.map((templateObject) => ({
           ...templateObject,
           templateModel: {
             ...templateObject.templateModel,
-            children: templateObject.templateModel.pieces.map((pieceChild) => ({
+            pieces: templateObject.templateModel.pieces.map((pieceChild) => ({
               ...pieceChild,
               layer:
                 pieceChild.id === action.payload.piece.id

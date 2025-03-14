@@ -57,7 +57,6 @@ export default function () {
                 <FontAwesomeIcon size="xl" icon={faShoppingCart} />
               </Button>
             </div>
-
             <Button
               onClick={() => navigate("/3d_builder")}
               variant="blackTransparent"

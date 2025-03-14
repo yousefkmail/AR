@@ -1,4 +1,4 @@
-import { Button } from "@components/atoms";
+import Button from "@components/atoms/Buttons/Button";
 import { TemplateModel } from "@core/index";
 import { CartItemType } from "@features/Cart";
 import { fa42Group } from "@fortawesome/free-brands-svg-icons";
@@ -39,8 +39,13 @@ export default function OrderCollectionsShow() {
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>{item.item.name}</div>
             <Button
+              variant="blackTransparent"
               onClick={() => navigate(`/3D_Builder/${record["id"]}/${index}`)}
-              style={{ borderColor: "rgba(128,128,128,0.2)" }}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "var(--active-secondary)",
+                },
+              }}
             >
               Preview
             </Button>

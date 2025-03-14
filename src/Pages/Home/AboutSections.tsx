@@ -3,9 +3,9 @@ import { useAboutSections } from "@hooks/SiteData/useAboutSections";
 import { AboutSectionsSkeleton } from "./AboutSectionsSkeleton";
 
 export const AboutSections = () => {
-  const { AboutSections, isLoading: aboutSectionsLoading } = useAboutSections();
+  const { AboutSections, isLoading } = useAboutSections();
 
-  if (aboutSectionsLoading) {
+  if (isLoading) {
     return <AboutSectionsSkeleton />;
   }
   return AboutSections?.sort((a, b) => a.order - b.order).map((section) => (

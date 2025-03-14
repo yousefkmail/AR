@@ -3,17 +3,21 @@ import { createBrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import AuthComponent from "../Pages/Admin/Authcomponent";
 import MainLayout from "@components/Layout/MainLayout";
-import {
-  Dashboard,
-  Login,
-  OrderPurchaseSuccess,
-  UserInfoFilling,
-} from "@pages";
 
 const Home = lazy(() => import("../Pages/Home/Home"));
 const Cart = lazy(() => import("../Pages/Cart/Cart"));
 const Order = lazy(() => import("../Pages/Order/Order"));
 const Builder = lazy(() => import("../Pages/3DBuilder/Builder"));
+const NotFound = lazy(() => import("../Pages/NotFound/NotFound"));
+const Login = lazy(() => import("../Pages/Admin/Login"));
+const Dashboard = lazy(() => import("../Pages/Dashboard/Dashboard"));
+const UserInfoFilling = lazy(
+  () => import("../Pages/UserInfoFilling/UserInfoFilling")
+);
+
+const OrderPurchaseSuccess = lazy(
+  () => import("../Pages/OrderSuccess/OrderPurchaseSuccess")
+);
 
 export const AppRouter = createBrowserRouter(
   [
@@ -108,7 +112,7 @@ export const AppRouter = createBrowserRouter(
       path: "*",
       element: (
         <Suspense fallback={<div></div>}>
-          <div>not found</div>
+          <NotFound />
         </Suspense>
       ),
     },

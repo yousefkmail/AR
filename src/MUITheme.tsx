@@ -42,6 +42,9 @@ export const theme = createTheme({
             "&:hover": {
               backgroundColor: "rgba(0, 0, 0, 0.1)",
             },
+            "&:active": {
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+            },
           },
         },
       ],

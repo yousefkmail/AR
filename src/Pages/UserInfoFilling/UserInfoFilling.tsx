@@ -224,6 +224,7 @@ export default function UserInfoFilling() {
             style={{ fontSize: "1rem" }}
             type="submit"
             disabled={isloading}
+            variant="blackTransparent"
           >
             {isloading
               ? "Loading..."

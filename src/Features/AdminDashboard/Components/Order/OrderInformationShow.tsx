@@ -2,6 +2,7 @@ import { faBox } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OrderSectionField } from "./OrderSectionField";
 import { useRecordContext } from "react-admin";
+import { camelCaseToLabel } from "@utils/Text";
 
 export function OrderInformationShow() {
   const record = useRecordContext();
@@ -35,11 +36,11 @@ export function OrderInformationShow() {
       />
       <OrderSectionField
         label="Payment type: "
-        value={record?.["paymentType"]}
+        value={camelCaseToLabel(record?.["paymentType"] ?? "")}
       />
       <OrderSectionField
         label="Payment status: "
-        value={record?.["paymentStatus"] === "NotPaid" ? "Not paid" : "Paid"}
+        value={camelCaseToLabel(record?.["paymentStatus"] ?? "")}
       />
     </div>
   );

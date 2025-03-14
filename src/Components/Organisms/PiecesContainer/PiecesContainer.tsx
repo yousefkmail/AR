@@ -1,13 +1,14 @@
 import Select from "react-select";
 import { OptionType, usePlanesQuery } from "../../../Hooks/usePlanesQuery";
 import { PiecesSelectStyle } from "../../../Styles/CustomStyles/react-select/PiecesSelectStyle";
-import WigitCard from "../../WigitCardUI/WigitCard";
+import WigitCard from "../../Mollecules/WigitCardUI/WigitCard";
 import { DragEvent } from "react";
 import { useFullPieces } from "../../../Core/Hooks/useFullPieces";
 import { v4 as uuidv4 } from "uuid";
 import { useUIDraggedWigit } from "@features/DragAndDrop";
 import GridLayout from "@components/Layout/GridLayout";
 import { PieceObject, TemplateObject } from "@core/index";
+import { useAddItemToCart } from "@hooks/useAddItemToCart";
 export const PiecesContainer = () => {
   const {
     activePieces,
@@ -26,7 +27,7 @@ export const PiecesContainer = () => {
     }
   };
   const { setDraggedItem } = useUIDraggedWigit();
-
+  const { addItemWithNotification } = useAddItemToCart();
   return (
     <div>
       <div style={{ padding: "5px 0px" }}>
@@ -92,6 +93,13 @@ export const PiecesContainer = () => {
                     payload: newTemplate,
                   });
                 }}
+                onAddToCart={(count) =>
+                  addItemWithNotification({
+                    item,
+                    quantity: count,
+                    type: "base",
+                  })
+                }
                 key={item.id}
                 plane={item}
               />
@@ -124,6 +132,13 @@ export const PiecesContainer = () => {
 
                   DispatchCreatedPieces({ type: "add", payload: newPiece });
                 }}
+                onAddToCart={(count) =>
+                  addItemWithNotification({
+                    item,
+                    quantity: count,
+                    type: "piece",
+                  })
+                }
                 key={item.id}
                 plane={item}
               />

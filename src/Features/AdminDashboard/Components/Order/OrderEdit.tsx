@@ -32,7 +32,7 @@ export const OrderEdit = () => {
           choices={orderStatusChoices}
           optionText="name"
           optionValue="id"
-          label="Preview Image"
+          label="Status"
         />
       </SimpleForm>
     </Edit>

@@ -9,6 +9,7 @@ import { Color, Group, MathUtils, Vector3 } from "three";
 
 import { ThreeEvent } from "@react-three/fiber";
 import { use3DDrag } from "../../../Hooks/use3DDrag";
+import { ObjectsScale } from "../../../Config/3DBuilderConfig";
 
 export type PngPlaneRef = {
   container: Group;
@@ -64,6 +65,10 @@ const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
       }
     );
 
+    const GetMousehoverOffset = () => {
+      return props.applyOffset ? ((props.height + 0.1) / 2) * ObjectsScale : 0;
+    };
+
     return (
       <>
         <group
@@ -95,12 +100,11 @@ const PngPlane = forwardRef<PngPlaneRef, PngPlaneProps>(
           layers={props.layer}
         >
           <Plane
-            position={[
-              0,
-              props.applyOffset ? ((props?.height ?? 0) + 0.1) / 100 : 0,
-              0,
+            position={[0, GetMousehoverOffset(), 0]}
+            args={[
+              (props?.width ?? 0) * ObjectsScale,
+              (props?.height ?? 0) * ObjectsScale,
             ]}
-            args={[(props?.width ?? 0) / 50, (props?.height ?? 0) / 50]}
             userData={{ id: id }}
             layers={props.layer}
           >

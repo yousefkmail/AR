@@ -1,7 +1,6 @@
 import {
   Datagrid,
   DeleteButton,
-  EditButton,
   ImageField,
   List,
   TextField,
@@ -12,13 +11,12 @@ import { DateField } from "../Shared/DateField";
 export function TemplateList() {
   return (
     <List>
-      <Datagrid>
+      <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
         <ImageField source="previewImage" />
         <PriceField source="price" />
         <TextField source="description" />
         <DateField source="createdAt" />
-        <EditButton />
         <DeleteButton />
       </Datagrid>
     </List>

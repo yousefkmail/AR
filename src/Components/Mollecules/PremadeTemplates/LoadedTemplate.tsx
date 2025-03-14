@@ -1,21 +1,23 @@
 import { DragEvent } from "react";
-import { TemplateModel } from "../../Core/Models/TemplateModel";
+import { TemplateModel } from "../../../Core/Models/TemplateModel";
 import { v4 as uuidv4 } from "uuid";
 import { useUIDraggedWigit } from "@features/DragAndDrop";
 import { TemplateObject } from "@core/index";
-import WigitCardImage from "@components/WigitCardUI/WigitCardImage";
-import { Button, Typography } from "@mui/material";
+import WigitCardImage from "@components/Mollecules/WigitCardUI/WigitCardImage";
+import { Typography } from "@mui/material";
 
 import { CalculatePrice, GetCurrencyFormat } from "@utils/CurrencyUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { QuantityChange } from "@features/Cart";
+import CartController from "../CartController";
+import { useAddItemToCart } from "@hooks/useAddItemToCart";
 interface TemplateProps {
   item: TemplateModel;
 }
 
 export default function LoadedTemplate({ item }: TemplateProps) {
   const { setDraggedItem } = useUIDraggedWigit();
+  const { addItemWithNotification } = useAddItemToCart();
   const handleDragStart = () => {
     const template: TemplateObject = {
       id: uuidv4(),
@@ -68,28 +70,16 @@ export default function LoadedTemplate({ item }: TemplateProps) {
             {"Loaded "}
             <FontAwesomeIcon icon={faCheck} />
           </Typography>
-
-          <QuantityChange>
-            <div
-              style={{
-                minWidth: "20px",
-                display: "inline-block",
-                textAlign: "center",
-              }}
-            >
-              1
-            </div>
-          </QuantityChange>
-
-          <div style={{ display: "flex", marginTop: "16px" }}>
-            <Button
-              style={{
-                flexGrow: "1",
-              }}
-              variant="contained"
-            >
-              {"Add to cart"}
-            </Button>
+          <div style={{ paddingTop: "8px" }}>
+            <CartController
+              onAddToCart={(count) =>
+                addItemWithNotification({
+                  item,
+                  quantity: count,
+                  type: "collection",
+                })
+              }
+            ></CartController>
           </div>
         </div>
       </div>

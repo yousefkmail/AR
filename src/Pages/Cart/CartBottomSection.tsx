@@ -15,6 +15,7 @@ export default function CartBottomSection({
     <div className="cart-bottom-container">
       <CartSummary className="cart-summary" productItems={productItems} />
       <Button
+        variant="blackTransparent"
         onClick={() => {
           onContinuePressed?.();
         }}

@@ -30,6 +30,7 @@ import {
   useSceneSettingsStore,
 } from "@core/Store/SceneSettingsStore";
 import { useCameraControlStore } from "../../../Pages/3DBuilder/CameraControlStore";
+import { ObjectsScale } from "../../../Config/3DBuilderConfig";
 
 export default function Template3DObject() {
   const { templateObject } = useContext(Template3DObjectContext);
@@ -118,10 +119,12 @@ export default function Template3DObject() {
         parentTemplate.templateModel.base.layers[pieceChild.layer].width ?? 0;
 
       const rightOffset =
-        (moveableAreaWidth / 2 - GetPieceRight(pieceChild.piece)) / 50;
+        (moveableAreaWidth / 2 - GetPieceRight(pieceChild.piece)) *
+        ObjectsScale;
 
       const leftOffset =
-        -(moveableAreaWidth / 2 - GetPieceLeft(pieceChild.piece)) / 50;
+        -(moveableAreaWidth / 2 - GetPieceLeft(pieceChild.piece)) *
+        ObjectsScale;
 
       let [leftChild, rightChild] = GetPieceChildNeighbours(
         parentTemplate,
@@ -133,7 +136,7 @@ export default function Template3DObject() {
           const minPosX = GetPieceMostRight(leftChild);
           xPos = MathUtils.clamp(
             xPos,
-            minPosX + pieceChild.piece.width / 100,
+            minPosX + (pieceChild.piece.width / 2) * ObjectsScale,
             Infinity
           );
         }
@@ -143,7 +146,7 @@ export default function Template3DObject() {
           xPos = MathUtils.clamp(
             xPos,
             -Infinity,
-            maxPosX - pieceChild.piece.width / 100
+            maxPosX - (pieceChild.piece.width / 2) * ObjectsScale
           );
         }
       }

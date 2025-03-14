@@ -6,3 +6,4 @@ export { default as Home } from "./Home/Home";
 export { default as OrderPage } from "./Order/Order";
 export { default as OrderPurchaseSuccess } from "./OrderSuccess/OrderPurchaseSuccess";
 export { default as UserInfoFilling } from "./UserInfoFilling/UserInfoFilling";
+export { default as NotFound } from "./NotFound/NotFound";

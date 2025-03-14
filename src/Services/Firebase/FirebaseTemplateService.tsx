@@ -6,22 +6,22 @@ import {
   UnresolvedTemplateModel,
 } from "@core";
 import { ITemplateService } from "../Interfaces/ITemplateService";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "@lib/Firebase/App";
+import { FirebaseDataProvider } from "./FirebaseDataProvider";
 
 export const FirebaseTemplateService: ITemplateService = {
   async GetAllTemplates(
     _page: number,
     _pageSize: number
   ): Promise<[UnresolvedTemplateModel[], number]> {
-    const docs = await getDocs(collection(firestore, "templates"));
-
-    return [
-      docs.docs.map((item) => {
-        return { ...(item.data() as UnresolvedTemplateModel), id: item.id };
-      }),
-      docs.size,
-    ];
+    const dataProidiver = new FirebaseDataProvider();
+    const docs = await dataProidiver.getList("templates", {
+      pagination: { page: _page, perPage: _pageSize },
+      sort: { field: "createdAt", order: "ASC" },
+    });
+    console.log(docs);
+    return [docs.data, docs.total];
   },
 
   async GetTemplateById(assetId: string): Promise<TemplateModel> {

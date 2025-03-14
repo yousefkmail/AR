@@ -1,4 +1,4 @@
-import { useRecordContext } from "react-admin";
+import { EditButton, useRecordContext } from "react-admin";
 import { OrderStatusShow } from "./OrderStatusShow";
 
 export function OrderShowHeader() {
@@ -16,6 +16,7 @@ export function OrderShowHeader() {
         <h4 style={{ marginTop: "10px" }}>{`Order ID: ${record?.["id"]}`}</h4>
       </div>
       <div>
+        <EditButton />
         <OrderStatusShow />
       </div>
     </div>

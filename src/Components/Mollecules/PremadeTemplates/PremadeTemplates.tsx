@@ -1,8 +1,8 @@
-import PremadeTemplatesSkeleton from "../PremadeTemplates/PremadeTemplatesSkeleton";
+import PremadeTemplatesSkeleton from "./PremadeTemplatesSkeleton";
 import Pagination from "@mui/material/Pagination";
 import { ChangeEvent } from "react";
 import { GetPageCount } from "@utils";
-import { PaginationCustomStyle } from "../../Styles/CustomStyles/mui/PaginationCustomStyle";
+import { PaginationCustomStyle } from "../../../Styles/CustomStyles/mui/PaginationCustomStyle";
 import LoadedTemplate from "./LoadedTemplate";
 import NotLoadedTemplate from "./NotLoadedTemplate";
 import { useTemplates } from "@hooks/Template/useTemplates";

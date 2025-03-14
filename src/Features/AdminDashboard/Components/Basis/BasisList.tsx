@@ -12,7 +12,7 @@ import { PriceField } from "../Shared/PriceField";
 export const BasisList = () => {
   return (
     <List>
-      <Datagrid>
+      <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
         <ImageField source="previewImage" />
         <TextField source="description" />

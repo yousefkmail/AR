@@ -13,7 +13,7 @@ const formatPascalCase = (value: string) => {
 
 export const OrderList = () => (
   <List>
-    <Datagrid>
+    <Datagrid bulkActionButtons={false}>
       <TextField source="customer.name" />
       <FunctionField
         source="type"

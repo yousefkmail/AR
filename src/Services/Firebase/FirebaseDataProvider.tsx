@@ -25,9 +25,9 @@ export class FirebaseDataProvider implements DataProvider {
   getList = async (resource: string, params: GetListParams) => {
     const { perPage, page } = params.pagination || {};
     const { field, order } = params.sort || {};
-    const { lastDoc } = params.meta || {};
     const collectionRef = collection(firestore, resource);
     const totalDocs = (await getCountFromServer(collectionRef)).data().count;
+    console.log(params);
 
     let queryConstraints = [];
 
@@ -38,10 +38,8 @@ export class FirebaseDataProvider implements DataProvider {
           order === "ASC" ? "asc" : "desc"
         )
       );
-    }
-
-    if (lastDoc) {
-      queryConstraints.push(lastDoc);
+    } else {
+      queryConstraints.push(orderBy("__name__", "asc"));
     }
 
     if (perPage) {

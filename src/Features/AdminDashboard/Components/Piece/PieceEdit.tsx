@@ -17,7 +17,7 @@ export const PieceEdit = () => {
         <NumberInput source="height" />
         <NumberInput source="price" />
         <NumberInput source="stock" />
-        <NumberInput source="category" />
+        <TextInput source="category" />
         <NumberInput source="baseWidth" />
         <NumberInput source="baseOffset" />
         <BooleanField source="isFlipable" />
