@@ -22,7 +22,7 @@ export default function CanvasSetup() {
     <>
       <ambientLight intensity={0.5} />
       <directionalLight intensity={0.2} position={[5, 5, 5]} />
-      <PerspectiveCamera layers={layers} position={[1, 1.5, 2]} makeDefault />
+      <PerspectiveCamera layers={layers} position={[0, 2, 3]} makeDefault />
       <CameraControls ref={camereControlsRef} enabled={cameraRef} />
     </>
   );

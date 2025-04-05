@@ -20,7 +20,6 @@ export const FirebaseTemplateService: ITemplateService = {
       pagination: { page: _page, perPage: _pageSize },
       sort: { field: "createdAt", order: "ASC" },
     });
-    console.log(docs);
     return [docs.data, docs.total];
   },
 
